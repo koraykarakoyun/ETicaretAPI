@@ -13,7 +13,7 @@ namespace ETicaretAPI.Persistence.Repositories
     public class WriteRepsitory<T> : IWriteRepository<T> where T : BaseEntity
     {
 
-        ETicaretDbContext _context;
+       readonly ETicaretDbContext _context;
 
         public WriteRepsitory(ETicaretDbContext context)
         {
