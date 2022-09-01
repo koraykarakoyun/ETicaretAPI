@@ -11,10 +11,11 @@ namespace ETicaretAPI.Persistence
     public class ETicaretDbContext:DbContext
     {
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public ETicaretDbContext(DbContextOptions options):base(options)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-2AMEV92;Database=ETicaretApi;Trusted_Connection=True;");
         }
+
 
         public DbSet<Product> Products { get; set; }
 

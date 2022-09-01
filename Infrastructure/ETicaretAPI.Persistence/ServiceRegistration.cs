@@ -1,4 +1,8 @@
-﻿using ETicaretAPI.Application.Abstraction;
+﻿
+using ETicaretAPI.Application.Repositories;
+using ETicaretAPI.Persistence.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -10,9 +14,20 @@ namespace ETicaretAPI.Persistence
 {
     public static class ServiceRegistration
     {
+
+
         public static void AddPersistenceServices(this IServiceCollection services)
         {
+            services.AddDbContext<ETicaretDbContext>(options=>options.UseSqlServer("Server=DESKTOP-2AMEV92;Database=ETicaretApi;Trusted_Connection=True;"));
 
+            services.AddScoped<IProductReadRepository, ProductReadRepository>();
+            services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
+
+            services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
+            services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
+
+            services.AddScoped<IOrderReadRepository, OrderReadRepository>();
+            services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
         }
     }
 }

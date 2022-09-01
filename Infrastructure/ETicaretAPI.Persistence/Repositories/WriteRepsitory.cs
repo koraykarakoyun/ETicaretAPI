@@ -47,7 +47,7 @@ namespace ETicaretAPI.Persistence.Repositories
 
         public async Task<bool> RemoveByIdAsync(string id)
         {
-            var result = await Table.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
+            var result = await Table.FindAsync(Guid.Parse(id));
             EntityEntry<T> entityEntry = Table.Remove(result);
 
             return entityEntry.State == EntityState.Deleted;
