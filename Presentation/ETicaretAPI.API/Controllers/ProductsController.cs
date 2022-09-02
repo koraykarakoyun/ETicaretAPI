@@ -13,6 +13,7 @@ namespace ETicaretAPI.API.Controllers
         private readonly IProductWriteRepository _productWriteRepository;
         private readonly IProductReadRepository _productReadRepository;
 
+
         public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository)
         {
             _productWriteRepository = productWriteRepository;
@@ -22,32 +23,12 @@ namespace ETicaretAPI.API.Controllers
         [HttpGet("getall")]
         public async Task<IActionResult> GetAll()
         {
-            /*
-            await _productWriteRepository.AddAsync(
 
-                new()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Deneme Ürünü2",
-                    CreatedDate = DateTime.Now,
-                    Price = 200,
-                    Stock = 10
+           var result= await _productReadRepository.GetByIdAsync("4e1fc388-816e-4bca-99b3-08da8cf6d418");
 
-                }
+            result.Name = "isim degistirildi";
 
-                );
-            */
-
-            /*
-            Product p = await _productReadRepository.GetByIdAsync("10c1cddf-7fd9-499c-b5fa-92df3b9cb65f",false);
-
-            p.Name = "isim degistirildi";
-
-             await _productWriteRepository.SaveAsync();
-            */
-
-
-            // await _productWriteRepository.SaveAsync();
+            await _productWriteRepository.SaveAsync();
 
             return Ok();
         }
