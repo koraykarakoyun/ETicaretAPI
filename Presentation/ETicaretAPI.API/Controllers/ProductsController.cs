@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI.Application.Repositories;
+using ETicaretAPI.Application.ViewModel;
 using ETicaretAPI.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,16 +22,60 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
 
-           var result= await _productReadRepository.GetByIdAsync("4e1fc388-816e-4bca-99b3-08da8cf6d418");
+            return Ok(_productReadRepository.GetAll(false));
+        }
+        [HttpGet("getbyid/{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var query = await _productReadRepository.GetByIdAsync(id, false);
+            return Ok(query);
+        }
 
-            result.Name = "isim degistirildi";
+        [HttpPost("add")]
+        public async Task<IActionResult> Add(ProductViewModel productViewModel)
+        {
+            await _productWriteRepository.AddAsync(
+                new()
+                {
+                    Name = productViewModel.Name,
+                    Stock = productViewModel.Stock,
+                    Price = productViewModel.Price,
+
+                });
+            await _productWriteRepository.SaveAsync();
+            return Ok("Eklendi");
+
+        }
+
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> Update(string id,ProductViewModel productViewModel)
+        {
+
+            var query = await _productReadRepository.GetByIdAsync(id);
+
+            query.Name = productViewModel.Name;
+            query.Price = productViewModel.Price;
+            query.Stock = productViewModel.Stock;
 
             await _productWriteRepository.SaveAsync();
 
-            return Ok();
+
+
+            return Ok("Guncellendi");
+
+        }
+
+        [HttpDelete("deletebyid/{id}")]
+        public async Task<IActionResult> DeletebyId(string id)
+        {
+            await _productWriteRepository.RemoveByIdAsync(id);
+            await _productWriteRepository.SaveAsync();
+            return Ok("Silindi");
+
         }
 
     }
