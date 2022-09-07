@@ -51,8 +51,8 @@ namespace ETicaretAPI.API.Controllers
         }
 
 
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update(string id,ProductViewModel productViewModel)
+        [HttpPut("updatebyid/{id}")]
+        public async Task<IActionResult> Update(string id, ProductViewModel productViewModel)
         {
 
             var query = await _productReadRepository.GetByIdAsync(id);

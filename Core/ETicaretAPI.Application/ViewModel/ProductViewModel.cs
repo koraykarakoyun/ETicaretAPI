@@ -8,8 +8,6 @@ namespace ETicaretAPI.Application.ViewModel
 {
     public class ProductViewModel
     {
-
-
         public string Name { get; set; }
 
         public int Stock { get; set; }

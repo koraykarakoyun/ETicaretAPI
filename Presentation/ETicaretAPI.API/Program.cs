@@ -1,4 +1,8 @@
+using ETicaretAPI.Application.Validators;
+using ETicaretAPI.Application.ViewModel;
 using ETicaretAPI.Persistence;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +10,8 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy=>policy.Allo
 
 builder.Services.AddPersistenceServices();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<ProductViewModel>());
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
