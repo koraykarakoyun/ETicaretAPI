@@ -1,6 +1,13 @@
-﻿using ETicaretAPI.Application.Repositories;
+﻿
+using ETicaretAPI.Application.CQRS.Product.Command.Add;
+using ETicaretAPI.Application.CQRS.Product.Command.Delete;
+using ETicaretAPI.Application.CQRS.Product.Command.UpdateById;
+using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
+using ETicaretAPI.Application.CQRS.Product.Query.GetById;
+using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.ViewModel;
 using ETicaretAPI.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,68 +20,53 @@ namespace ETicaretAPI.API.Controllers
 
         private readonly IProductWriteRepository _productWriteRepository;
         private readonly IProductReadRepository _productReadRepository;
+        readonly IMediator _mediator;
 
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IMediator mediator)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
+            _mediator = mediator;
         }
 
         [HttpGet("getall")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll(GetAllProductQueryRequest getAllProductQueryRequest)
         {
+            List<GetAllProductQueryResponse> getAllProductQueryResponses = await _mediator.Send(getAllProductQueryRequest);
+            return Ok(getAllProductQueryResponses);
 
-            return Ok(_productReadRepository.GetAll(false));
         }
         [HttpGet("getbyid/{id}")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(GetByIdProductQueryRequest getByIdProductQueryRequest)
         {
-            var query = await _productReadRepository.GetByIdAsync(id, false);
-            return Ok(query);
+            GetByIdProductQueryResponse getByIdProductQueryResponse = await _mediator.Send(getByIdProductQueryRequest);
+            return Ok(getByIdProductQueryResponse);
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> Add(ProductViewModel productViewModel)
+        public async Task<IActionResult> Add(AddProductCommandRequest addProductCommandRequest)
         {
-            await _productWriteRepository.AddAsync(
-                new()
-                {
-                    Name = productViewModel.Name,
-                    Stock = productViewModel.Stock,
-                    Price = productViewModel.Price,
-
-                });
-            await _productWriteRepository.SaveAsync();
-            return Ok("Eklendi");
+            AddProductCommandResponse addProductCommandResponse = await _mediator.Send(addProductCommandRequest);
+            return Ok(addProductCommandResponse);
 
         }
 
 
-        [HttpPut("updatebyid/{id}")]
-        public async Task<IActionResult> Update(string id, ProductViewModel productViewModel)
+        [HttpPut("update")]
+        public async Task<IActionResult> Update(UpdateProductCommandRequest updateProductCommandRequest)
         {
-
-            var query = await _productReadRepository.GetByIdAsync(id);
-
-            query.Name = productViewModel.Name;
-            query.Price = productViewModel.Price;
-            query.Stock = productViewModel.Stock;
-
-            await _productWriteRepository.SaveAsync();
-
-
-
-            return Ok("Guncellendi");
+            UpdateProductCommandResponse updateProductCommandResponse= await _mediator.Send(updateProductCommandRequest);
+            return Ok(updateProductCommandResponse);
+            
 
         }
 
-        [HttpDelete("deletebyid/{id}")]
-        public async Task<IActionResult> DeletebyId(string id)
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeletebyId(DeleteProductCommandRequest deleteProductCommandRequest)
         {
-            await _productWriteRepository.RemoveByIdAsync(id);
-            await _productWriteRepository.SaveAsync();
-            return Ok("Silindi");
+            DeleteProductCommandResponse deleteProductCommandResponse= await _mediator.Send(deleteProductCommandRequest);
+            return Ok(deleteProductCommandResponse);
 
         }
 

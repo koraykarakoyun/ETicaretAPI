@@ -20,8 +20,5 @@ namespace ETicaretAPI.Application.Repositories
 
 
 
-
-
-
     }
 }
