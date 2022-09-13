@@ -1,5 +1,7 @@
 ﻿using ETicaretAPI.Domain.Common;
 using ETicaretAPI.Domain.Entities;
+using ETicaretAPI.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,13 +9,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Persistence
+namespace ETicaretAPI.Persistence.Context
 {
-    public class ETicaretDbContext:DbContext
+    public class ETicaretDbContext : IdentityDbContext<AppUser,AppRole,string>
     {
 
 
-        public ETicaretDbContext(DbContextOptions options):base(options)
+        public ETicaretDbContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -34,12 +36,12 @@ namespace ETicaretAPI.Persistence
 
                 if (data.State == EntityState.Added)
                 {
-                  data.Entity.CreatedDate = DateTime.Now;
+                    data.Entity.CreatedDate = DateTime.Now;
                 }
 
-                else if (data.State==EntityState.Modified)
+                else if (data.State == EntityState.Modified)
                 {
-                  data.Entity.UpdatedDate= DateTime.Now;
+                    data.Entity.UpdatedDate = DateTime.Now;
                 }
 
             }
