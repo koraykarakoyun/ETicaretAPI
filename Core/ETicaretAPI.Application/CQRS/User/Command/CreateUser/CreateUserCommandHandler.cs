@@ -25,14 +25,15 @@ namespace ETicaretAPI.Application.CQRS.User.Command.CreateUser
 
 
 
-           IdentityResult ıdentityResult= await _userManager.CreateAsync(new AppUser()
+            IdentityResult ıdentityResult = await _userManager.CreateAsync(new AppUser()
             {
+                Id=Guid.NewGuid().ToString(),
                 Name = request.Name,
                 Surname = request.Surname,
                 UserName = request.Username,
                 Email = request.Email,
 
-            }, request.Password);
+            }, request.Password); ;
 
             CreateUserCommandResponse response = new() { IsSuccess = ıdentityResult.Succeeded };
 
