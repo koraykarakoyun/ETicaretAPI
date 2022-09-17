@@ -1,6 +1,7 @@
 using ETicaretAPI.Application;
+using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.Validators;
-using ETicaretAPI.Application.ViewModel;
+
 using ETicaretAPI.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -12,7 +13,7 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy=>policy.Allo
 builder.Services.AddPersistenceServices();
 builder.Services.AddApplicationService();
 
-builder.Services.AddControllers().AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<ProductViewModel>());
+builder.Services.AddControllers().AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<AddProductCommandRequest>());
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

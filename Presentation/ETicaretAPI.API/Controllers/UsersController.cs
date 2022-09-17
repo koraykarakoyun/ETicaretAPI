@@ -26,6 +26,17 @@ namespace ETicaretAPI.API.Controllers
 
         }
 
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login()
+        {
+
+            return Ok();
+
+
+
+        }
+
+
 
 
     }

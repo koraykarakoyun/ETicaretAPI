@@ -1,4 +1,4 @@
-﻿using ETicaretAPI.Application.ViewModel;
+﻿using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Domain.Entities;
 using FluentValidation;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Application.Validators
 {
-    public class ProductValidator : AbstractValidator<ProductViewModel>
+    public class ProductValidator : AbstractValidator<AddProductCommandRequest>
     {
         public ProductValidator()
         {
