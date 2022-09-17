@@ -9,6 +9,8 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
 {
     public class GetAllProductQueryResponse
     {
+
+        public string Id { get; set; }
         public string Name { get; set; }
 
         public int Stock { get; set; }

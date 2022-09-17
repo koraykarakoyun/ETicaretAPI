@@ -1,6 +1,6 @@
 ﻿
 using ETicaretAPI.Application.Repositories;
-using ETicaretAPI.Application.ViewModel;
+
 using MediatR;
 using System;
 using System.Collections.Generic;

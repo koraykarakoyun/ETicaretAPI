@@ -5,9 +5,9 @@ using ETicaretAPI.Application.CQRS.Product.Command.UpdateById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
 using ETicaretAPI.Application.CQRS.Product.Query.GetById;
 using ETicaretAPI.Application.Repositories;
-using ETicaretAPI.Application.ViewModel;
 using ETicaretAPI.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,19 +31,20 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAll(GetAllProductQueryRequest getAllProductQueryRequest)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllProductQueryRequest getAllProductQueryRequest)
         {
             List<GetAllProductQueryResponse> getAllProductQueryResponses = await _mediator.Send(getAllProductQueryRequest);
             return Ok(getAllProductQueryResponses);
 
         }
         [HttpGet("getbyid/{id}")]
-        public async Task<IActionResult> GetById(GetByIdProductQueryRequest getByIdProductQueryRequest)
+        public async Task<IActionResult> GetById([FromQuery] GetByIdProductQueryRequest getByIdProductQueryRequest)
         {
             GetByIdProductQueryResponse getByIdProductQueryResponse = await _mediator.Send(getByIdProductQueryRequest);
             return Ok(getByIdProductQueryResponse);
         }
 
+        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpPost("add")]
         public async Task<IActionResult> Add(AddProductCommandRequest addProductCommandRequest)
         {
@@ -52,7 +53,7 @@ namespace ETicaretAPI.API.Controllers
 
         }
 
-
+        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpPut("update")]
         public async Task<IActionResult> Update(UpdateProductCommandRequest updateProductCommandRequest)
         {
@@ -62,7 +63,10 @@ namespace ETicaretAPI.API.Controllers
 
         }
 
-        [HttpDelete("delete")]
+
+
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [HttpDelete("DeletebyId/{id}")]
         public async Task<IActionResult> DeletebyId(DeleteProductCommandRequest deleteProductCommandRequest)
         {
             DeleteProductCommandResponse deleteProductCommandResponse= await _mediator.Send(deleteProductCommandRequest);

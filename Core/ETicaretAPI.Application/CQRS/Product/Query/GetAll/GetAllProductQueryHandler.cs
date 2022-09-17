@@ -23,6 +23,7 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
      
             return _productReadRepository.GetAll().Select(product => new GetAllProductQueryResponse
             {
+                Id=product.Id.ToString(),
                 Name = product.Name,
                 Stock = product.Stock,
                 Price = product.Price,

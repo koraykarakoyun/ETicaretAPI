@@ -1,5 +1,7 @@
 ﻿using ETicaretAPI.Application.CQRS.User.Command.CreateUser;
+using ETicaretAPI.Application.CQRS.User.Command.Login;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,10 +29,11 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login(LoginCommandRequest loginCommandRequest)
         {
 
-            return Ok();
+            LoginCommandResponse loginCommandResponse = await _mediator.Send(loginCommandRequest);
+            return Ok(loginCommandResponse);
 
 
 
