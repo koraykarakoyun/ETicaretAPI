@@ -21,7 +21,12 @@ namespace ETicaretAPI.Persistence
         public static void AddPersistenceServices(this IServiceCollection services)
         {
             services.AddDbContext<ETicaretDbContext>(options => options.UseSqlServer("Server=DESKTOP-2AMEV92;Database=ETicaretApi;Trusted_Connection=True;"));
-            services.AddIdentity<AppUser, AppRole>(_ => _.User.RequireUniqueEmail = true)
+            services.AddIdentity<AppUser, AppRole>(_ =>
+                {
+                    _.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+/ ";
+                    _.User.RequireUniqueEmail = true;
+                }
+                )
             .AddEntityFrameworkStores<ETicaretDbContext>();
 
             services.AddScoped<IProductReadRepository, ProductReadRepository>();
