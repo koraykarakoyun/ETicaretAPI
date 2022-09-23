@@ -20,7 +20,7 @@ namespace ETicaretAPI.Infrastructure.Token
             _configuration = configuration;
         }
 
-        public Application.DTOs.Token CreateAccessToken(int expiration)
+        public Application.DTOs.Token CreateAccessToken(int expiration_time_seconds)
         {
             Application.DTOs.Token token = new Application.DTOs.Token();
 
@@ -28,7 +28,7 @@ namespace ETicaretAPI.Infrastructure.Token
 
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            token.Expiration = DateTime.UtcNow.AddMinutes(expiration);
+            token.Expiration = DateTime.UtcNow.AddSeconds(expiration_time_seconds);
 
 
             //Asıl olay bu sınıfta...(JWTSecurityToken)

@@ -1,8 +1,12 @@
 ﻿
+using ETicaretAPI.Application.Abstraction.Auth;
+using ETicaretAPI.Application.Abstraction.User;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Domain.Entities.Identity;
+using ETicaretAPI.Persistence.Auth;
 using ETicaretAPI.Persistence.Context;
 using ETicaretAPI.Persistence.Repositories;
+using ETicaretAPI.Persistence.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +41,12 @@ namespace ETicaretAPI.Persistence
 
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
             services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IExternalAuthService, AuthService>();
+            services.AddScoped<IInternalAuthService, AuthService>();
+
 
 
 

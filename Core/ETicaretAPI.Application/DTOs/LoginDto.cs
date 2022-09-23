@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Application.CQRS.User.Command.GoogleLogin
+namespace ETicaretAPI.Application.DTOs
 {
-    public class GoogleLoginCommandResponse
+    public class LoginDto
     {
         public string Message { get; set; }
         public bool IsSuccess { get; set; }
         public DTOs.Token Token { get; set; }
-
     }
 }

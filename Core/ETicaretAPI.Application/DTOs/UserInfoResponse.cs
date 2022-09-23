@@ -18,5 +18,7 @@ namespace ETicaretAPI.Application.DTOs
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
+
+
     }
 }

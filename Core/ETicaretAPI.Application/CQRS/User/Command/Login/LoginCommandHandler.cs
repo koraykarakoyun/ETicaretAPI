@@ -1,4 +1,6 @@
-﻿using ETicaretAPI.Application.Token;
+﻿using ETicaretAPI.Application.Abstraction.Auth;
+using ETicaretAPI.Application.DTOs;
+using ETicaretAPI.Application.Token;
 using ETicaretAPI.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -12,39 +14,25 @@ namespace ETicaretAPI.Application.CQRS.User.Command.Login
 {
     public class LoginCommandHandler : IRequestHandler<LoginCommandRequest, LoginCommandResponse>
     {
-        UserManager<AppUser> _userManager;
-        SignInManager<AppUser> _signInManager;
-        ITokenHandler _tokenHandler;
 
-        public LoginCommandHandler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler)
+        IAuthService _authService;
+
+        public LoginCommandHandler(IAuthService authService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _tokenHandler = tokenHandler;
+            _authService = authService;
         }
 
         public async Task<LoginCommandResponse> Handle(LoginCommandRequest request, CancellationToken cancellationToken)
         {
-             AppUser user= await _userManager.FindByEmailAsync(request.Email);
 
-            if (user == null)
+            LoginDto loginDto= await _authService.Login(request.Email, request.Password,15);
+
+            return new LoginCommandResponse
             {
-                return new LoginCommandResponse() { Message="Email veya parola hatalı." ,IsSuccess=false};
-            }
-
-            SignInResult signInResult= await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-
-            if (signInResult.Succeeded)
-            {
-                //kullanıcı login oldu.
-               DTOs.Token token= _tokenHandler.CreateAccessToken(5);
-
-                return new LoginCommandResponse() { IsSuccess = true, Message = "Giris yapildi.", Token = token };
-
-            }
-
-            return new();
-
+                IsSuccess = loginDto.IsSuccess,
+                Message = loginDto.Message,
+                Token = loginDto.Token
+            };
         }
     }
 }

@@ -7,48 +7,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ETicaretAPI.Application.Exceptions;
+using ETicaretAPI.Application.Abstraction.User;
+using ETicaretAPI.Application.DTOs.CreateUser;
 
 namespace ETicaretAPI.Application.CQRS.User.Command.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
     {
-
-        UserManager<AppUser> _userManager;
-
-        public CreateUserCommandHandler(UserManager<AppUser> userManager)
+        IUserService _userService;
+        public CreateUserCommandHandler(IUserService userService)
         {
-            _userManager = userManager;
+            _userService = userService;
         }
-
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
         {
-
-
-
-            IdentityResult ıdentityResult = await _userManager.CreateAsync(new AppUser()
+           CreateUserResponseDto responseDto=await _userService.CreateUser(new CreateUserRequestDto()
             {
-                Id=Guid.NewGuid().ToString(),
                 Name = request.Name,
                 Surname = request.Surname,
-                UserName = request.Username,
+                Username = request.Username,
                 Email = request.Email,
+                Password = request.Password,
+                PasswordConfirm = request.PasswordConfirm
+            });
 
-            }, request.Password); ;
-
-            CreateUserCommandResponse response = new() { IsSuccess = ıdentityResult.Succeeded };
-
-            if (response.IsSuccess)
+            return new CreateUserCommandResponse()
             {
-                response.Message = "Kullanıcı olusturuldu";
-            }
-            else
-            {
-                foreach (var error in ıdentityResult.Errors)
-                {
-                    response.Message += error.Description;
-                }
-            }
-            return response;
+                IsSuccess = responseDto.IsSuccess,
+                Message = responseDto.Message
+            };
 
         }
     }

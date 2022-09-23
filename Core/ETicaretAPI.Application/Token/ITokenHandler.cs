@@ -9,6 +9,6 @@ namespace ETicaretAPI.Application.Token
     public interface ITokenHandler
     {
 
-       DTOs.Token CreateAccessToken(int expiration);
+       DTOs.Token CreateAccessToken(int expiration_time_seconds);
     }
 }
