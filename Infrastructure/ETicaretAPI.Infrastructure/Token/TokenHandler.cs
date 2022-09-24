@@ -33,6 +33,10 @@ namespace ETicaretAPI.Infrastructure.Token
             token.Expiration = DateTime.UtcNow.AddSeconds(expiration_time_seconds);
 
 
+
+
+
+
             //Asıl olay bu sınıfta...(JWTSecurityToken)
 
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken

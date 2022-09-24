@@ -15,6 +15,7 @@ namespace ETicaretAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class ProductsController : ControllerBase
     {
 
@@ -44,7 +45,7 @@ namespace ETicaretAPI.API.Controllers
             return Ok(getByIdProductQueryResponse);
         }
 
-        [Authorize(AuthenticationSchemes = "Admin")]
+        
         [HttpPost("add")]
         public async Task<IActionResult> Add(AddProductCommandRequest addProductCommandRequest)
         {
@@ -53,7 +54,6 @@ namespace ETicaretAPI.API.Controllers
 
         }
 
-        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpPut("update")]
         public async Task<IActionResult> Update(UpdateProductCommandRequest updateProductCommandRequest)
         {
@@ -65,7 +65,6 @@ namespace ETicaretAPI.API.Controllers
 
 
 
-        [Authorize(AuthenticationSchemes = "Admin")]
         [HttpDelete("DeletebyId/{id}")]
         public async Task<IActionResult> DeletebyId(DeleteProductCommandRequest deleteProductCommandRequest)
         {

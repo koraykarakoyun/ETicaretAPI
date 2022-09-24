@@ -88,7 +88,7 @@ namespace ETicaretAPI.Persistence.Auth
             {
                 await _userManager.AddLoginAsync(appUser, info);
                 Token token=_tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
-                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 5);
+                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration,10);
                 
 
                 return new LoginDto()
@@ -174,7 +174,7 @@ namespace ETicaretAPI.Persistence.Auth
             {
                 //kullanıcı login oldu.
                 ETicaretAPI.Application.DTOs.Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
-                _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 5);
+                 await _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 10);
                 return new LoginDto()
                 {
                     IsSuccess = true,
