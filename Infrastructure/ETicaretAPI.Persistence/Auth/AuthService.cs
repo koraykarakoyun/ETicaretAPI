@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI.Application.Abstraction.Auth;
+using ETicaretAPI.Application.Abstraction.User;
 using ETicaretAPI.Application.CQRS.User.Command.FacebookLogin;
 using ETicaretAPI.Application.CQRS.User.Command.GoogleLogin;
 using ETicaretAPI.Application.CQRS.User.Command.Login;
@@ -26,14 +27,15 @@ namespace ETicaretAPI.Persistence.Auth
         ITokenHandler _tokenHandler;
         HttpClient _httpClient;
         IConfiguration _configuration;
-
-        public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        IUserService _userService;
+        public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, IHttpClientFactory httpClientFactory, IConfiguration configuration, IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenHandler = tokenHandler;
             _httpClient = httpClientFactory.CreateClient();
             _configuration = configuration;
+            _userService = userService;
         }
 
         private async Task<LoginDto> CreateUserExternalAsync(AppUser appUser,string email,string name,UserLoginInfo info,int TokenLifeTime_Seconds)
@@ -86,6 +88,9 @@ namespace ETicaretAPI.Persistence.Auth
             {
                 await _userManager.AddLoginAsync(appUser, info);
                 Token token=_tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
+                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 5);
+                
+
                 return new LoginDto()
                 {
                     IsSuccess = true,
@@ -169,6 +174,7 @@ namespace ETicaretAPI.Persistence.Auth
             {
                 //kullanıcı login oldu.
                 ETicaretAPI.Application.DTOs.Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
+                _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 5);
                 return new LoginDto()
                 {
                     IsSuccess = true,

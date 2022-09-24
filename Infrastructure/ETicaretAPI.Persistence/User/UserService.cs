@@ -51,5 +51,20 @@ namespace ETicaretAPI.Persistence.User
             return response;
 
         }
+
+        public async Task UpdateRefreshToken(AppUser appUser, string refreshToken, DateTime accessTokenEndTime, int addOnAccessTokenTime)
+        {
+            if (appUser != null)
+            {
+                appUser.RefreshToken = refreshToken;
+                appUser.RefreshTokenLifeTime = accessTokenEndTime.AddSeconds(addOnAccessTokenTime);
+                await _userManager.UpdateAsync(appUser);
+            }
+            else
+            {
+                throw new Exception("Kullanıcı Bulunamadı");
+            }
+
+        }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using ETicaretAPI.Application.Token;
+using ETicaretAPI.Domain.Entities.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,8 +46,20 @@ namespace ETicaretAPI.Infrastructure.Token
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
             token.AccessToken = jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
-
+            token.RefreshToken = CreateRefreshToken();
             return token;
+        }
+
+        public string CreateRefreshToken()
+        {
+            byte[] number = new byte[32];
+
+            using RandomNumberGenerator randomNumber = RandomNumberGenerator.Create();
+
+            randomNumber.GetBytes(number);
+
+            return Convert.ToBase64String(number);
+
         }
     }
 }
