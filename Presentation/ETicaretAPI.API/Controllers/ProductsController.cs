@@ -65,7 +65,7 @@ namespace ETicaretAPI.API.Controllers
 
 
 
-        [HttpDelete("DeletebyId/{id}")]
+        [HttpDelete("deletebyid/{id}")]
         public async Task<IActionResult> DeletebyId(DeleteProductCommandRequest deleteProductCommandRequest)
         {
             DeleteProductCommandResponse deleteProductCommandResponse= await _mediator.Send(deleteProductCommandRequest);

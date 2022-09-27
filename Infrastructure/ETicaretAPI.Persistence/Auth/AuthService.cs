@@ -9,6 +9,7 @@ using ETicaretAPI.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace ETicaretAPI.Persistence.Auth
             _userService = userService;
         }
 
-        private async Task<LoginDto> CreateUserExternalAsync(AppUser appUser,string email,string name,UserLoginInfo info,int TokenLifeTime_Seconds)
+        private async Task<LoginDto> CreateUserExternalAsync(AppUser appUser, string email, string name, UserLoginInfo info, int TokenLifeTime_Seconds)
         {
             bool result = appUser != null;
 
@@ -64,8 +65,8 @@ namespace ETicaretAPI.Persistence.Auth
                     var identityResult = await _userManager.CreateAsync(appUser);
                     if (!identityResult.Succeeded)
                     {
-                        
-                        LoginDto response=new LoginDto()
+
+                        LoginDto response = new LoginDto()
                         {
                             IsSuccess = false,
                         };
@@ -87,9 +88,9 @@ namespace ETicaretAPI.Persistence.Auth
             if (result)
             {
                 await _userManager.AddLoginAsync(appUser, info);
-                Token token=_tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
-                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration,10);
-                
+                Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
+                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 15);
+
 
                 return new LoginDto()
                 {
@@ -124,7 +125,7 @@ namespace ETicaretAPI.Persistence.Auth
 
                 //login tablosunda google girişi yapan kisinin bilgileri aranır
                 AppUser appUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-                return await CreateUserExternalAsync(appUser, userInfoResponse.Email,userInfoResponse.Name,info,TokenLifeTime_Seconds);
+                return await CreateUserExternalAsync(appUser, userInfoResponse.Email, userInfoResponse.Name, info, TokenLifeTime_Seconds);
 
             }
 
@@ -150,8 +151,8 @@ namespace ETicaretAPI.Persistence.Auth
             //login tablosunda google girişi yapan kisinin bilgileri aranır
             AppUser appUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
-            return await CreateUserExternalAsync(appUser,payload.Email,payload.Name,info,TokenLifeTime_Seconds);
-  
+            return await CreateUserExternalAsync(appUser, payload.Email, payload.Name, info, TokenLifeTime_Seconds);
+
 
         }
 
@@ -174,7 +175,7 @@ namespace ETicaretAPI.Persistence.Auth
             {
                 //kullanıcı login oldu.
                 ETicaretAPI.Application.DTOs.Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
-                 await _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 10);
+                await _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 15);
                 return new LoginDto()
                 {
                     IsSuccess = true,
@@ -191,5 +192,25 @@ namespace ETicaretAPI.Persistence.Auth
             };
 
         }
+
+        public async Task<Token> RefreshTokenLogin(string RefreshToken)
+        {
+
+            AppUser appUser = await _userManager.Users.FirstOrDefaultAsync(p => p.RefreshToken == RefreshToken);
+
+            if (appUser != null && appUser.RefreshTokenLifeTime > DateTime.UtcNow)
+            {
+                Token token = _tokenHandler.CreateAccessToken(20);
+                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 15);
+                return token;
+            }
+            else
+            {
+                throw new Exception();
+            }
+
+        }
+
+
     }
 }

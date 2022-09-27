@@ -9,6 +9,8 @@ namespace ETicaretAPI.Application.Abstraction.Auth
 {
     public interface IInternalAuthService
     {
-        Task<LoginDto> Login(string Email, string Password,int TokenLifeTime_Seconds);
+        Task<LoginDto> Login(string Email, string Password, int TokenLifeTime_Seconds);
+
+        Task<DTOs.Token> RefreshTokenLogin(string RefreshToken);
     }
 }

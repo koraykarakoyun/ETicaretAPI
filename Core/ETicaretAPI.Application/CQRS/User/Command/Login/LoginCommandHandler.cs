@@ -25,7 +25,7 @@ namespace ETicaretAPI.Application.CQRS.User.Command.Login
         public async Task<LoginCommandResponse> Handle(LoginCommandRequest request, CancellationToken cancellationToken)
         {
 
-            LoginDto loginDto= await _authService.Login(request.Email, request.Password,15);
+            LoginDto loginDto= await _authService.Login(request.Email, request.Password,20);
 
             return new LoginCommandResponse
             {
