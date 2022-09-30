@@ -1,16 +1,28 @@
 using ETicaretAPI.Application;
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.Validators;
-
 using ETicaretAPI.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serilog.Core;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+
+Logger logg = new LoggerConfiguration().
+    WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("MSSQL"), "logs", autoCreateSqlTable: true)
+    .WriteTo.Seq(builder.Configuration.GetConnectionString("SEQ"))
+    .MinimumLevel.Information()
+    .CreateLogger();
+
+builder.Host.UseSerilog(logg);
+
+
 
 builder.Services.AddPersistenceServices();
 builder.Services.AddApplicationService();
@@ -46,6 +58,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseSerilogRequestLogging();
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthentication();

@@ -20,10 +20,10 @@ namespace ETicaretAPI.Persistence
 {
     public static class ServiceRegistration
     {
-
-
+       
         public static void AddPersistenceServices(this IServiceCollection services)
         {
+            
             services.AddDbContext<ETicaretDbContext>(options => options.UseSqlServer("Server=DESKTOP-2AMEV92;Database=ETicaretApi;Trusted_Connection=True;"));
             services.AddIdentity<AppUser, AppRole>(_ =>
                 {
