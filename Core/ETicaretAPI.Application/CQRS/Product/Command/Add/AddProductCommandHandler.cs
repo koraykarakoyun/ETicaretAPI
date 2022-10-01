@@ -22,7 +22,10 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.Add
 
         public async Task<AddProductCommandResponse> Handle(AddProductCommandRequest request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("AddProduct Calistirildi");
+            //_logger.LogInformation("AddProduct Calistirildi");
+
+            throw new Exception("Hatalı ekleme");
+
             await _productWriteRepository.AddAsync(
                 new() { Name = request.Name, Stock = request.Stock, Price = request.Price }
                 );

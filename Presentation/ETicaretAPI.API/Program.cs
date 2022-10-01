@@ -1,3 +1,4 @@
+using ETicaretAPI.API.Extensions;
 using ETicaretAPI.Application;
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.Validators;
@@ -58,6 +59,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 app.UseSerilogRequestLogging();
 app.UseCors();
 app.UseHttpsRedirection();

@@ -175,7 +175,7 @@ namespace ETicaretAPI.Persistence.Auth
             {
                 //kullanıcı login oldu.
                 ETicaretAPI.Application.DTOs.Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
-                await _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 5);
+                await _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 10);
                 return new LoginDto()
                 {
                     IsSuccess = true,
@@ -200,13 +200,13 @@ namespace ETicaretAPI.Persistence.Auth
 
             if (appUser != null && appUser.RefreshTokenLifeTime > DateTime.UtcNow)
             {
-                Token token = _tokenHandler.CreateAccessToken(20);
-                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 5);
+                Token token = _tokenHandler.CreateAccessToken(10);
+                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 10);
                 return token;
             }
             else
             {
-                throw new Exception();
+                throw new Exception("Islemi yapmak için yetkiniz yok");
             }
 
         }
