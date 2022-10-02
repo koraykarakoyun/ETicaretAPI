@@ -3,6 +3,8 @@ using ETicaretAPI.Application;
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.Validators;
 using ETicaretAPI.Persistence;
+using ETicaretAPI.SignalR;
+using ETicaretAPI.SignalR.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +30,7 @@ builder.Host.UseSerilog(logg);
 builder.Services.AddPersistenceServices();
 builder.Services.AddApplicationService();
 builder.Services.AddInfrastructureService();
+builder.Services.AddSignalRServices();
 
 builder.Services.AddControllers().AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<AddProductCommandRequest>());
 
@@ -65,7 +68,7 @@ app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+app.AddMapHub();
 
 app.Run();

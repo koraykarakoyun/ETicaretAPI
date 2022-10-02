@@ -1,5 +1,5 @@
 ﻿using ETicaretAPI.Application.Abstraction.SignalR;
-using MediatR;
+using ETicaretAPI.SignalR.HubServices;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -7,15 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Application
+namespace ETicaretAPI.SignalR
 {
     public static class ServiceRegistration
     {
-        public static void AddApplicationService(this IServiceCollection services)
+        public static void AddSignalRServices(this IServiceCollection collection)
         {
-            services.AddMediatR(typeof(ServiceRegistration));
-            services.AddHttpClient();
-           
+            collection.AddSignalR();
+            collection.AddTransient<IProductHubService,ProductHubService>();
         }
     }
 }
