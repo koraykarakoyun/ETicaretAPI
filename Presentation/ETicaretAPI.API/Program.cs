@@ -16,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-
 Logger logg = new LoggerConfiguration().
     WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("MSSQL"), "logs", autoCreateSqlTable: true)
     .WriteTo.Seq(builder.Configuration.GetConnectionString("SEQ"))

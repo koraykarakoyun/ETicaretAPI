@@ -15,7 +15,6 @@ namespace ETicaretAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
     public class ProductsController : ControllerBase
     {
 
@@ -38,8 +37,9 @@ namespace ETicaretAPI.API.Controllers
             return Ok(getAllProductQueryResponses);
 
         }
+
         [HttpGet("getbyid/{id}")]
-        public async Task<IActionResult> GetById([FromQuery] GetByIdProductQueryRequest getByIdProductQueryRequest)
+        public async Task<IActionResult> GetById([FromRoute] GetByIdProductQueryRequest getByIdProductQueryRequest)
         {
             GetByIdProductQueryResponse getByIdProductQueryResponse = await _mediator.Send(getByIdProductQueryRequest);
             return Ok(getByIdProductQueryResponse);
@@ -47,6 +47,7 @@ namespace ETicaretAPI.API.Controllers
 
         
         [HttpPost("add")]
+        [Authorize(AuthenticationSchemes ="Admin")]
         public async Task<IActionResult> Add(AddProductCommandRequest addProductCommandRequest)
         {
             AddProductCommandResponse addProductCommandResponse = await _mediator.Send(addProductCommandRequest);
@@ -55,6 +56,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPut("update")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Update(UpdateProductCommandRequest updateProductCommandRequest)
         {
             UpdateProductCommandResponse updateProductCommandResponse= await _mediator.Send(updateProductCommandRequest);
@@ -66,6 +68,7 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpDelete("deletebyid/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> DeletebyId(DeleteProductCommandRequest deleteProductCommandRequest)
         {
             DeleteProductCommandResponse deleteProductCommandResponse= await _mediator.Send(deleteProductCommandRequest);
