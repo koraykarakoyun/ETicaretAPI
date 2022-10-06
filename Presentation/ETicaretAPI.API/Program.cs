@@ -63,6 +63,7 @@ if (app.Environment.IsDevelopment())
 }
 app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 app.UseSerilogRequestLogging();
+app.UseStaticFiles();
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthentication();

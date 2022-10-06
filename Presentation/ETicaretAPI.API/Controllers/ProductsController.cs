@@ -21,13 +21,15 @@ namespace ETicaretAPI.API.Controllers
         private readonly IProductWriteRepository _productWriteRepository;
         private readonly IProductReadRepository _productReadRepository;
         readonly IMediator _mediator;
+        readonly IWebHostEnvironment _webHostEnvironment;
 
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IMediator mediator)
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IMediator mediator, IWebHostEnvironment webHostEnvironment)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
             _mediator = mediator;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet("getall")]
@@ -45,9 +47,9 @@ namespace ETicaretAPI.API.Controllers
             return Ok(getByIdProductQueryResponse);
         }
 
-        
+
         [HttpPost("add")]
-        [Authorize(AuthenticationSchemes ="Admin")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Add(AddProductCommandRequest addProductCommandRequest)
         {
             AddProductCommandResponse addProductCommandResponse = await _mediator.Send(addProductCommandRequest);
@@ -59,9 +61,9 @@ namespace ETicaretAPI.API.Controllers
         [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> Update(UpdateProductCommandRequest updateProductCommandRequest)
         {
-            UpdateProductCommandResponse updateProductCommandResponse= await _mediator.Send(updateProductCommandRequest);
+            UpdateProductCommandResponse updateProductCommandResponse = await _mediator.Send(updateProductCommandRequest);
             return Ok(updateProductCommandResponse);
-            
+
 
         }
 
@@ -71,8 +73,35 @@ namespace ETicaretAPI.API.Controllers
         [Authorize(AuthenticationSchemes = "Admin")]
         public async Task<IActionResult> DeletebyId(DeleteProductCommandRequest deleteProductCommandRequest)
         {
-            DeleteProductCommandResponse deleteProductCommandResponse= await _mediator.Send(deleteProductCommandRequest);
+            DeleteProductCommandResponse deleteProductCommandResponse = await _mediator.Send(deleteProductCommandRequest);
             return Ok(deleteProductCommandResponse);
+
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Upload([FromForm] IFormCollection type)
+        {
+
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            foreach (IFormFile file in Request.Form.Files)
+            {
+                string fullpath = Path.Combine(path, file.FileName);
+                using (FileStream fileStream = new(fullpath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync: false))
+                {
+                    await file.CopyToAsync(fileStream);
+                    await fileStream.FlushAsync();
+                }
+
+            }
+
+            return Ok("eklendi");
 
         }
 
