@@ -1,6 +1,7 @@
 ﻿
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.CQRS.Product.Command.Delete;
+using ETicaretAPI.Application.CQRS.Product.Command.ImageUpload;
 using ETicaretAPI.Application.CQRS.Product.Command.UpdateById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
 using ETicaretAPI.Application.CQRS.Product.Query.GetById;
@@ -80,28 +81,12 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromForm] IFormCollection type)
+        public async Task<IActionResult> Upload([FromForm] ImageUploadProductCommandRequest ımageUploadProductCommandRequest)
         {
 
-            string path = Path.Combine(_webHostEnvironment.WebRootPath, "resource/product-images");
+            ImageUploadProductCommandResponse ımageUploadProductCommandResponse = await _mediator.Send(ımageUploadProductCommandRequest);
 
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            foreach (IFormFile file in Request.Form.Files)
-            {
-                string fullpath = Path.Combine(path, file.FileName);
-                using (FileStream fileStream = new(fullpath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync: false))
-                {
-                    await file.CopyToAsync(fileStream);
-                    await fileStream.FlushAsync();
-                }
-
-            }
-
-            return Ok("eklendi");
+            return Ok(ımageUploadProductCommandResponse);
 
         }
 
