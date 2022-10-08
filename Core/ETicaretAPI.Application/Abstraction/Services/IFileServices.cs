@@ -12,8 +12,6 @@ namespace ETicaretAPI.Application.Abstraction.Services
 
         Task<bool> UploadAsync(string path, IFormFileCollection formfilecollection);
 
-        Task<string> FileRenameAsync(string filename);
-
         Task<bool> CopyFileAsync(IFormFile file,string fullpath);
 
     }
