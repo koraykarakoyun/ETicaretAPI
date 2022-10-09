@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Persistence.Context
 {
-    public class ETicaretDbContext : IdentityDbContext<AppUser,AppRole,string>
+    public class ETicaretDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
 
 
@@ -25,6 +25,13 @@ namespace ETicaretAPI.Persistence.Context
         public DbSet<Customer> Customers { get; set; }
 
         public DbSet<Order> Orders { get; set; }
+
+
+        public DbSet<ETicaretAPI.Domain.Entities.File.File> Files { get; set; }
+
+        public DbSet<ETicaretAPI.Domain.Entities.File.ProductImageFile> ProductImageFiles { get; set; }
+
+        public DbSet<ETicaretAPI.Domain.Entities.File.InvoiceFile> InvoiceFiles { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

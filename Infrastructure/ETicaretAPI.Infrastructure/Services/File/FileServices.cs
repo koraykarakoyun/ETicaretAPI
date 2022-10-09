@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 using IOFile = System.IO.File;
 
 namespace ETicaretAPI.Infrastructure.Services.File
@@ -22,9 +23,9 @@ namespace ETicaretAPI.Infrastructure.Services.File
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public async Task<bool> UploadAsync(string path, IFormFileCollection formfilecollection)
+        public async Task<(IFormFile file, string fullpath)> UploadAsync(string path, IFormFileCollection formfilecollection)
         {
-            string uploadpath = Path.Combine(_webHostEnvironment.WebRootPath, path);s
+            string uploadpath = Path.Combine(_webHostEnvironment.WebRootPath, path);
 
             if (!Directory.Exists(uploadpath))
             {
@@ -32,7 +33,7 @@ namespace ETicaretAPI.Infrastructure.Services.File
             }
             foreach (IFormFile file in formfilecollection)
             {
-                if (file.ContentType != "image/jpeg" && file.ContentType != "image/png")
+                if (file.ContentType != "image/jpeg" && file.ContentType != "image/png" && file.ContentType != "application/pdf")
                 {
                     throw new Exception();
                 }
@@ -40,15 +41,15 @@ namespace ETicaretAPI.Infrastructure.Services.File
                 string newfilename = await FileRenameAsync(uploadpath, file.FileName);
 
                 string fullpath = Path.Combine(uploadpath, newfilename);
-                bool result = await CopyFileAsync(file, fullpath);
 
-                if (!result)
-                {
-                    throw new Exception();
-                }
+                 IFormFile uploadedfile = await CopyFileAsync(file, fullpath);
+
+                return (file:uploadedfile,fullpath:Path.Combine(path,newfilename));
+
             }
 
-            return true;
+            throw new Exception();
+          
 
         }
 
@@ -81,14 +82,14 @@ namespace ETicaretAPI.Infrastructure.Services.File
 
         }
 
-        public async Task<bool> CopyFileAsync(IFormFile file, string fullpath)
+        public async Task<IFormFile> CopyFileAsync(IFormFile file, string fullpath)
         {
             using (FileStream fileStream = new(fullpath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync: false))
             {
                 await file.CopyToAsync(fileStream);
                 await fileStream.FlushAsync();
             }
-            return true;
+            return file;
         }
 
     }

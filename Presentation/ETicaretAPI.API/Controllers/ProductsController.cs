@@ -2,6 +2,7 @@
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.CQRS.Product.Command.Delete;
 using ETicaretAPI.Application.CQRS.Product.Command.ImageUpload;
+using ETicaretAPI.Application.CQRS.Product.Command.InvoiceUpload;
 using ETicaretAPI.Application.CQRS.Product.Command.UpdateById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
 using ETicaretAPI.Application.CQRS.Product.Query.GetById;
@@ -81,14 +82,15 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromForm] ImageUploadProductCommandRequest ımageUploadProductCommandRequest)
+        public async Task<IActionResult> Upload([FromForm] InvoiceUploadProductCommandRequest ınvoiceUploadProductCommandRequest)
         {
 
-            ImageUploadProductCommandResponse ımageUploadProductCommandResponse = await _mediator.Send(ımageUploadProductCommandRequest);
+            InvoiceUploadProductCommandResponse ınvoiceUploadProductCommandResonse = await _mediator.Send(ınvoiceUploadProductCommandRequest);
 
-            return Ok(ımageUploadProductCommandResponse);
+            return Ok(ınvoiceUploadProductCommandResonse);
 
         }
+
 
     }
 }

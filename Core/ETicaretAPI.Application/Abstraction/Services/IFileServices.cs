@@ -10,9 +10,9 @@ namespace ETicaretAPI.Application.Abstraction.Services
     public interface IFileServices
     {
 
-        Task<bool> UploadAsync(string path, IFormFileCollection formfilecollection);
+        Task<(IFormFile file, string fullpath)> UploadAsync(string path, IFormFileCollection formfilecollection);
 
-        Task<bool> CopyFileAsync(IFormFile file,string fullpath);
+        Task<IFormFile> CopyFileAsync(IFormFile file,string fullpath);
 
     }
 }
