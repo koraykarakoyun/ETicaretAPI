@@ -2,6 +2,7 @@ using ETicaretAPI.API.Extensions;
 using ETicaretAPI.Application;
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.Validators;
+using ETicaretAPI.Infrastructure.Services.Storage.LocalStorage;
 using ETicaretAPI.Persistence;
 using ETicaretAPI.SignalR;
 using ETicaretAPI.SignalR.Extensions;
@@ -30,6 +31,7 @@ builder.Services.AddPersistenceServices();
 builder.Services.AddApplicationService();
 builder.Services.AddInfrastructureService();
 builder.Services.AddSignalRServices();
+builder.Services.AddStoreage<LocalStorage>();
 
 builder.Services.AddControllers().AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<AddProductCommandRequest>());
 

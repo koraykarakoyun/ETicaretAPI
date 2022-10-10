@@ -82,12 +82,12 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromForm] InvoiceUploadProductCommandRequest ınvoiceUploadProductCommandRequest)
+        public async Task<IActionResult> Upload([FromForm] ImageUploadProductCommandRequest ımageUploadProductCommandRequest)
         {
 
-            InvoiceUploadProductCommandResponse ınvoiceUploadProductCommandResonse = await _mediator.Send(ınvoiceUploadProductCommandRequest);
+           ImageUploadProductCommandResponse ımageUploadProductCommandResponse = await _mediator.Send(ımageUploadProductCommandRequest);
 
-            return Ok(ınvoiceUploadProductCommandResonse);
+            return Ok(ımageUploadProductCommandResponse);
 
         }
 

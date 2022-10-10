@@ -1,4 +1,5 @@
-﻿using ETicaretAPI.Application.Abstraction.Services;
+﻿
+using ETicaretAPI.Application.Abstraction.Storage;
 using ETicaretAPI.Application.CQRS.Product.Command.ImageUpload;
 using ETicaretAPI.Application.Repositories.InvoiceFile;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
@@ -15,20 +16,21 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.InvoiceUpload
     public class InvoiceUploadProductCommandHandler : IRequestHandler<InvoiceUploadProductCommandRequest, InvoiceUploadProductCommandResponse>
     {
 
-        readonly IFileServices _fileServices;
+        readonly IStorageService _storageService;
         readonly IInvoiceFileWriteRepository _ınvoiceFileWriteRepository;
 
-        public InvoiceUploadProductCommandHandler(IFileServices fileServices, IInvoiceFileWriteRepository ınvoiceFileWriteRepository)
+        public InvoiceUploadProductCommandHandler(IInvoiceFileWriteRepository ınvoiceFileWriteRepository, IStorageService storageService)
         {
-            _fileServices = fileServices;
+
             _ınvoiceFileWriteRepository = ınvoiceFileWriteRepository;
+            _storageService = storageService;
         }
 
         public async Task<InvoiceUploadProductCommandResponse> Handle(InvoiceUploadProductCommandRequest request, CancellationToken cancellationToken)
         {
 
 
-            (IFormFile uploadedfile, string uploadedpath) = await _fileServices.UploadAsync("resource/invoices", request.formcollection.Files);
+            (IFormFile uploadedfile, string uploadedpath) = await _storageService.UploadAsync("resource/invoices", request.formcollection.Files);
 
             bool result = await _ınvoiceFileWriteRepository.AddAsync(new() { FileName = uploadedfile.FileName, Path = uploadedpath });
             await _ınvoiceFileWriteRepository.SaveAsync();
