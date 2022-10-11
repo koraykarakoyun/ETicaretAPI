@@ -11,5 +11,7 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.ImageUpload
     public class ImageUploadProductCommandRequest : IRequest<ImageUploadProductCommandResponse>
     {
         public IFormCollection formcollection { get; set; }
+
+        public string ProductId { get; set; }
     }
 }

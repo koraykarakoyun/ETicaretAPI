@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ETicaretAPI.Domain.Common;
+using ETicaretAPI.Domain.Entities.File;
 
 namespace ETicaretAPI.Domain.Entities
 {
@@ -16,6 +17,8 @@ namespace ETicaretAPI.Domain.Entities
         public float Price { get; set; }
 
         public ICollection<Order> Orders { get; set; }
+
+        public ICollection<ProductImageFile> ProductImageFiles { get; set; }
 
     }
 }

@@ -1,5 +1,7 @@
 ﻿using ETicaretAPI.Application.Abstraction.Storage;
+using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
+using ETicaretAPI.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -14,14 +16,16 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.ImageUpload
     public class ImageUploadProductCommandHandler : IRequestHandler<ImageUploadProductCommandRequest, ImageUploadProductCommandResponse>
     {
         readonly IStorageService _storageService;
-        
-        readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
 
-        public ImageUploadProductCommandHandler(IProductImageFileWriteRepository productImageFileWriteRepository, IStorageService storageService)
+        readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
+        readonly IProductReadRepository _productReadRepository;
+
+        public ImageUploadProductCommandHandler(IProductImageFileWriteRepository productImageFileWriteRepository, IStorageService storageService, IProductReadRepository productReadRepository)
         {
 
             _productImageFileWriteRepository = productImageFileWriteRepository;
             _storageService = storageService;
+            _productReadRepository = productReadRepository;
         }
 
         public async Task<ImageUploadProductCommandResponse> Handle(ImageUploadProductCommandRequest request, CancellationToken cancellationToken)
@@ -29,7 +33,16 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.ImageUpload
 
             (IFormFile uploadedfile, string uploadedpath) = await _storageService.UploadAsync("resource/product-images", request.formcollection.Files);
 
-            bool result = await _productImageFileWriteRepository.AddAsync(new() { FileName = uploadedfile.FileName, Path = uploadedpath });
+
+            Domain.Entities.Product product = await _productReadRepository.GetByIdAsync(request.ProductId);
+
+            bool result = await _productImageFileWriteRepository.AddAsync(new() { FileName = uploadedfile.FileName, Path = uploadedpath, Products = new List<Domain.Entities.Product>(){product}});
+
+
+
+
+
+
             await _productImageFileWriteRepository.SaveAsync();
 
 
