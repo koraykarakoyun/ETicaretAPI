@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
 {
-    public class GetAllProductQueryRequest:IRequest<List<GetAllProductQueryResponse>>
+    public class GetAllProductQueryRequest: IRequest<List<GetAllProductQueryResponse>>
     {
 
     }

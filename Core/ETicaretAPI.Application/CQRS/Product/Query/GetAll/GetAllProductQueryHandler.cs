@@ -1,5 +1,8 @@
 ﻿using ETicaretAPI.Application.Repositories;
+using ETicaretAPI.Application.Repositories.ProductImageFile;
+using ETicaretAPI.Domain.Entities.File;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -14,26 +17,28 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
 
         IProductReadRepository _productReadRepository;
         ILogger<GetAllProductQueryHandler> _logger;
+        IProductImageFileReadRepository _productImageFileReadRepository;
 
-        public GetAllProductQueryHandler(IProductReadRepository productReadRepository, ILogger<GetAllProductQueryHandler> logger)
+        public GetAllProductQueryHandler(IProductReadRepository productReadRepository, ILogger<GetAllProductQueryHandler> logger, IProductImageFileReadRepository productImageFileReadRepository)
         {
             _productReadRepository = productReadRepository;
-            _logger = logger;
+            _logger = logger;  
         }
 
         public async Task<List<GetAllProductQueryResponse>> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("GetAllPrduct Calistirildi");
-            return _productReadRepository.GetAll().Select(product => new GetAllProductQueryResponse
+                
+            return  _productReadRepository.GetAll().Include(p=>p.ProductImageFiles).Select(a => new GetAllProductQueryResponse
             {
-                Id = product.Id.ToString(),
-                Name = product.Name,
-                Stock = product.Stock,
-                Price = product.Price,
+                Id=a.Id.ToString(),
+                Name=a.Name,
+                Price=a.Price,
+                Stock=a.Stock,
+                productImageFile=a.ProductImageFiles
 
             }).ToList();
 
-
+           
         }
     }
 }

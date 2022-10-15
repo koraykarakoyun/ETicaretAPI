@@ -30,12 +30,13 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.ImageUpload
 
         public async Task<ImageUploadProductCommandResponse> Handle(ImageUploadProductCommandRequest request, CancellationToken cancellationToken)
         {
-
+            //dosyayı sunucuya yükleme işlemi(wwwroot)
             (IFormFile uploadedfile, string uploadedpath) = await _storageService.UploadAsync("resource/product-images", request.formcollection.Files);
 
 
             Domain.Entities.Product product = await _productReadRepository.GetByIdAsync(request.ProductId);
-
+             
+            //dosya bilgilerini veritabanına (productimagefiles tablosuna) kaydetme işlemi
             bool result = await _productImageFileWriteRepository.AddAsync(new() { FileName = uploadedfile.FileName, Path = uploadedpath, Products = new List<Domain.Entities.Product>(){product}});
 
 

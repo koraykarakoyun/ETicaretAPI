@@ -44,7 +44,7 @@ namespace ETicaretAPI.Infrastructure.Services.Storage.LocalStorage
         {
 
 
-            string uploadpath = Path.Combine(_webHostEnvironment.WebRootPath, path);
+            string uploadpath = Path.Combine(_webHostEnvironment.WebRootPath, path);//c/koray/resource-product/
 
             if (!Directory.Exists(uploadpath))
             {
@@ -63,7 +63,7 @@ namespace ETicaretAPI.Infrastructure.Services.Storage.LocalStorage
 
                 IFormFile uploadedfile = await CopyFileAsync(file, fullpath);
 
-                return (file: uploadedfile, fullpath: Path.Combine(path, newfilename));
+                return (file: uploadedfile, fullpath: Path.Combine(path,newfilename));
 
             }
 

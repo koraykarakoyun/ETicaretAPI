@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ETicaretAPI.Domain.Entities;
-using ETicaretAPI.Domain.Entities.File;
 
-namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
+namespace ETicaretAPI.Application.CQRS.Product.Query.GetAllImage
 {
-    public class GetAllProductQueryResponse
+    public class GetAllImageProductQueryResponse
     {
+
 
         public string Id { get; set; }
         public string Name { get; set; }
@@ -18,9 +17,9 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
 
         public float Price { get; set; }
 
-        public ICollection<ProductImageFile> productImageFile { get; set; }
+        public string Path { get; set; }
 
-
+        public string FileName { get; set; }
 
     }
 }

@@ -1,17 +1,21 @@
 ﻿
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
+using ETicaretAPI.Application.CQRS.Product.Command.ChangeShowCase;
 using ETicaretAPI.Application.CQRS.Product.Command.Delete;
 using ETicaretAPI.Application.CQRS.Product.Command.ImageUpload;
 using ETicaretAPI.Application.CQRS.Product.Command.InvoiceUpload;
 using ETicaretAPI.Application.CQRS.Product.Command.UpdateById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
+using ETicaretAPI.Application.CQRS.Product.Query.GetAllImage;
 using ETicaretAPI.Application.CQRS.Product.Query.GetById;
+using ETicaretAPI.Application.CQRS.Product.Query.GetImage;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ETicaretAPI.API.Controllers
 {
@@ -85,11 +89,45 @@ namespace ETicaretAPI.API.Controllers
         public async Task<IActionResult> Upload([FromForm] ImageUploadProductCommandRequest ımageUploadProductCommandRequest)
         {
 
-           ImageUploadProductCommandResponse ımageUploadProductCommandResponse = await _mediator.Send(ımageUploadProductCommandRequest);
+            ImageUploadProductCommandResponse ımageUploadProductCommandResponse = await _mediator.Send(ımageUploadProductCommandRequest);
 
             return Ok(ımageUploadProductCommandResponse);
 
         }
+
+
+        [HttpGet("getimage/{ProductId}")]
+        public async Task<IActionResult> GetImage([FromRoute] GetImageProductCommandRequest getImageProductCommandRequest)
+        {
+
+
+            List<GetImageProductCommandResponse> getImageProductCommandResponse = await _mediator.Send(getImageProductCommandRequest);
+
+            return Ok(getImageProductCommandResponse);
+
+        }
+
+
+
+        [HttpGet("getallimage")]
+        public async Task<IActionResult> getallimage([FromRoute] GetAllImageProductQueryRequest getAllImageProductQueryRequest)
+        {
+
+            List<GetAllImageProductQueryResponse> getAllImageProductQueryResponses = await _mediator.Send(getAllImageProductQueryRequest);
+
+            return Ok(getAllImageProductQueryResponses);
+
+
+        }
+
+        [HttpPut("vitrin")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        public async Task<IActionResult> Vitrin(ChangeShowCaseProductCommandRequest changeShowCaseProductCommandRequest)
+        {
+            ChangeShowCaseProductCommandResponse changeShowCaseProductCommandResponse = await _mediator.Send(changeShowCaseProductCommandRequest);
+            return Ok(changeShowCaseProductCommandResponse);
+        }
+
 
 
     }
