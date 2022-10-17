@@ -19,19 +19,45 @@ namespace ETicaretAPI.Persistence.Context
         {
         }
 
-
+        //Main Tables
         public DbSet<Product> Products { get; set; }
 
         public DbSet<Customer> Customers { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 
-
+        //File Tables
         public DbSet<ETicaretAPI.Domain.Entities.File.File> Files { get; set; }
 
         public DbSet<ETicaretAPI.Domain.Entities.File.ProductImageFile> ProductImageFiles { get; set; }
 
         public DbSet<ETicaretAPI.Domain.Entities.File.InvoiceFile> InvoiceFiles { get; set; }
+
+        //Basket Tables
+        public DbSet<ETicaretAPI.Domain.Entities.Basket> Baskets { get; set; }
+        public DbSet<ETicaretAPI.Domain.Entities.BasketItem> BasketItems { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+
+
+            builder.Entity<Order>()
+               .HasKey(b => b.Id);
+
+            builder.Entity<Order>()
+                .HasIndex(o => o.OrderCode)
+                .IsUnique();
+
+            builder.Entity<ETicaretAPI.Domain.Entities.Basket>()
+                .HasOne(b => b.Order)
+                .WithOne(o => o.Basket)
+                .HasForeignKey<Order>(b => b.Id);
+            //order'in "id" si ile  basket "id" si "bire bir iliski" ile baglandi.
+
+
+
+            base.OnModelCreating(builder);
+        }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
