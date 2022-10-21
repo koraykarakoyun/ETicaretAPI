@@ -54,8 +54,6 @@ namespace ETicaretAPI.Persistence.Context
                 .HasForeignKey<Order>(b => b.Id);
             //order'in "id" si ile  basket "id" si "bire bir iliski" ile baglandi.
 
-
-
             base.OnModelCreating(builder);
         }
 

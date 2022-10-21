@@ -1,4 +1,5 @@
-﻿using ETicaretAPI.Application.Repositories;
+﻿using ETicaretAPI.Application.Abstraction.Basket;
+using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
 using ETicaretAPI.Domain.Entities.File;
 using MediatR;
@@ -22,12 +23,12 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
         public GetAllProductQueryHandler(IProductReadRepository productReadRepository, ILogger<GetAllProductQueryHandler> logger, IProductImageFileReadRepository productImageFileReadRepository)
         {
             _productReadRepository = productReadRepository;
-            _logger = logger;  
+            _logger = logger;
         }
 
         public async Task<List<GetAllProductQueryResponse>> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
         {
-                
+
             return  _productReadRepository.GetAll().Include(p=>p.ProductImageFiles).Select(a => new GetAllProductQueryResponse
             {
                 Id=a.Id.ToString(),

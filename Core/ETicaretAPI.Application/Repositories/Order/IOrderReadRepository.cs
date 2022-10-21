@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Application.Repositories
+namespace ETicaretAPI.Application.Repositories.Order
 {
-    public interface IOrderReadRepository:IReadRepository<Order>
+    public interface IOrderReadRepository:IReadRepository<Domain.Entities.Order>
     {
     }
 }

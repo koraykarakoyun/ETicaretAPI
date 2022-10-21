@@ -88,7 +88,7 @@ namespace ETicaretAPI.Persistence.Auth
             if (result)
             {
                 await _userManager.AddLoginAsync(appUser, info);
-                Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
+                Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds,appUser);
                 await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 5);
 
 
@@ -174,8 +174,8 @@ namespace ETicaretAPI.Persistence.Auth
             if (signInResult.Succeeded)
             {
                 //kullanıcı login oldu.
-                ETicaretAPI.Application.DTOs.Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds);
-                await _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 10);
+                ETicaretAPI.Application.DTOs.Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds,user);
+                await _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 200);
                 return new LoginDto()
                 {
                     IsSuccess = true,
@@ -200,8 +200,8 @@ namespace ETicaretAPI.Persistence.Auth
 
             if (appUser != null && appUser.RefreshTokenLifeTime > DateTime.UtcNow)
             {
-                Token token = _tokenHandler.CreateAccessToken(10);
-                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 10);
+                Token token = _tokenHandler.CreateAccessToken(300, appUser);
+                await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 200);
                 return token;
             }
             else

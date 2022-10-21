@@ -29,7 +29,7 @@ namespace ETicaretAPI.Application.CQRS.User.Command.FacebookLogin
 
         public async Task<FacebookLoginCommandResponse> Handle(FacebookLoginCommandRequest request, CancellationToken cancellationToken)
         {
-            LoginDto loginDto = await _authService.FacbookLogin(request.AccessToken,20);
+            LoginDto loginDto = await _authService.FacbookLogin(request.AccessToken,300);
 
             return new FacebookLoginCommandResponse
             {

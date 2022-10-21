@@ -12,8 +12,8 @@ namespace ETicaretAPI.Application.Abstraction.Basket
     {
 
         Task<List<BasketItem>> GetBasketItems();
-        Task AddItemToBasketAsync(Create_BasketItem basketItem);
-        Task UpdateQuantityAsync(Update_BasketItem basketItem);
-        Task RemoveBasketItemAsync(string basketItemId);
+        Task<bool> AddItemToBasketAsync(Create_BasketItem basketItem);
+        Task<bool> UpdateQuantityAsync(Update_BasketItem basketItem);
+        Task<bool> RemoveBasketItemAsync(string basketItemId);
     }
 }

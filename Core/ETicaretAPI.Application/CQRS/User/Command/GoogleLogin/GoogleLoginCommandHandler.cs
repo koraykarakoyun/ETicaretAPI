@@ -26,7 +26,7 @@ namespace ETicaretAPI.Application.CQRS.User.Command.GoogleLogin
         public async Task<GoogleLoginCommandResponse> Handle(GoogleLoginCommandRequest request, CancellationToken cancellationToken)
         {
 
-            LoginDto loginDto = await _authService.GoogleLogin(request.IdToken,20);
+            LoginDto loginDto = await _authService.GoogleLogin(request.IdToken,300);
 
             return new GoogleLoginCommandResponse
             {

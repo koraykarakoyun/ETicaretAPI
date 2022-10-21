@@ -38,6 +38,7 @@ namespace ETicaretAPI.API.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+       
         [HttpGet("getall")]
         public async Task<IActionResult> GetAll([FromQuery] GetAllProductQueryRequest getAllProductQueryRequest)
         {

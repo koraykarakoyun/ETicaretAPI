@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace ETicaretAPI.Infrastructure.Token
             _configuration = configuration;
         }
 
-        public Application.DTOs.Token CreateAccessToken(int expiration_time_seconds)
+        public Application.DTOs.Token CreateAccessToken(int expiration_time_seconds,AppUser user)
         {
             Application.DTOs.Token token = new Application.DTOs.Token();
 
@@ -45,7 +46,8 @@ namespace ETicaretAPI.Infrastructure.Token
                 issuer: _configuration["Token:Issuer"],
                 notBefore: DateTime.UtcNow,
                 expires: token.Expiration,
-                signingCredentials: signingCredentials
+                signingCredentials: signingCredentials,
+                claims:new List<Claim>{new(ClaimTypes.Name,user.UserName)}
                 );
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new();

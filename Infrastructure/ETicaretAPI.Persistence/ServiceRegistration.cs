@@ -6,6 +6,7 @@ using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.Basket;
 using ETicaretAPI.Application.Repositories.BasketItem;
 using ETicaretAPI.Application.Repositories.InvoiceFile;
+using ETicaretAPI.Application.Repositories.Order;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
 using ETicaretAPI.Domain.Entities.Identity;
 using ETicaretAPI.Persistence.Auth;
@@ -16,8 +17,10 @@ using ETicaretAPI.Persistence.Repositories.Basket;
 using ETicaretAPI.Persistence.Repositories.BasketItem;
 using ETicaretAPI.Persistence.Repositories.File;
 using ETicaretAPI.Persistence.Repositories.InvoiceFile;
+using ETicaretAPI.Persistence.Repositories.Order;
 using ETicaretAPI.Persistence.Repositories.ProductImageFile;
 using ETicaretAPI.Persistence.User;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,32 +53,30 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
             services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
 
-            services.AddScoped<IOrderReadRepository, OrderReadRepository>();
             services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
+            services.AddScoped<IOrderReadRepository, OrderReadRepository>();
+
+            services.AddScoped<IFileWriteRepository,FileWriteRepository>();
+            services.AddScoped<IFileReadRepository, FileReadRepository>();
+            services.AddScoped<IProductImageFileWriteRepository,ProductImageFileWriteRepository>();
+            services.AddScoped<IProductImageFileReadRepository, ProductImageFileReadRepository>();
+            services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
+            services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
+
+            services.AddScoped<IBasketWriteRepository, BasketWriteRepository>();
+            services.AddScoped<IBasketReadRepository, BasketReadRepository>();
+            services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
+            services.AddScoped<IBasketItemReadRepository, BasketItemReadRepository>();
+            services.AddScoped<IBasketService, BasketService>();
+          
+
+
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IExternalAuthService, AuthService>();
             services.AddScoped<IInternalAuthService, AuthService>();
 
-
-            services.AddScoped<IFileWriteRepository,FileWriteRepository>();
-            services.AddScoped<IFileReadRepository, FileReadRepository>();
-
-
-            services.AddScoped<IProductImageFileWriteRepository,ProductImageFileWriteRepository>();
-            services.AddScoped<IProductImageFileReadRepository, ProductImageFileReadRepository>();
-
-            services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
-            services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
-
-
-            services.AddScoped<IBasketWriteRepository, BasketWriteRepository>();
-            services.AddScoped<IBasketReadRepository, BasketReadRepository>();
-
-            services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
-            services.AddScoped<IBasketItemReadRepository, BasketItemReadRepository>();
-            services.AddScoped<IBasketService, BasketService>();
         }
     }
 }
