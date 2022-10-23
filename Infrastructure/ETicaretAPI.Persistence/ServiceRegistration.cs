@@ -1,6 +1,7 @@
 ﻿
 using ETicaretAPI.Application.Abstraction.Auth;
 using ETicaretAPI.Application.Abstraction.Basket;
+using ETicaretAPI.Application.Abstraction.Order;
 using ETicaretAPI.Application.Abstraction.User;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.Basket;
@@ -68,7 +69,8 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
             services.AddScoped<IBasketItemReadRepository, BasketItemReadRepository>();
             services.AddScoped<IBasketService, BasketService>();
-          
+
+            services.AddScoped<IOrderService, OrderService>();
 
 
 

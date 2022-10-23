@@ -11,7 +11,7 @@ namespace ETicaretAPI.Domain.Entities
     {
         public Guid Name { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
+        //public ICollection<Order> Orders { get; set; }
 
     }
 }

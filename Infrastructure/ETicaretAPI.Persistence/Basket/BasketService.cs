@@ -163,5 +163,10 @@ namespace ETicaretAPI.Persistence.Basket
             return false;
 
         }
+
+        public async Task<Domain.Entities.Basket?> GetUserActiveBasket()
+        {
+           return await ContextUser();
+        }
     }
 }
