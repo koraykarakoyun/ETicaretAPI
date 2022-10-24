@@ -12,5 +12,7 @@ namespace ETicaretAPI.Application.Abstraction.Order
 
         Task CreateOrder(CreateOrderDto createOrderDto);
 
+        Task<List<GetAllOrderDto>> GetAllOrder();
+
     }
 }

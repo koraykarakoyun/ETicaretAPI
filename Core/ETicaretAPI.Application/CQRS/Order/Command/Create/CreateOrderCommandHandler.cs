@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Application.CQRS.Order.Command
+namespace ETicaretAPI.Application.CQRS.Order.Command.Create
 {
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommandRequest, CreateOrderCommandResponse>
     {
@@ -23,14 +23,14 @@ namespace ETicaretAPI.Application.CQRS.Order.Command
             {
                 Address = request.Address,
                 Description = request.Description
-                
+
             });
 
 
             return new CreateOrderCommandResponse()
             {
-                IsSuccess=true,
-                Messages="Sepetiniz Basariyla Tamamlanmistir"
+                IsSuccess = true,
+                Messages = "Sepetiniz Basariyla Tamamlanmistir"
             };
         }
     }

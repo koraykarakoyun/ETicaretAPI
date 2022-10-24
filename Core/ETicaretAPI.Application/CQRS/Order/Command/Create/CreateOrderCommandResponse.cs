@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Application.CQRS.Order.Command
+namespace ETicaretAPI.Application.CQRS.Order.Command.Create
 {
     public class CreateOrderCommandResponse
     {

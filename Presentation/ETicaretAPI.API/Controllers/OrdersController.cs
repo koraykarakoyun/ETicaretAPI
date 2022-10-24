@@ -1,4 +1,5 @@
-﻿using ETicaretAPI.Application.CQRS.Order.Command;
+﻿using ETicaretAPI.Application.CQRS.Order.Command.Create;
+using ETicaretAPI.Application.CQRS.Order.Query.GetAll;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,13 @@ namespace ETicaretAPI.API.Controllers
         {
             _mediator = mediator;
         }
+        [HttpGet("GetAllOrders")]
+        public async Task<IActionResult> GetAllOrder([FromRoute]GetAllOrderQueryRequest getAllOrderQueryRequest)
+        {
+             List<GetAllOrderQueryResponse> getAllOrderQueryResponse = await _mediator.Send(getAllOrderQueryRequest);
+            return Ok(getAllOrderQueryResponse);
+        }
+
 
         [HttpPost("CreateOrder")]
         public async Task<IActionResult> CreateOrder(CreateOrderCommandRequest createOrderCommandRequest)

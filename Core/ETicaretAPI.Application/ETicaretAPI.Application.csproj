@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\Order\Query\" />
     <Folder Include="CQRS\User\Query\" />
   </ItemGroup>
 
