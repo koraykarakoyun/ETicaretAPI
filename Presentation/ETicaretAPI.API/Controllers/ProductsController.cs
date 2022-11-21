@@ -1,4 +1,5 @@
 ﻿
+using ETicaretAPI.Application.Const;
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.CQRS.Product.Command.ChangeShowCase;
 using ETicaretAPI.Application.CQRS.Product.Command.Delete;
@@ -9,6 +10,8 @@ using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAllImage;
 using ETicaretAPI.Application.CQRS.Product.Query.GetById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetImage;
+using ETicaretAPI.Application.CustomAttributes;
+using ETicaretAPI.Application.Enums;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Domain.Entities;
 using MediatR;
@@ -16,6 +19,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Net.Mail;
 
 namespace ETicaretAPI.API.Controllers
 {
@@ -57,6 +61,7 @@ namespace ETicaretAPI.API.Controllers
 
         [HttpPost("add")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products,ActionType =ActionType.Writing,Definiton ="Add Product")]
         public async Task<IActionResult> Add(AddProductCommandRequest addProductCommandRequest)
         {
             AddProductCommandResponse addProductCommandResponse = await _mediator.Send(addProductCommandRequest);
@@ -66,6 +71,7 @@ namespace ETicaretAPI.API.Controllers
 
         [HttpPut("update")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Updateing, Definiton = "Update Product")]
         public async Task<IActionResult> Update(UpdateProductCommandRequest updateProductCommandRequest)
         {
             UpdateProductCommandResponse updateProductCommandResponse = await _mediator.Send(updateProductCommandRequest);
@@ -78,6 +84,7 @@ namespace ETicaretAPI.API.Controllers
 
         [HttpDelete("deletebyid/{id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Deleting, Definiton = "Delete By Id Product")]
         public async Task<IActionResult> DeletebyId(DeleteProductCommandRequest deleteProductCommandRequest)
         {
             DeleteProductCommandResponse deleteProductCommandResponse = await _mediator.Send(deleteProductCommandRequest);
@@ -128,6 +135,7 @@ namespace ETicaretAPI.API.Controllers
             ChangeShowCaseProductCommandResponse changeShowCaseProductCommandResponse = await _mediator.Send(changeShowCaseProductCommandRequest);
             return Ok(changeShowCaseProductCommandResponse);
         }
+
 
 
 

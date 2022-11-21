@@ -1,5 +1,7 @@
-﻿using ETicaretAPI.Application.Abstraction.Storage;
+﻿using ETicaretAPI.Application.Abstraction.ApplicationServices;
+using ETicaretAPI.Application.Abstraction.Storage;
 using ETicaretAPI.Application.Token;
+using ETicaretAPI.Infrastructure.Services.ApplicationServices;
 using ETicaretAPI.Infrastructure.Services.Storage;
 using ETicaretAPI.Infrastructure.Token;
 using MediatR;
@@ -18,7 +20,7 @@ namespace ETicaretAPI.Application
         {
             services.AddScoped<ITokenHandler, TokenHandler>();
             services.AddScoped<IStorageService,StorageService>();
-
+            services.AddScoped<IApplicationServices, ApplicationServices>();
         }
 
 

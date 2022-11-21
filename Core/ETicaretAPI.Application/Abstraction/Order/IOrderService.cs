@@ -14,5 +14,9 @@ namespace ETicaretAPI.Application.Abstraction.Order
 
         Task<List<GetAllOrderDto>> GetAllOrder();
 
+        Task<OrderDetailDto> GetOrderDetailById(string Id);
+        
+        Task<bool> CompleteOrderAsync(string Id);
+
     }
 }

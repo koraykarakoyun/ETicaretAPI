@@ -1,7 +1,10 @@
-﻿using ETicaretAPI.Application.CQRS.Basket.Command.Add;
+﻿using ETicaretAPI.Application.Const;
+using ETicaretAPI.Application.CQRS.Basket.Command.Add;
 using ETicaretAPI.Application.CQRS.Basket.Command.RemoveItemToBasket;
 using ETicaretAPI.Application.CQRS.Basket.Command.UpdateBasketItem;
 using ETicaretAPI.Application.CQRS.Basket.Query.GetBasketItem;
+using ETicaretAPI.Application.CustomAttributes;
+using ETicaretAPI.Application.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +24,7 @@ namespace ETicaretAPI.API.Controllers
             _mediator = mediator;
         }
 
+        [AuthorizeDefinition(Menu =AttributeConst.Baskets,ActionType =ActionType.Reading,Definiton ="Get Basket Item")]
         [HttpGet("getbasketitem")]
         public async Task<IActionResult> GetBasketItem([FromRoute] GetBasketItemQueryRequest getBasketItemQueryRequest)
         {
@@ -31,6 +35,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
 
+        [AuthorizeDefinition(Menu = AttributeConst.Baskets, ActionType = ActionType.Updateing, Definiton = "Update Basket Item")]
         [HttpPut("updatebasketitem")]
         public async Task<IActionResult> UpdateBasketItem(UpdateBasketItemCommandRequest updateBasketItemCommandRequest)
         {
@@ -42,6 +47,7 @@ namespace ETicaretAPI.API.Controllers
 
 
 
+        [AuthorizeDefinition(Menu = AttributeConst.Baskets, ActionType =ActionType.Writing, Definiton = "Add Basket Item")]
         [HttpPost("addbasketitem")]
         public async Task<IActionResult> AddBasketItem(AddItemToBasketCommandRequest addItemToBasketCommandRequest)
         {
@@ -51,6 +57,8 @@ namespace ETicaretAPI.API.Controllers
 
         }
 
+
+        [AuthorizeDefinition(Menu = AttributeConst.Baskets, ActionType =ActionType.Deleting, Definiton = "Delete Basket Item")]
         [HttpDelete("deletebasketitem")]
         public async Task<IActionResult> DeleteBasketItem(RemoveItemToBasketCommanRequest removeItemToBasketCommanRequest)
         {

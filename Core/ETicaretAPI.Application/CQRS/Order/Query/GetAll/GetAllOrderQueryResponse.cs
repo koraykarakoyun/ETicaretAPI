@@ -21,5 +21,7 @@ namespace ETicaretAPI.Application.CQRS.Order.Query.GetAll
 
         public DateTime CreatedDate { get; set; }
 
+        public bool OrderCompleted { get; set; }
+
     }
 }

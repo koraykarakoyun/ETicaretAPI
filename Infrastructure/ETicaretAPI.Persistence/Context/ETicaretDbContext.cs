@@ -37,6 +37,8 @@ namespace ETicaretAPI.Persistence.Context
         public DbSet<ETicaretAPI.Domain.Entities.Basket> Baskets { get; set; }
         public DbSet<ETicaretAPI.Domain.Entities.BasketItem> BasketItems { get; set; }
 
+        public DbSet<Domain.Entities.CompletedOrder> CompletedOrders { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -53,6 +55,9 @@ namespace ETicaretAPI.Persistence.Context
                 .WithOne(o => o.Basket)
                 .HasForeignKey<Order>(b => b.Id);
             //order'in "id" si ile  basket "id" si "bire bir iliski" ile baglandi.
+
+            builder.Entity<Order>().HasOne(o => o.CompletedOrder).WithOne(o => o.Order).HasForeignKey<CompletedOrder>(o => o.OrderId);
+
 
             base.OnModelCreating(builder);
         }

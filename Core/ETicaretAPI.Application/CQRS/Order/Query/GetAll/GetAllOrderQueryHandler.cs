@@ -30,7 +30,8 @@ namespace ETicaretAPI.Application.CQRS.Order.Query.GetAll
                 Description = a.Description,
                 Address = a.Address,
                 TotalPrice = a.TotalPrice,
-                CreatedDate = a.CreatedDate
+                CreatedDate = a.CreatedDate,
+                OrderCompleted = a.OrderCompleted
 
             }).ToList();
         }

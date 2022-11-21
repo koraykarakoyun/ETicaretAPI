@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ETicaretAPI.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace ETicaretAPI.Application.DTOs
         public string TotalPrice { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public bool OrderCompleted { get; set; }
 
 
     }
