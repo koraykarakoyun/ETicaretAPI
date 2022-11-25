@@ -71,7 +71,7 @@ namespace ETicaretAPI.Persistence
         public async Task<List<GetAllOrderDto>> GetAllOrder()
         {
 
-            var query = _orderReadRepository.Table.Include(o => o.Basket).ThenInclude(b => b.AppUser)
+            var query = _orderReadRepository.Table.Include(o => o.Basket).ThenInclude(b => b.User)
                .Include(o => o.Basket).ThenInclude(b => b.BasketItems).ThenInclude(p => p.Product);
 
             var result = from order in query
@@ -96,7 +96,7 @@ namespace ETicaretAPI.Persistence
             return await result.Select(a => new GetAllOrderDto()
             {
                 OrderBasketId = a.Id.ToString(),
-                UserName = a.Basket.AppUser.UserName,
+                UserName = a.Basket.User.UserName,
                 OrderCode = a.OrderCode,
                 Address = a.Address,
                 Description = a.Description,

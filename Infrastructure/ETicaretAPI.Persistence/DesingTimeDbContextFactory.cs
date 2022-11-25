@@ -15,7 +15,7 @@ namespace ETicaretAPI.Persistence
         {
             DbContextOptionsBuilder<ETicaretDbContext> dbContextOptionsBuilder = new();
 
-            dbContextOptionsBuilder.UseSqlServer("Server=DESKTOP-2AMEV92;Database=ETicaretApi;Trusted_Connection=True;");
+            dbContextOptionsBuilder.UseSqlServer("Server=DESKTOP-3AI1OI3;Database=ETicaretApi;Trusted_Connection=True;");
 
             return new(dbContextOptionsBuilder.Options);
         }

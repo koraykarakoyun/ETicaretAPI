@@ -12,8 +12,6 @@ namespace ETicaretAPI.Domain.Entities.Identity
         public string Name { get; set; }
         public string Surname { get; set; }
 
-
-
         public ICollection<Basket> Basket { get; set; }
         public string? RefreshToken { get; set; }
 
