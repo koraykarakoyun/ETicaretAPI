@@ -39,6 +39,10 @@ namespace ETicaretAPI.Persistence.Context
 
         public DbSet<Domain.Entities.CompletedOrder> CompletedOrders { get; set; }
 
+        public DbSet<Domain.Entities.Menu> Menus { get; set; }
+
+        public DbSet<Domain.Entities.Endpoint> Endpoints { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 

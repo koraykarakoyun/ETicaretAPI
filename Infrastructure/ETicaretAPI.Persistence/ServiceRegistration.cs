@@ -1,5 +1,6 @@
 ﻿
 using ETicaretAPI.Application.Abstraction.Auth;
+using ETicaretAPI.Application.Abstraction.AuthorizationEndpoint;
 using ETicaretAPI.Application.Abstraction.Basket;
 using ETicaretAPI.Application.Abstraction.Order;
 using ETicaretAPI.Application.Abstraction.Role;
@@ -8,19 +9,24 @@ using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.Basket;
 using ETicaretAPI.Application.Repositories.BasketItem;
 using ETicaretAPI.Application.Repositories.CompletedOrder;
+using ETicaretAPI.Application.Repositories.Endpoint;
 using ETicaretAPI.Application.Repositories.InvoiceFile;
+using ETicaretAPI.Application.Repositories.Menu;
 using ETicaretAPI.Application.Repositories.Order;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
 using ETicaretAPI.Domain.Entities.Identity;
 using ETicaretAPI.Persistence.Auth;
+using ETicaretAPI.Persistence.AuthorizationEndpoint;
 using ETicaretAPI.Persistence.Basket;
 using ETicaretAPI.Persistence.Context;
 using ETicaretAPI.Persistence.Repositories;
 using ETicaretAPI.Persistence.Repositories.Basket;
 using ETicaretAPI.Persistence.Repositories.BasketItem;
 using ETicaretAPI.Persistence.Repositories.CompletedOrder;
+using ETicaretAPI.Persistence.Repositories.Endpoint;
 using ETicaretAPI.Persistence.Repositories.File;
 using ETicaretAPI.Persistence.Repositories.InvoiceFile;
+using ETicaretAPI.Persistence.Repositories.Menu;
 using ETicaretAPI.Persistence.Repositories.Order;
 using ETicaretAPI.Persistence.Repositories.ProductImageFile;
 using ETicaretAPI.Persistence.Role;
@@ -39,10 +45,10 @@ namespace ETicaretAPI.Persistence
 {
     public static class ServiceRegistration
     {
-       
+
         public static void AddPersistenceServices(this IServiceCollection services)
         {
-            
+
             services.AddDbContext<ETicaretDbContext>(options => options.UseSqlServer("Server=DESKTOP-3AI1OI3;Database=ETicaretApi;Trusted_Connection=True;"));
             services.AddIdentity<AppUser, AppRole>(_ =>
                 {
@@ -61,9 +67,9 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
 
-            services.AddScoped<IFileWriteRepository,FileWriteRepository>();
+            services.AddScoped<IFileWriteRepository, FileWriteRepository>();
             services.AddScoped<IFileReadRepository, FileReadRepository>();
-            services.AddScoped<IProductImageFileWriteRepository,ProductImageFileWriteRepository>();
+            services.AddScoped<IProductImageFileWriteRepository, ProductImageFileWriteRepository>();
             services.AddScoped<IProductImageFileReadRepository, ProductImageFileReadRepository>();
             services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
             services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
@@ -75,6 +81,12 @@ namespace ETicaretAPI.Persistence
 
             services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
             services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
+
+            services.AddScoped<IMenuReadRepository, MenuReadRepository>();
+            services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
+
+            services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
+            services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
 
 
             services.AddScoped<IBasketService, BasketService>();
@@ -88,6 +100,7 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IInternalAuthService, AuthService>();
 
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
 
         }
     }

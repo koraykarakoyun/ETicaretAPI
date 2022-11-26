@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Concretes\**" />
+    <EmbeddedResource Remove="Concretes\**" />
+    <None Remove="Concretes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Google.Apis.Auth" Version="1.57.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.9" />
@@ -25,10 +31,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\ETicaretAPI.Application\ETicaretAPI.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Concretes\" />
   </ItemGroup>
 
 </Project>

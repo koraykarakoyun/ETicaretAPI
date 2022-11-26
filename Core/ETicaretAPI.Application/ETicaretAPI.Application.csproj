@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CQRS\AuthorizationEndpoint\Query\" />
     <Folder Include="CQRS\User\Query\" />
   </ItemGroup>
 
