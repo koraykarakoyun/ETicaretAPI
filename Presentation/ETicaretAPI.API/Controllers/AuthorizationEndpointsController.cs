@@ -1,4 +1,6 @@
 ﻿using ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command;
+using ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command.AssingRoleEndpoint;
+using ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command.GetRolesToEndpoint;
 using ETicaretAPI.Application.CQRS.User.Command.Login;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +19,14 @@ namespace ETicaretAPI.API.Controllers
         {
             _mediator = mediator;
         }
+
+        [HttpPost("GetRolesToEndpoint")]
+        public async Task<IActionResult> GetRolesToEndpoint(GetRolesToEndpointCommandRequest getRolesToEndpointCommandRequest)
+        {
+            GetRolesToEndpointCommandResponse getRolesToEndpointCommandResponse = await _mediator.Send(getRolesToEndpointCommandRequest);
+            return Ok(getRolesToEndpointCommandResponse);
+        }
+
 
 
 

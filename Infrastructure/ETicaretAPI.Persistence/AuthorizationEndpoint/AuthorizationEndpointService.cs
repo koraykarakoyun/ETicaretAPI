@@ -49,7 +49,7 @@ namespace ETicaretAPI.Persistence.AuthorizationEndpoint
                 await _menuWriteRepository.AddAsync(_menu);
                 await _menuWriteRepository.SaveAsync();
             }
-            Endpoint? _endpoint = await _endpointReadRepository.Table.Include(t => t.Menu).FirstOrDefaultAsync(m => m.Menu.Name == Menu && m.Code == Code);
+            Endpoint? _endpoint = await _endpointReadRepository.Table.Include(t => t.Menu).Include(r=>r.Roles).FirstOrDefaultAsync(m => m.Menu.Name == Menu && m.Code == Code);
 
             if (_endpoint == null)
             {
@@ -70,6 +70,10 @@ namespace ETicaretAPI.Persistence.AuthorizationEndpoint
 
             }
 
+            foreach (var roles in _endpoint.Roles)
+            {
+                _endpoint.Roles.Remove(roles);
+            }
 
             var approles = await _roleManager.Roles.Where(r => Roles.Contains(r.Name)).ToListAsync();
 
@@ -78,7 +82,17 @@ namespace ETicaretAPI.Persistence.AuthorizationEndpoint
                 _endpoint.Roles.Add(role);
             }
             await _endpointWriteRepository.SaveAsync();
-    
+
+        }
+
+        public async Task<List<string>> GetRolesToEndpoint(string Menu, string Code)
+        {
+            Endpoint? endpoint = await _endpointReadRepository.Table.Include(e => e.Roles).Include(e => e.Menu).FirstOrDefaultAsync(a => a.Menu.Name == Menu && a.Code == Code);
+            if (endpoint != null)
+            {
+                return endpoint.Roles.Select(a => a.Name).ToList();
+            }
+            return null;
         }
     }
 }

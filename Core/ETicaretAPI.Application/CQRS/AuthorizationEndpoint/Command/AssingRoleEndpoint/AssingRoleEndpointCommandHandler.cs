@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI.Application.Abstraction.AuthorizationEndpoint;
+using ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command.AssingRoleEndpoint;
 using MediatR;
 using System;
 using System.Collections.Generic;

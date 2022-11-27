@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command
+namespace ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command.AssingRoleEndpoint
 {
     public class AssingRoleEndpointCommandResponse
     {
