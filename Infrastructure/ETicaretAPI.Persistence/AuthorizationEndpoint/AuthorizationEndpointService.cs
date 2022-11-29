@@ -34,7 +34,8 @@ namespace ETicaretAPI.Persistence.AuthorizationEndpoint
             _roleManager = roleManager;
         }
 
-        public async Task AssingRoleEndpointAsync(string Code, string[] Roles, Type type, string Menu)
+
+        public async Task AssignRoleEndpointAsync(string Code, string[] Roles, Type type, string Menu)
         {
 
             Menu _menu = await _menuReadRepository.GetSingleAsync(m => m.Name == Menu);

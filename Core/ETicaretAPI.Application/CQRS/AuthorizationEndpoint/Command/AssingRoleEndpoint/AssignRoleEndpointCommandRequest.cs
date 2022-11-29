@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command.AssingRoleEndpoint
 {
-    public class AssingRoleEndpointCommandRequest : IRequest<AssingRoleEndpointCommandResponse>
+    public class AssignRoleEndpointCommandRequest : IRequest<AssignRoleEndpointCommandResponse>
     {
         public string menu { get; set; }
 

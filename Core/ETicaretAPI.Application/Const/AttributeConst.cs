@@ -14,5 +14,6 @@ namespace ETicaretAPI.Application.Const
         public const string Products = "Products";
         public const string AuthorizeDefinition = "AuthorizeDefinition";
         public const string Roles = "Roles";
+        public const string Users = "Users";
     }
 }

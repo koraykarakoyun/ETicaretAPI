@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command.AssingRoleEndpoint
 {
-    public class AssingRoleEndpointCommandResponse
+    public class AssignRoleEndpointCommandResponse
     {
     }
 }

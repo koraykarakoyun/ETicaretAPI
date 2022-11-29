@@ -3,6 +3,7 @@ using ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command.AssingRoleEndpo
 using ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command.GetRolesToEndpoint;
 using ETicaretAPI.Application.CQRS.User.Command.Login;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPost("GetRolesToEndpoint")]
+        [Authorize(AuthenticationSchemes ="Admin")]
         public async Task<IActionResult> GetRolesToEndpoint(GetRolesToEndpointCommandRequest getRolesToEndpointCommandRequest)
         {
             GetRolesToEndpointCommandResponse getRolesToEndpointCommandResponse = await _mediator.Send(getRolesToEndpointCommandRequest);
@@ -28,14 +30,13 @@ namespace ETicaretAPI.API.Controllers
         }
 
 
-
-
         [HttpPost("AssingRoleEndpoint")]
-        public async Task<IActionResult> AssingRoleEndpoint(AssingRoleEndpointCommandRequest assingRoleEndpointCommandRequest)
+        [Authorize(AuthenticationSchemes = "Admin")]
+        public async Task<IActionResult> AssingRoleEndpoint(AssignRoleEndpointCommandRequest assignRoleEndpointCommandRequest)
         {
-            assingRoleEndpointCommandRequest.Type = typeof(Program);
-            AssingRoleEndpointCommandResponse assingRoleEndpointCommandResponse = await _mediator.Send(assingRoleEndpointCommandRequest);
-            return Ok(assingRoleEndpointCommandResponse);
+            assignRoleEndpointCommandRequest.Type = typeof(Program);
+            AssignRoleEndpointCommandResponse assignRoleEndpointCommandResponse = await _mediator.Send(assignRoleEndpointCommandRequest);
+            return Ok(assignRoleEndpointCommandResponse);
         }
     }
 }
