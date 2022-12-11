@@ -19,7 +19,7 @@ namespace ETicaretAPI.Application.CQRS.User.Query.GetUserRoles
 
         public async Task<GetByIdUserRolesResponse> Handle(GetByIdUserRolesRequest request, CancellationToken cancellationToken)
         {
-            List<string> roles = await _userService.GetByIdUserRoles(request.Id);
+            List<string> roles = await _userService.GetUserRoles(request.Id);
             return new()
             {
                 Roles = roles

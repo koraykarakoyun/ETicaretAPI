@@ -1,4 +1,5 @@
 using ETicaretAPI.API.Extensions;
+using ETicaretAPI.API.Filters;
 using ETicaretAPI.Application;
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.Validators;
@@ -36,7 +37,13 @@ builder.Services.AddInfrastructureService();
 builder.Services.AddSignalRServices();
 builder.Services.AddStoreage<LocalStorage>();
 
-builder.Services.AddControllers().AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<AddProductCommandRequest>());
+builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<RolePermissionFilter>();
+    })
+ .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<AddProductCommandRequest>());
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

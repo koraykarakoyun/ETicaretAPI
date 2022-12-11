@@ -20,7 +20,10 @@ namespace ETicaretAPI.Application.Abstraction.User
 
         Task AssignUserRoles(string Id,string[] Roles);
 
-        Task<List<string>> GetByIdUserRoles(string Id);
+        Task<List<string>> GetUserRoles(string IdOrUserName);
+
+
+        Task<bool> HasRolePermissionToEndpointAsync(string username,string code);
 
 
     }
