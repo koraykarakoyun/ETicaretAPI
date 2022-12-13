@@ -44,6 +44,7 @@ namespace ETicaretAPI.API.Controllers
 
        
         [HttpGet("getall")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Get All Product")]
         public async Task<IActionResult> GetAll([FromQuery] GetAllProductQueryRequest getAllProductQueryRequest)
         {
             List<GetAllProductQueryResponse> getAllProductQueryResponses = await _mediator.Send(getAllProductQueryRequest);
@@ -52,6 +53,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpGet("getbyid/{id}")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Get By Id Product")]
         public async Task<IActionResult> GetById([FromRoute] GetByIdProductQueryRequest getByIdProductQueryRequest)
         {
             GetByIdProductQueryResponse getByIdProductQueryResponse = await _mediator.Send(getByIdProductQueryRequest);
@@ -94,6 +96,7 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpPost("[action]")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Writing, Definiton = "Image Updload Product")]
         public async Task<IActionResult> Upload([FromForm] ImageUploadProductCommandRequest ımageUploadProductCommandRequest)
         {
 
@@ -105,6 +108,7 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpGet("getimage/{ProductId}")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Get Image Product")]
         public async Task<IActionResult> GetImage([FromRoute] GetImageProductCommandRequest getImageProductCommandRequest)
         {
 
@@ -118,6 +122,7 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpGet("getallimage")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Get All Image Product")]
         public async Task<IActionResult> getallimage([FromRoute] GetAllImageProductQueryRequest getAllImageProductQueryRequest)
         {
 
@@ -130,6 +135,7 @@ namespace ETicaretAPI.API.Controllers
 
         [HttpPut("vitrin")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Updateing, Definiton = "Change Show Case")]
         public async Task<IActionResult> Vitrin(ChangeShowCaseProductCommandRequest changeShowCaseProductCommandRequest)
         {
             ChangeShowCaseProductCommandResponse changeShowCaseProductCommandResponse = await _mediator.Send(changeShowCaseProductCommandRequest);

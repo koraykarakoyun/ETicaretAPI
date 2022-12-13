@@ -129,7 +129,7 @@ namespace ETicaretAPI.Persistence.User
                 foreach (var endpointRole in endpointRoles)
                 {
 
-                    if(userRole== endpointRole)
+                    if (userRole == endpointRole)
                     {
                         return true;
                     }
@@ -154,6 +154,22 @@ namespace ETicaretAPI.Persistence.User
             {
                 throw new Exception("Kullanıcı Bulunamadı");
             }
+
+        }
+
+        public async Task<bool> IsAdminAsync(string userName)
+        {
+            if (!string.IsNullOrEmpty(userName))
+            {
+                AppUser appUser = await _userManager.FindByNameAsync(userName);
+                if (appUser != null && appUser.Admin)
+                {
+                    return true;
+                }
+              
+            }
+            return false;
+
 
         }
     }

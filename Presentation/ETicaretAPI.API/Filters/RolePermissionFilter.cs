@@ -19,10 +19,17 @@ namespace ETicaretAPI.API.Filters
         }
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var username = context.HttpContext.User.Identity.Name;
+            var username = context.HttpContext.User.Identity?.Name;
 
-            if (!string.IsNullOrEmpty(username))
+            if(await _userService.IsAdminAsync(username))
             {
+                await next();
+            }
+
+            else if (!string.IsNullOrEmpty(username))
+            {
+                
+
                 var descriptor = context.ActionDescriptor as ControllerActionDescriptor;
 
                 var authorizeDefinitionAttribute = descriptor?.MethodInfo.GetCustomAttribute(typeof(AuthorizeDefinitionAttribute)) as AuthorizeDefinitionAttribute;

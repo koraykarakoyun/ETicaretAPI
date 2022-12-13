@@ -18,6 +18,8 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
 
         public float Price { get; set; }
 
+        public string Path { get; set; }
+
         public ICollection<ProductImageFile> productImageFile { get; set; }
 
 

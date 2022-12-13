@@ -23,7 +23,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpGet("[action]")]
-        [AuthorizeDefinition(ActionType =ActionType.Reading,Definiton = "Get Authorize Definiton Endpoints",Menu =AttributeConst.AuthorizeDefinition)]
+        [AuthorizeDefinition(ActionType =ActionType.Reading,Definiton = "Get Authorize Definiton Endpoints",Menu =AttributeConst.ApplicationServices)]
         public async Task<IActionResult> GetAuthorizeDefinitonEndpoints()
         {
 

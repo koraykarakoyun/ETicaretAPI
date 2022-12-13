@@ -38,13 +38,9 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.ImageUpload
              
             //dosya bilgilerini veritabanına (productimagefiles tablosuna) kaydetme işlemi
             bool result = await _productImageFileWriteRepository.AddAsync(new() { FileName = uploadedfile.FileName, Path = uploadedpath, Products = new List<Domain.Entities.Product>(){product}});
-
-
-
-
-
-
             await _productImageFileWriteRepository.SaveAsync();
+
+            
 
 
             if (!result)

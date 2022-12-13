@@ -25,6 +25,9 @@ namespace ETicaretAPI.Application.Abstraction.User
 
         Task<bool> HasRolePermissionToEndpointAsync(string username,string code);
 
+        Task<bool> IsAdminAsync(string userName);
+
+
 
     }
 }

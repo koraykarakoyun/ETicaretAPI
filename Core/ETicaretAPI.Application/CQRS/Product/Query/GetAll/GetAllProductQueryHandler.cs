@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,22 +25,29 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
         {
             _productReadRepository = productReadRepository;
             _logger = logger;
+            _productImageFileReadRepository = productImageFileReadRepository;
         }
 
         public async Task<List<GetAllProductQueryResponse>> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
         {
 
-            return  _productReadRepository.GetAll().Include(p=>p.ProductImageFiles).Select(a => new GetAllProductQueryResponse
+
+            return _productImageFileReadRepository.Table.Include(p => p.Products).Where(a => a.ShowCase == true)
+            .SelectMany(p => p.Products, (p, i) =>
+            new GetAllProductQueryResponse()
             {
-                Id=a.Id.ToString(),
-                Name=a.Name,
-                Price=a.Price,
-                Stock=a.Stock,
-                productImageFile=a.ProductImageFiles
+
+                Id = i.Id.ToString(),
+                Name = i.Name,
+                Price = i.Price,
+                Stock = i.Stock,
+                Path = p.Path
 
             }).ToList();
 
-           
+
+
+
         }
     }
 }
