@@ -4,7 +4,9 @@ using ETicaretAPI.Application.CQRS.User.Command.FacebookLogin;
 using ETicaretAPI.Application.CQRS.User.Command.GoogleLogin;
 using ETicaretAPI.Application.CQRS.User.Command.Login;
 using ETicaretAPI.Application.DTOs;
+using ETicaretAPI.Application.Repositories.UserAuthRoles;
 using ETicaretAPI.Application.Token;
+using ETicaretAPI.Domain.Entities;
 using ETicaretAPI.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using MediatR;
@@ -29,7 +31,9 @@ namespace ETicaretAPI.Persistence.Auth
         HttpClient _httpClient;
         IConfiguration _configuration;
         IUserService _userService;
-        public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, IHttpClientFactory httpClientFactory, IConfiguration configuration, IUserService userService)
+        readonly IUserAuthRolesReadRepository _userAuthRolesReadRepository;
+
+        public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, IHttpClientFactory httpClientFactory, IConfiguration configuration, IUserService userService, IUserAuthRolesReadRepository userAuthRolesReadRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -37,9 +41,10 @@ namespace ETicaretAPI.Persistence.Auth
             _httpClient = httpClientFactory.CreateClient();
             _configuration = configuration;
             _userService = userService;
+            _userAuthRolesReadRepository = userAuthRolesReadRepository;
         }
 
-        private async Task<LoginDto> CreateUserExternalAsync(AppUser appUser, string email, string name, UserLoginInfo info, int TokenLifeTime_Seconds)
+        private async Task<LoginDto> CreateUserExternalAsync(AppUser? appUser, string email, string name, UserLoginInfo info, int TokenLifeTime_Seconds)
         {
             bool result = appUser != null;
 
@@ -48,7 +53,9 @@ namespace ETicaretAPI.Persistence.Auth
             {
 
                 //kullanıcıyı user tablosunda arar
-                appUser = await _userManager.FindByEmailAsync(email);
+
+                appUser = await _userManager.Users.Include(a => a.UserAuthRole).SingleOrDefaultAsync(a => a.Email == email);
+                UserAuthRole userAuthRole = await _userAuthRolesReadRepository.GetSingleAsync(a => a.RoleName == "Kullanıcı");
 
                 //kullanıcı user tablosunda yoksa
                 if (appUser == null)
@@ -59,7 +66,8 @@ namespace ETicaretAPI.Persistence.Auth
                         Name = name,
                         Surname = name,
                         UserName = name,
-                        Email = email
+                        Email = email,
+                        UserAuthRole = userAuthRole
                     };
                     //kullanıcı yoksa user tablosuna kaydeder.
                     var identityResult = await _userManager.CreateAsync(appUser);
@@ -87,8 +95,11 @@ namespace ETicaretAPI.Persistence.Auth
 
             if (result)
             {
+
+                appUser = await _userManager.Users.Include(a => a.UserAuthRole).SingleOrDefaultAsync(a => a.Email == appUser.Email && a.PasswordHash == appUser.PasswordHash);
+
                 await _userManager.AddLoginAsync(appUser, info);
-                Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds,appUser);
+                Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds, appUser);
                 await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 5);
 
 
@@ -96,7 +107,9 @@ namespace ETicaretAPI.Persistence.Auth
                 {
                     IsSuccess = true,
                     Message = "Basarili giris",
-                    Token = token
+                    Token = token,
+                    UserAuthRoleName =appUser.UserAuthRole.RoleName
+
                 };
 
             }
@@ -120,9 +133,7 @@ namespace ETicaretAPI.Persistence.Auth
             {
                 string userinforesponse = await _httpClient.GetStringAsync($"https://graph.facebook.com/me?fields=email,name&access_token={AccessToken}");
                 UserInfoResponse userInfoResponse = JsonSerializer.Deserialize<UserInfoResponse>(userinforesponse);
-
                 var info = new UserLoginInfo("FACEBOOK", facebookUserInfoValidation.Data.UserId, "FACEBOOK");
-
                 //login tablosunda google girişi yapan kisinin bilgileri aranır
                 AppUser appUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
                 return await CreateUserExternalAsync(appUser, userInfoResponse.Email, userInfoResponse.Name, info, TokenLifeTime_Seconds);
@@ -158,7 +169,8 @@ namespace ETicaretAPI.Persistence.Auth
 
         public async Task<LoginDto> Login(string Email, string Password, int TokenLifeTime_Seconds)
         {
-            AppUser user = await _userManager.FindByEmailAsync(Email);
+
+            AppUser? user = await _userManager.Users.Include(a => a.UserAuthRole).SingleOrDefaultAsync(a => a.Email == Email);
 
             if (user == null)
             {
@@ -174,13 +186,14 @@ namespace ETicaretAPI.Persistence.Auth
             if (signInResult.Succeeded)
             {
                 //kullanıcı login oldu.
-                ETicaretAPI.Application.DTOs.Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds,user);
+                ETicaretAPI.Application.DTOs.Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds, user);
                 await _userService.UpdateRefreshToken(user, token.RefreshToken, token.Expiration, 200);
                 return new LoginDto()
                 {
                     IsSuccess = true,
                     Message = "Giris yapildi.",
-                    Token = token
+                    Token = token,
+                    UserAuthRoleName = user.UserAuthRole.RoleName
                 };
 
             }

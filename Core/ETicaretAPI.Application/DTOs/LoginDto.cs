@@ -11,5 +11,6 @@ namespace ETicaretAPI.Application.DTOs
         public string Message { get; set; }
         public bool IsSuccess { get; set; }
         public DTOs.Token Token { get; set; }
+        public string UserAuthRoleName { get; set; }
     }
 }

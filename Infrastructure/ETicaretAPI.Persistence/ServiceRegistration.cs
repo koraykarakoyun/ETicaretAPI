@@ -14,6 +14,7 @@ using ETicaretAPI.Application.Repositories.InvoiceFile;
 using ETicaretAPI.Application.Repositories.Menu;
 using ETicaretAPI.Application.Repositories.Order;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
+using ETicaretAPI.Application.Repositories.UserAuthRoles;
 using ETicaretAPI.Domain.Entities.Identity;
 using ETicaretAPI.Persistence.Auth;
 using ETicaretAPI.Persistence.AuthorizationEndpoint;
@@ -29,6 +30,7 @@ using ETicaretAPI.Persistence.Repositories.InvoiceFile;
 using ETicaretAPI.Persistence.Repositories.Menu;
 using ETicaretAPI.Persistence.Repositories.Order;
 using ETicaretAPI.Persistence.Repositories.ProductImageFile;
+using ETicaretAPI.Persistence.Repositories.UserAuthRoles;
 using ETicaretAPI.Persistence.Role;
 using ETicaretAPI.Persistence.User;
 using Microsoft.AspNetCore.Http;
@@ -88,6 +90,8 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
             services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
 
+            services.AddScoped<IUserAuthRolesReadRepository, UserAuthRolesReadRepository>();
+            services.AddScoped<IUserAuthRolesWriteRepository, UserAuthRolesWriteRepository>();
 
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IOrderService, OrderService>();

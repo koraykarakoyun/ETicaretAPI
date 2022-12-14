@@ -43,6 +43,8 @@ namespace ETicaretAPI.Persistence.Context
 
         public DbSet<Domain.Entities.Endpoint> Endpoints { get; set; }
 
+        public DbSet<Domain.Entities.UserAuthRole> UserAuthRoles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -61,7 +63,6 @@ namespace ETicaretAPI.Persistence.Context
             //order'in "id" si ile  basket "id" si "bire bir iliski" ile baglandi.
 
             builder.Entity<Order>().HasOne(o => o.CompletedOrder).WithOne(o => o.Order).HasForeignKey<CompletedOrder>(o => o.OrderId);
-
 
             base.OnModelCreating(builder);
         }

@@ -14,6 +14,8 @@ namespace ETicaretAPI.Application.CQRS.User.Command.Login
 
         public DTOs.Token Token { get; set; }
 
+        public string UserAuthRoleName { get; set; }
+
 
     }
 }

@@ -69,6 +69,8 @@ namespace ETicaretAPI.API.Controllers
         }
 
 
+       
+
 
     }
 }

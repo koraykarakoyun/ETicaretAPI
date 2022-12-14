@@ -25,13 +25,14 @@ namespace ETicaretAPI.Application.CQRS.User.Command.Login
         public async Task<LoginCommandResponse> Handle(LoginCommandRequest request, CancellationToken cancellationToken)
         {
 
-            LoginDto loginDto= await _authService.Login(request.Email, request.Password,300);
+            LoginDto loginDto = await _authService.Login(request.Email, request.Password, 300);
 
             return new LoginCommandResponse
             {
                 IsSuccess = loginDto.IsSuccess,
                 Message = loginDto.Message,
-                Token = loginDto.Token
+                Token = loginDto.Token,
+                UserAuthRoleName = loginDto.UserAuthRoleName
             };
         }
     }

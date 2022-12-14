@@ -12,12 +12,13 @@ namespace ETicaretAPI.Domain.Entities.Identity
         public string Name { get; set; }
         public string Surname { get; set; }
 
-        public bool Admin { get; set; }
-
         public ICollection<Basket> Basket { get; set; }
         public string? RefreshToken { get; set; }
 
         public DateTime? RefreshTokenLifeTime { get; set; }
+
+        public UserAuthRole UserAuthRole { get; set; }
+
 
     }
 }

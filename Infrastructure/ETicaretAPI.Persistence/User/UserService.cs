@@ -3,6 +3,8 @@ using ETicaretAPI.Application.CQRS.User.Command.CreateUser;
 using ETicaretAPI.Application.DTOs;
 using ETicaretAPI.Application.DTOs.CreateUser;
 using ETicaretAPI.Application.Repositories.Endpoint;
+using ETicaretAPI.Application.Repositories.UserAuthRoles;
+using ETicaretAPI.Domain.Entities;
 using ETicaretAPI.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -20,11 +22,13 @@ namespace ETicaretAPI.Persistence.User
 
         UserManager<AppUser> _userManager;
         readonly IEndpointReadRepository _endpointReadRepository;
+        readonly IUserAuthRolesReadRepository _userAuthRolesReadRepository;
 
-        public UserService(UserManager<AppUser> userManager, IEndpointReadRepository endpointReadRepository)
+        public UserService(UserManager<AppUser> userManager, IEndpointReadRepository endpointReadRepository, IUserAuthRolesReadRepository userAuthRolesReadRepository)
         {
             _userManager = userManager;
             _endpointReadRepository = endpointReadRepository;
+            _userAuthRolesReadRepository = userAuthRolesReadRepository;
         }
 
         public async Task AssignUserRoles(string Id, string[] Roles)
@@ -42,6 +46,7 @@ namespace ETicaretAPI.Persistence.User
 
         public async Task<CreateUserResponseDto> CreateUser(CreateUserRequestDto createUserDto)
         {
+           UserAuthRole userAuthRole= await _userAuthRolesReadRepository.GetSingleAsync(a => a.RoleName == "Kullanıcı");
 
             IdentityResult ıdentityResult = await _userManager.CreateAsync(new AppUser()
             {
@@ -50,7 +55,7 @@ namespace ETicaretAPI.Persistence.User
                 Surname = createUserDto.Surname,
                 UserName = createUserDto.Username,
                 Email = createUserDto.Email,
-
+                UserAuthRole= userAuthRole
             }, createUserDto.Password);
 
             CreateUserResponseDto response = new() { IsSuccess = ıdentityResult.Succeeded };
@@ -161,12 +166,12 @@ namespace ETicaretAPI.Persistence.User
         {
             if (!string.IsNullOrEmpty(userName))
             {
-                AppUser appUser = await _userManager.FindByNameAsync(userName);
-                if (appUser != null && appUser.Admin)
+                AppUser appUser = await _userManager.Users.Include(a => a.UserAuthRole).SingleOrDefaultAsync(a => a.UserName == userName);
+                if (appUser.UserAuthRole.RoleName == "Admin")
                 {
                     return true;
                 }
-              
+
             }
             return false;
 
