@@ -2,7 +2,9 @@
 using ETicaretAPI.Application.CQRS.AuthUserRole.Command.DeleteAuthUserRole;
 using ETicaretAPI.Application.CQRS.AuthUserRole.Command.UpdateAuthUserRole;
 using ETicaretAPI.Application.CQRS.UserAuthRole.Command.AddUserAuthRole;
+using ETicaretAPI.Application.CQRS.UserAuthRole.Command.SetUserAuthRole;
 using ETicaretAPI.Application.CQRS.UserAuthRole.Query.GetAllUserAuthRole;
+using ETicaretAPI.Application.CQRS.UserAuthRole.Query.GetByIdUserAuthRole;
 using ETicaretAPI.Application.CustomAttributes;
 using ETicaretAPI.Application.Enums;
 using MediatR;
@@ -26,7 +28,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
 
-        [HttpGet("GetUserAuthRole")]
+        [HttpGet("GetAllUserAuthRoles")]
         [AuthorizeDefinition(Menu = AttributeConst.UserAuthRoles, ActionType = ActionType.Reading, Definiton = "Get All User Auth Role")]
         public async Task<IActionResult> AddAuthUserRole([FromRoute] GetAllUserAuthRoleRequest getAllUserAuthRoleRequest)
         {
@@ -60,7 +62,21 @@ namespace ETicaretAPI.API.Controllers
             return Ok(updateUserAuthRoleResponse);
         }
 
+        [HttpPut("SetUserAuthRole")]
+        [AuthorizeDefinition(Menu = AttributeConst.UserAuthRoles, ActionType = ActionType.Updateing, Definiton = "Set User Auth Role")]
+        public async Task<IActionResult> SetUserAuthRole(SetUserAuthRoleRequest setUserAuthRoleRequest)
+        {
+            SetUserAuthRoleResponse setUserAuthRoleResponse = await _mediator.Send(setUserAuthRoleRequest);
+            return Ok(setUserAuthRoleResponse);
+        }
 
+        [HttpPut("GetByIdUserAuthRole/{UserId}")]
+        [AuthorizeDefinition(Menu = AttributeConst.UserAuthRoles, ActionType = ActionType.Updateing, Definiton = "Get By Id User Auth Role")]
+        public async Task<IActionResult> GetByIdUserAuthRole([FromRoute] GetByIdUserAuthRoleRequest getByIdUserAuthRoleRequest)
+        {
+            GetByIdUserAuthRoleResponse getByIdUserAuthRoleResponse = await _mediator.Send(getByIdUserAuthRoleRequest);
+            return Ok(getByIdUserAuthRoleResponse);
+        }
 
 
 

@@ -55,7 +55,7 @@ namespace ETicaretAPI.Persistence.Auth
                 //kullanıcıyı user tablosunda arar
 
                 appUser = await _userManager.Users.Include(a => a.UserAuthRole).SingleOrDefaultAsync(a => a.Email == email);
-                UserAuthRole userAuthRole = await _userAuthRolesReadRepository.GetSingleAsync(a => a.RoleName == "Kullanıcı");
+                Domain.Entities.UserAuthRole userAuthRole = await _userAuthRolesReadRepository.GetSingleAsync(a => a.RoleName == "Kullanıcı");
 
                 //kullanıcı user tablosunda yoksa
                 if (appUser == null)

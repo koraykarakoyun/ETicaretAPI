@@ -6,6 +6,7 @@ using ETicaretAPI.Application.Repositories.Endpoint;
 using ETicaretAPI.Application.Repositories.UserAuthRoles;
 using ETicaretAPI.Domain.Entities;
 using ETicaretAPI.Domain.Entities.Identity;
+using ETicaretAPI.Persistence.Repositories.UserAuthRoles;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,7 @@ namespace ETicaretAPI.Persistence.User
 
         public async Task<CreateUserResponseDto> CreateUser(CreateUserRequestDto createUserDto)
         {
-           UserAuthRole userAuthRole= await _userAuthRolesReadRepository.GetSingleAsync(a => a.RoleName == "Kullanıcı");
+            Domain.Entities.UserAuthRole userAuthRole = await _userAuthRolesReadRepository.GetSingleAsync(a => a.RoleName == "Kullanıcı");
 
             IdentityResult ıdentityResult = await _userManager.CreateAsync(new AppUser()
             {
@@ -55,7 +56,7 @@ namespace ETicaretAPI.Persistence.User
                 Surname = createUserDto.Surname,
                 UserName = createUserDto.Username,
                 Email = createUserDto.Email,
-                UserAuthRole= userAuthRole
+                UserAuthRole = userAuthRole
             }, createUserDto.Password);
 
             CreateUserResponseDto response = new() { IsSuccess = ıdentityResult.Succeeded };
@@ -177,5 +178,7 @@ namespace ETicaretAPI.Persistence.User
 
 
         }
+
+     
     }
 }

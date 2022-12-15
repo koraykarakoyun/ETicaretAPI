@@ -5,6 +5,7 @@ using ETicaretAPI.Application.Abstraction.Basket;
 using ETicaretAPI.Application.Abstraction.Order;
 using ETicaretAPI.Application.Abstraction.Role;
 using ETicaretAPI.Application.Abstraction.User;
+using ETicaretAPI.Application.Abstraction.UserAuthRole;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.Basket;
 using ETicaretAPI.Application.Repositories.BasketItem;
@@ -33,6 +34,7 @@ using ETicaretAPI.Persistence.Repositories.ProductImageFile;
 using ETicaretAPI.Persistence.Repositories.UserAuthRoles;
 using ETicaretAPI.Persistence.Role;
 using ETicaretAPI.Persistence.User;
+using ETicaretAPI.Persistence.UserAuthRole;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -105,7 +107,7 @@ namespace ETicaretAPI.Persistence
 
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
-
+            services.AddScoped<IUserAuthRoleService, UserAuthRoleService>();
         }
     }
 }
