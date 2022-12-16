@@ -16,12 +16,15 @@ namespace ETicaretAPI.Domain.Entities
 
         public float Price { get; set; }
 
+        public Guid CategoryId { get; set; }
 
         public ICollection<BasketItem> BasketItems { get; set; }
 
         //public ICollection<Order> Orders { get; set; }
 
         public ICollection<ProductImageFile> ProductImageFiles { get; set; }
+
+        public Category Category { get; set; }
 
     }
 }

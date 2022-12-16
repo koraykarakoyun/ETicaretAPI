@@ -1,4 +1,5 @@
-﻿using ETicaretAPI.Application.Abstraction.SignalR;
+﻿using ETicaretAPI.Application.Abstraction.Category;
+using ETicaretAPI.Application.Abstraction.SignalR;
 using ETicaretAPI.Application.Abstraction.Storage;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
@@ -24,8 +25,9 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.Add
         readonly IProductReadRepository _productReadRepository;
         readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
         IProductImageFileReadRepository _productImageFileReadRepository;
+        ICategoryService _categoryService;
 
-        public AddProductCommandHandler(IProductWriteRepository productWriteRepository, ILogger<AddProductCommandHandler> logger, IProductHubService productHubService, IStorageService storageService, IProductReadRepository productReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IProductImageFileReadRepository productImageFileReadRepository)
+        public AddProductCommandHandler(IProductWriteRepository productWriteRepository, ILogger<AddProductCommandHandler> logger, IProductHubService productHubService, IStorageService storageService, IProductReadRepository productReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IProductImageFileReadRepository productImageFileReadRepository, ICategoryService categoryService)
         {
             _productWriteRepository = productWriteRepository;
             _logger = logger;
@@ -34,16 +36,19 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.Add
             _productReadRepository = productReadRepository;
             _productImageFileWriteRepository = productImageFileWriteRepository;
             _productImageFileReadRepository = productImageFileReadRepository;
+            _categoryService = categoryService;
         }
 
         public async Task<AddProductCommandResponse> Handle(AddProductCommandRequest request, CancellationToken cancellationToken)
         {
 
+            Domain.Entities.Category category= await _categoryService.GetByIdCategoryAsync(request.CategoryId);
             Domain.Entities.Product product = new Domain.Entities.Product()
             {
                 Name = request.Name,
                 Stock = request.Stock,
-                Price = request.Price
+                Price = request.Price,
+                Category=category
             };
             await _productWriteRepository.AddAsync(product);
             await _productWriteRepository.SaveAsync();

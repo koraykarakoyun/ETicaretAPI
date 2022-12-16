@@ -18,6 +18,8 @@ namespace ETicaretAPI.Application.Const
         public const string Auth = "Auth";
         public const string AuthorizationEndpoints = "Authorization Endpoints";
         public const string UserAuthRoles = "UserAuthRoles";
-       
+        public const string Categories = "Categories";
+
+
     }
 }

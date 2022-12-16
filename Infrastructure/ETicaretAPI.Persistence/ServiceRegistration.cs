@@ -2,6 +2,7 @@
 using ETicaretAPI.Application.Abstraction.Auth;
 using ETicaretAPI.Application.Abstraction.AuthorizationEndpoint;
 using ETicaretAPI.Application.Abstraction.Basket;
+using ETicaretAPI.Application.Abstraction.Category;
 using ETicaretAPI.Application.Abstraction.Order;
 using ETicaretAPI.Application.Abstraction.Role;
 using ETicaretAPI.Application.Abstraction.User;
@@ -9,6 +10,7 @@ using ETicaretAPI.Application.Abstraction.UserAuthRole;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.Basket;
 using ETicaretAPI.Application.Repositories.BasketItem;
+using ETicaretAPI.Application.Repositories.Category;
 using ETicaretAPI.Application.Repositories.CompletedOrder;
 using ETicaretAPI.Application.Repositories.Endpoint;
 using ETicaretAPI.Application.Repositories.InvoiceFile;
@@ -20,10 +22,12 @@ using ETicaretAPI.Domain.Entities.Identity;
 using ETicaretAPI.Persistence.Auth;
 using ETicaretAPI.Persistence.AuthorizationEndpoint;
 using ETicaretAPI.Persistence.Basket;
+using ETicaretAPI.Persistence.Category;
 using ETicaretAPI.Persistence.Context;
 using ETicaretAPI.Persistence.Repositories;
 using ETicaretAPI.Persistence.Repositories.Basket;
 using ETicaretAPI.Persistence.Repositories.BasketItem;
+using ETicaretAPI.Persistence.Repositories.Category;
 using ETicaretAPI.Persistence.Repositories.CompletedOrder;
 using ETicaretAPI.Persistence.Repositories.Endpoint;
 using ETicaretAPI.Persistence.Repositories.File;
@@ -95,6 +99,11 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IUserAuthRolesReadRepository, UserAuthRolesReadRepository>();
             services.AddScoped<IUserAuthRolesWriteRepository, UserAuthRolesWriteRepository>();
 
+            services.AddScoped<ICategoryReadRepository, CategoryReadRepository>();
+            services.AddScoped<ICategoryWriteRepository, CategoryWriteRepository>();
+
+
+
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IOrderService, OrderService>();
 
@@ -108,6 +117,7 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
             services.AddScoped<IUserAuthRoleService, UserAuthRoleService>();
+            services.AddScoped<ICategoryService, CategoryService>();
         }
     }
 }
