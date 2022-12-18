@@ -1,6 +1,8 @@
 ﻿using ETicaretAPI.Application.Abstraction.Category;
 using ETicaretAPI.Application.DTOs;
+using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.Category;
+using ETicaretAPI.Application.Repositories.ProductImageFile;
 using ETicaretAPI.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,11 +18,15 @@ namespace ETicaretAPI.Persistence.Category
 
         ICategoryReadRepository _categoryReadRepository;
         ICategoryWriteRepository _categoryWriteRepository;
+        IProductReadRepository _productReadRepository;
+       
 
-        public CategoryService(ICategoryReadRepository categoryReadRepository, ICategoryWriteRepository categoryWriteRepository)
+        public CategoryService(ICategoryReadRepository categoryReadRepository, ICategoryWriteRepository categoryWriteRepository, IProductReadRepository productReadRepository)
         {
             _categoryReadRepository = categoryReadRepository;
             _categoryWriteRepository = categoryWriteRepository;
+            _productReadRepository = productReadRepository;
+            
         }
 
         public async Task AddCategoryAsync(string Name)
@@ -52,26 +58,49 @@ namespace ETicaretAPI.Persistence.Category
             await _categoryWriteRepository.SaveAsync();
         }
 
-
-
-        public async Task<List<GetCategoryInProductsDto>> GetCategoryInProductsAsync(string CategoryId)
+        public async Task<Domain.Entities.Category> GetByIdCategoryAsync(string CategoryId)
         {
-            Domain.Entities.Category? category = await _categoryReadRepository.Table.Include(p => p.Products).SingleOrDefaultAsync(a => a.Id == Guid.Parse(CategoryId));
-            return category.Products.Select(a => new GetCategoryInProductsDto()
+            return await _categoryReadRepository.GetByIdAsync(CategoryId);
+        }
+
+
+        public async Task<List<GetByIdCategoryInProductsDto>> GetByIdCategoryInProductsAsync(string CategoryId)
+        {
+            var products = _productReadRepository.Table.Include(a => a.Category).Include(a => a.ProductImageFiles).Where(a => a.Category.Id == Guid.Parse(CategoryId)).ToList();
+
+
+
+            return products.SelectMany(i => i.ProductImageFiles, (p, i) => new GetByIdCategoryInProductsDto()
             {
-                CategoryId = a.Category.Id.ToString(),
-                CategoryName = a.Category.Name,
-                ProductId = a.Id.ToString(),
-                ProductName = a.Name,
-                ProductPrice = a.Price,
-                ProductStock = a.Stock,
+                CategoryId = p.CategoryId.ToString(),
+                CategoryName = p.Category.Name,
+                ProductId = p.Id.ToString(),
+                ProductName = p.Name,
+                ProductPrice = p.Price,
+                ProductStock = p.Stock,
+                Path = i.Path,
+                ShowCase = i.ShowCase
             }).ToList();
 
         }
 
-        public async Task<Domain.Entities.Category> GetByIdCategoryAsync(string CategoryId)
+        public async Task<List<GetByNameCategoryInProductsDto>> GetByNameCategoryInProductsAsync(string CategoryName)
         {
-             return await _categoryReadRepository.GetByIdAsync(CategoryId);
+            var products = _productReadRepository.Table.Include(a => a.Category).Include(a => a.ProductImageFiles).Where(a => a.Category.Name == CategoryName).ToList();
+
+
+            return products.SelectMany(i => i.ProductImageFiles, (p,i) => new GetByNameCategoryInProductsDto()
+            {
+              CategoryId=p.CategoryId.ToString(),
+              CategoryName=p.Category.Name,
+              ProductId=p.Id.ToString(),
+              ProductName=p.Name,
+              ProductPrice=p.Price,
+              ProductStock=p.Stock,
+              Path=i.Path,
+              ShowCase=i.ShowCase          
+            }).ToList();
+
         }
     }
 }

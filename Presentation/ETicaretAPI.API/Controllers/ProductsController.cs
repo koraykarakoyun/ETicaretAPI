@@ -87,7 +87,7 @@ namespace ETicaretAPI.API.Controllers
         [HttpDelete("deletebyid/{id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Deleting, Definiton = "Delete By Id Product")]
-        public async Task<IActionResult> DeletebyId(DeleteProductCommandRequest deleteProductCommandRequest)
+        public async Task<IActionResult> DeletebyId([FromRoute]DeleteProductCommandRequest deleteProductCommandRequest)
         {
             DeleteProductCommandResponse deleteProductCommandResponse = await _mediator.Send(deleteProductCommandRequest);
             return Ok(deleteProductCommandResponse);

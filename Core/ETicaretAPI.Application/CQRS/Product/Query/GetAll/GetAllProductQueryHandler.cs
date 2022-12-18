@@ -37,10 +37,10 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
             new GetAllProductQueryResponse()
             {
 
-                Id = i.Id.ToString(),
-                Name = i.Name,
-                Price = i.Price,
-                Stock = i.Stock,
+                ProductId = i.Id.ToString(),
+                ProductName = i.Name,
+                ProductPrice = i.Price,
+                ProductStock = i.Stock,
                 Path = p.Path
 
             }).ToList();

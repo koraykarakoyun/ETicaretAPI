@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI.Application.Abstraction.Category;
+using ETicaretAPI.Application.CQRS.Category.Query.GetByNameCategoryInProducts;
 using ETicaretAPI.Application.DTOs;
 using MediatR;
 using System;
@@ -20,15 +21,17 @@ namespace ETicaretAPI.Application.CQRS.Category.Query.GetCategoryInProducts
 
         public async Task<List<GetCategoryInProductsResponse>> Handle(GetCategoryInProductsRequest request, CancellationToken cancellationToken)
         {
-            List<GetCategoryInProductsDto> getCategoryInProductsDtos = await _categoryService.GetCategoryInProductsAsync(request.CategoryId);
-            return getCategoryInProductsDtos.Select(a => new GetCategoryInProductsResponse()
+            List<GetByIdCategoryInProductsDto> getCategoryInProductsDtos = await _categoryService.GetByIdCategoryInProductsAsync(request.CategoryId);
+
+            return getCategoryInProductsDtos.Where(a => a.ShowCase == true).Select(a => new GetCategoryInProductsResponse()
             {
-                CategoryId=a.CategoryId,
-                CategoryName=a.CategoryName,
-                ProductId=a.ProductId,
-                ProductName=a.ProductName,
-                ProductPrice=a.ProductPrice,
-                ProductStock=a.ProductStock
+                CategoryId = a.CategoryId,
+                CategoryName = a.CategoryName,
+                ProductId = a.ProductId,
+                ProductName = a.ProductName,
+                ProductPrice = a.ProductPrice,
+                ProductStock = a.ProductStock,
+                Path = a.Path,
             }).ToList();
         }
     }

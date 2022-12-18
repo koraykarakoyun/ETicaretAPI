@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Application.DTOs
 {
-    public class GetCategoryInProductsDto
+    public class GetByIdCategoryInProductsDto
     {
         public string CategoryId { get; set; }
         public string CategoryName { get; set; }
@@ -14,5 +14,7 @@ namespace ETicaretAPI.Application.DTOs
         public string ProductName { get; set; }
         public int ProductStock { get; set; }
         public float ProductPrice { get; set; }
+        public string Path { get; set; }
+        public bool ShowCase { get; set; }
     }
 }

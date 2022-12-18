@@ -21,7 +21,7 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetById
         {
            var response= await _productReadRepository.GetByIdAsync(request.Id,false);
 
-           return new GetByIdProductQueryResponse {Name = response.Name,Stock=response.Stock,Price=response.Price};           
+           return new GetByIdProductQueryResponse {ProductName = response.Name,ProductStock =response.Stock,ProductPrice=response.Price};           
         }
     }
 }

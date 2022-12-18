@@ -34,10 +34,10 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAllImage
             return datas.Select(a => new GetAllImageProductQueryResponse
             {
 
-                Id = a.p.Id.ToString(),
-                Name = a.p.Name,
-                Stock = a.p.Stock,
-                Price = a.p.Price,
+                ProductId = a.p.Id.ToString(),
+                ProductName = a.p.Name,
+                ProductStock = a.p.Stock,
+                ProductPrice = a.p.Price,
                 FileName = a.pif.FileName,
                 Path = a.pif.Path,
             }).ToList();

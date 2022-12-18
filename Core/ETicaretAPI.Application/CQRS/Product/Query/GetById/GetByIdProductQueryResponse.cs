@@ -8,10 +8,9 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetById
 {
     public class GetByIdProductQueryResponse
     {
-        public string Name { get; set; }
-
-        public int Stock { get; set; }
-
-        public float Price { get; set; }
+        public string ProductId { get; set; }
+        public string ProductName { get; set; }
+        public int ProductStock { get; set; }
+        public float ProductPrice { get; set; }
     }
 }

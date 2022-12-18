@@ -3,6 +3,7 @@ using ETicaretAPI.Application.CQRS.Category.Command.AddCategory;
 using ETicaretAPI.Application.CQRS.Category.Command.DeleteCategory;
 using ETicaretAPI.Application.CQRS.Category.Command.UpdateCategory;
 using ETicaretAPI.Application.CQRS.Category.Query.GetAllCategories;
+using ETicaretAPI.Application.CQRS.Category.Query.GetByNameCategoryInProducts;
 using ETicaretAPI.Application.CQRS.Category.Query.GetCategoryInProducts;
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.CustomAttributes;
@@ -47,7 +48,7 @@ namespace ETicaretAPI.API.Controllers
 
         [HttpDelete("[action]/{Id}")]
         [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Deleting, Definiton = "Delete By Id Category")]
-        public async Task<IActionResult> DeleteByIdCategory([FromRoute]DeleteByIdCategoryCommandRequest deleteByIdCategoryCommandRequest)
+        public async Task<IActionResult> DeleteByIdCategory([FromRoute] DeleteByIdCategoryCommandRequest deleteByIdCategoryCommandRequest)
         {
             DeleteByIdCategoryCommandResponse deleteByIdCategoryCommandResponse = await _mediator.Send(deleteByIdCategoryCommandRequest);
             return Ok(deleteByIdCategoryCommandResponse);
@@ -56,7 +57,7 @@ namespace ETicaretAPI.API.Controllers
 
         [HttpGet("[action]")]
         [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Reading, Definiton = "Get All Categories")]
-        public async Task<IActionResult> GetAllCategories([FromRoute]GetAllCategoriesQueryRequest getAllCategoriesQueryRequest)
+        public async Task<IActionResult> GetAllCategories([FromRoute] GetAllCategoriesQueryRequest getAllCategoriesQueryRequest)
         {
             List<GetAllCategoriesQueryResponse> getAllCategoriesQueryResponse = await _mediator.Send(getAllCategoriesQueryRequest);
             return Ok(getAllCategoriesQueryResponse);
@@ -64,15 +65,22 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpGet("[action]/{CategoryId}")]
-        [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Reading, Definiton = "Get Category In Products")]
-        public async Task<IActionResult> GetCategoryInProducts([FromRoute]GetCategoryInProductsRequest getCategoryInProductsRequest)
+        [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Reading, Definiton = "Get By Id Category In Products")]
+        public async Task<IActionResult> GetCategoryInProducts([FromRoute] GetCategoryInProductsRequest getCategoryInProductsRequest)
         {
             List<GetCategoryInProductsResponse> getCategoryInProductsResponses = await _mediator.Send(getCategoryInProductsRequest);
             return Ok(getCategoryInProductsResponses);
 
         }
 
+        [HttpGet("[action]/{CategoryName}")]
+        [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Reading, Definiton = "Get By Name Category In Products")]
+        public async Task<IActionResult> GetByNameCategoryInProducts([FromRoute] GetByNameCategoryInProductsRequest getByNameCategoryInProductsRequest)
+        {
+            List<GetByNameCategoryInProductsResponse> getByNameCategoryInProductsResponses = await _mediator.Send(getByNameCategoryInProductsRequest);
+            return Ok(getByNameCategoryInProductsResponses);
 
+        }
 
 
 

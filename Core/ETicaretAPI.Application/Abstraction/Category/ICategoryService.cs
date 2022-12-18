@@ -18,11 +18,11 @@ namespace ETicaretAPI.Application.Abstraction.Category
 
         Task<List<Domain.Entities.Category>> GetAllCategoriesAsync();
 
-
-        Task<List<GetCategoryInProductsDto>> GetCategoryInProductsAsync(string CategoryId);
-
         Task<Domain.Entities.Category> GetByIdCategoryAsync(string CategoryId);
 
+        Task<List<GetByIdCategoryInProductsDto>> GetByIdCategoryInProductsAsync(string CategoryId);
+
+        Task<List<GetByNameCategoryInProductsDto>> GetByNameCategoryInProductsAsync(string CategoryName);
 
     }
 }

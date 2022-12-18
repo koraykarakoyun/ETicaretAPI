@@ -30,7 +30,7 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetImage
 
             return product.ProductImageFiles.Select(p => new GetImageProductCommandResponse
             {
-                Id=p.Id.ToString(),
+                ProductId=p.Id.ToString(),
                 FileName = p.FileName,
                 Path = p.Path,
                 
