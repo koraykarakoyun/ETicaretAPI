@@ -47,6 +47,7 @@ namespace ETicaretAPI.Persistence.Context
 
         public DbSet<Domain.Entities.Category> Categories { get; set; }
 
+        public DbSet<Domain.Entities.Slider> Sliders { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 

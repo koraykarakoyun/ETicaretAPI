@@ -39,11 +39,11 @@ builder.Services.AddStoreage<LocalStorage>();
 
 builder.Services.AddControllers(
 
-    options =>
-{
+//    options =>
+//{
 
-    options.Filters.Add<RolePermissionFilter>();
-}
+//    options.Filters.Add<RolePermissionFilter>();
+//}
 
 )
  .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<AddProductCommandRequest>());
