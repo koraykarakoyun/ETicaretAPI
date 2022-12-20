@@ -14,6 +14,7 @@ namespace ETicaretAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class AuthorizationEndpointsController : ControllerBase
     {
 
@@ -25,7 +26,6 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPost("GetRolesToEndpoint")]
-        [Authorize(AuthenticationSchemes ="Admin")]
         [AuthorizeDefinition(ActionType = ActionType.Reading, Definiton = "Get Roles To Endpoint", Menu = AttributeConst.AuthorizationEndpoints)]
         public async Task<IActionResult> GetRolesToEndpoint(GetRolesToEndpointCommandRequest getRolesToEndpointCommandRequest)
         {
@@ -35,7 +35,6 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpPost("AssingRoleEndpoint")]
-        [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(ActionType = ActionType.Reading, Definiton = "Assing Role Endpoint", Menu = AttributeConst.AuthorizationEndpoints)]
         public async Task<IActionResult> AssingRoleEndpoint(AssignRoleEndpointCommandRequest assignRoleEndpointCommandRequest)
         {

@@ -17,7 +17,7 @@ namespace ETicaretAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Admin")]
+   
     public class CategoriesController : ControllerBase
     {
 
@@ -29,6 +29,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Writing, Definiton = "Add Category")]
         public async Task<IActionResult> AddCategory(AddCategoryCommandRequest addCategoryCommandRequest)
         {
@@ -38,6 +39,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPut("[action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Updateing, Definiton = "Update Category")]
         public async Task<IActionResult> UpdateCategory(UpdateCategoryCommandRequest updateCategoryCommandRequest)
         {
@@ -47,6 +49,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpDelete("[action]/{Id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Deleting, Definiton = "Delete By Id Category")]
         public async Task<IActionResult> DeleteByIdCategory([FromRoute] DeleteByIdCategoryCommandRequest deleteByIdCategoryCommandRequest)
         {

@@ -16,10 +16,10 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
 {
     public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryRequest, List<GetAllProductQueryResponse>>
     {
-
+        IProductImageFileReadRepository _productImageFileReadRepository;
         IProductReadRepository _productReadRepository;
         ILogger<GetAllProductQueryHandler> _logger;
-        IProductImageFileReadRepository _productImageFileReadRepository;
+        
 
         public GetAllProductQueryHandler(IProductReadRepository productReadRepository, ILogger<GetAllProductQueryHandler> logger, IProductImageFileReadRepository productImageFileReadRepository)
         {
@@ -42,7 +42,6 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
                 ProductPrice = i.Price,
                 ProductStock = i.Stock,
                 Path = p.Path
-
             }).ToList();
 
 

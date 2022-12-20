@@ -10,6 +10,7 @@ using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAllImage;
 using ETicaretAPI.Application.CQRS.Product.Query.GetById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetImage;
+using ETicaretAPI.Application.CQRS.Product.Query.SearchProducts;
 using ETicaretAPI.Application.CustomAttributes;
 using ETicaretAPI.Application.Enums;
 using ETicaretAPI.Application.Repositories;
@@ -42,7 +43,7 @@ namespace ETicaretAPI.API.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-       
+
         [HttpGet("getall")]
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Get All Product")]
         public async Task<IActionResult> GetAll([FromQuery] GetAllProductQueryRequest getAllProductQueryRequest)
@@ -61,9 +62,19 @@ namespace ETicaretAPI.API.Controllers
         }
 
 
+        [HttpGet("SearchProducts/{word}")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "SearchProducts")]
+        public async Task<IActionResult> SearchProducts([FromRoute] SearchProductsQueryRequest searchProductsQueryRequest)
+        {
+          List<SearchProductsQueryResponse> searchProductsQueryResponse = await _mediator.Send(searchProductsQueryRequest);
+            return Ok(searchProductsQueryResponse);
+        }
+
+
+
         [HttpPost("add")]
         [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AttributeConst.Products,ActionType =ActionType.Writing,Definiton ="Add Product")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Writing, Definiton = "Add Product")]
         public async Task<IActionResult> Add(AddProductCommandRequest addProductCommandRequest)
         {
             AddProductCommandResponse addProductCommandResponse = await _mediator.Send(addProductCommandRequest);
@@ -87,7 +98,7 @@ namespace ETicaretAPI.API.Controllers
         [HttpDelete("deletebyid/{id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Deleting, Definiton = "Delete By Id Product")]
-        public async Task<IActionResult> DeletebyId([FromRoute]DeleteProductCommandRequest deleteProductCommandRequest)
+        public async Task<IActionResult> DeletebyId([FromRoute] DeleteProductCommandRequest deleteProductCommandRequest)
         {
             DeleteProductCommandResponse deleteProductCommandResponse = await _mediator.Send(deleteProductCommandRequest);
             return Ok(deleteProductCommandResponse);
@@ -96,6 +107,7 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpPost("[action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Writing, Definiton = "Image Updload Product")]
         public async Task<IActionResult> Upload([FromForm] ImageUploadProductCommandRequest ımageUploadProductCommandRequest)
         {

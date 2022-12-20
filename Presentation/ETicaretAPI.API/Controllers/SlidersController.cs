@@ -10,13 +10,14 @@ using ETicaretAPI.Application.CQRS.Slider.Query.GetAllSlidePhotos;
 using ETicaretAPI.Application.CustomAttributes;
 using ETicaretAPI.Application.Enums;
 using MediatR;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETicaretAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class SlidersController : ControllerBase
     {
 
@@ -29,6 +30,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Sliders, ActionType = ActionType.Writing, Definiton = "Add Slide Photo")]
         public async Task<IActionResult> AddSlidePhoto([FromForm] AddSlidePhotoCommandSliderRequest addSlidePhotoCommandSliderRequest)
         {
@@ -38,6 +40,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpDelete("[action]/{Id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Sliders, ActionType = ActionType.Deleting, Definiton = "Delete By Id Slide Photo")]
         public async Task<IActionResult> DeleteByIdSlidePhoto([FromRoute] DeleteByIdSlidePhotoCommandRequest deleteByIdSlidePhotoCommandRequest)
         {
@@ -56,6 +59,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpDelete("[action]/{Id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Sliders, ActionType = ActionType.Deleting, Definiton = "Delete ShowCase Slide Photo")]
         public async Task<IActionResult> DeleteByIdShowCase([FromRoute] DeleteByIdShowCaseCommandSliderRequest deleteByIdShowCaseCommandSliderRequest)
         {
