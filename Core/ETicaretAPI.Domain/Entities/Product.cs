@@ -26,5 +26,7 @@ namespace ETicaretAPI.Domain.Entities
 
         public Category Category { get; set; }
 
+        public ProductDetail ProductDetail { get; set; }
+
     }
 }

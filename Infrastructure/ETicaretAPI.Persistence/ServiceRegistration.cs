@@ -16,6 +16,8 @@ using ETicaretAPI.Application.Repositories.Endpoint;
 using ETicaretAPI.Application.Repositories.InvoiceFile;
 using ETicaretAPI.Application.Repositories.Menu;
 using ETicaretAPI.Application.Repositories.Order;
+using ETicaretAPI.Application.Repositories.ProductDetail;
+using ETicaretAPI.Application.Repositories.ProductDetails;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
 using ETicaretAPI.Application.Repositories.Slider;
 using ETicaretAPI.Application.Repositories.UserAuthRoles;
@@ -35,6 +37,7 @@ using ETicaretAPI.Persistence.Repositories.File;
 using ETicaretAPI.Persistence.Repositories.InvoiceFile;
 using ETicaretAPI.Persistence.Repositories.Menu;
 using ETicaretAPI.Persistence.Repositories.Order;
+using ETicaretAPI.Persistence.Repositories.ProductDetail;
 using ETicaretAPI.Persistence.Repositories.ProductImageFile;
 using ETicaretAPI.Persistence.Repositories.Slider;
 using ETicaretAPI.Persistence.Repositories.UserAuthRoles;
@@ -107,6 +110,8 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<ISliderReadRepository, SliderReadRepository>();
             services.AddScoped<ISliderWriteRepository, SliderWriteRepository>();
 
+            services.AddScoped<IProductDetailReadRepository, ProductDetailReadRepository>();
+            services.AddScoped<IProductDetailWriteRepository, ProductDetailWriteRepository>();
 
 
             services.AddScoped<IBasketService, BasketService>();

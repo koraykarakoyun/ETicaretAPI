@@ -48,6 +48,8 @@ namespace ETicaretAPI.Persistence.Context
         public DbSet<Domain.Entities.Category> Categories { get; set; }
 
         public DbSet<Domain.Entities.Slider> Sliders { get; set; }
+
+        public DbSet<Domain.Entities.ProductDetail> ProductDetails { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -68,6 +70,11 @@ namespace ETicaretAPI.Persistence.Context
             builder.Entity<Order>().HasOne(o => o.CompletedOrder).WithOne(o => o.Order).HasForeignKey<CompletedOrder>(o => o.OrderId);
 
             builder.Entity<Product>().HasOne(a => a.Category).WithMany(a => a.Products).HasForeignKey(a=>a.CategoryId);
+
+         
+            builder.Entity<Product>().HasOne(a => a.ProductDetail).WithOne(a => a.Product).HasForeignKey<ProductDetail>(a => a.Id);
+
+            builder.Entity<ProductDetail>().HasKey(a => a.Id);
 
 
             base.OnModelCreating(builder);
