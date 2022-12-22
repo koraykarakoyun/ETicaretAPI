@@ -1,5 +1,6 @@
 ﻿using ETicaretAPI.Application.Repositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,22 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetById
 
         public async Task<GetByIdProductQueryResponse> Handle(GetByIdProductQueryRequest request, CancellationToken cancellationToken)
         {
-           var response= await _productReadRepository.GetByIdAsync(request.Id,false);
+            var response = await _productReadRepository.Table.Include(a => a.ProductDetail).SingleOrDefaultAsync(a => a.Id == Guid.Parse(request.Id));
 
-           return new GetByIdProductQueryResponse {ProductName = response.Name,ProductStock =response.Stock,ProductPrice=response.Price};           
+
+
+
+            return new GetByIdProductQueryResponse
+            {
+                ProductId = response.Id.ToString(),
+                ProductName = response.Name,
+                ProductStock = response.Stock,
+                ProductPrice = response.Price,
+                ProductBrand=response.ProductDetail.Brand,
+                ProductModel=response.ProductDetail.Model,
+                ProductDescription=response.ProductDetail.Description,
+                ProductColor=response.ProductDetail.Color
+            };
         }
     }
 }

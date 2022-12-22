@@ -32,7 +32,7 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetImage
             {
                 ProductId=p.Id.ToString(),
                 FileName = p.FileName,
-                Path = p.Path,
+                ProductPath = p.Path,
                 
             }).ToList();
 

@@ -31,7 +31,7 @@ namespace ETicaretAPI.Application.CQRS.Category.Query.GetByNameCategoryInProduct
                 ProductName = a.ProductName,
                 ProductPrice = a.ProductPrice,
                 ProductStock = a.ProductStock,
-                Path = a.Path
+                ProductPath = a.Path
             }).ToList();
         }
     }

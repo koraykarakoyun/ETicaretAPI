@@ -25,7 +25,7 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.SearchProducts
 
         public async Task<List<SearchProductsQueryResponse>> Handle(SearchProductsQueryRequest request, CancellationToken cancellationToken)
         {
-            var result = await _productReadRepository.Table.Include(a => a.ProductImageFiles).Where(a => a.Name.Contains(request.word) && a.ProductImageFiles.Any(a => a.ShowCase == true)).SelectMany(p => p.ProductImageFiles, (p, i) =>
+            var result = await _productReadRepository.Table.Include(a=>a.ProductDetail).Include(a => a.ProductImageFiles).Where(a => a.Name.Contains(request.word) && a.ProductImageFiles.Any(a => a.ShowCase == true)).SelectMany(p => p.ProductImageFiles, (p, i) =>
             new SearchProductsDto()
             {
                 ProductId = p.Id.ToString(),
@@ -33,7 +33,11 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.SearchProducts
                 ProductPrice = p.Price,
                 ProductStock = p.Stock,
                 Path = i.Path,
-                ShowCase = i.ShowCase
+                ShowCase = i.ShowCase,
+                ProductBrand=p.ProductDetail.Brand,
+                ProductModel=p.ProductDetail.Model,
+                ProductDescription=p.ProductDetail.Description,
+                ProductColor=p.ProductDetail.Color
             }).ToListAsync();
 
             return result.Where(a => a.ShowCase == true).Select(a => new SearchProductsQueryResponse()
@@ -42,7 +46,11 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.SearchProducts
                 ProductName = a.ProductName,
                 ProductPrice = a.ProductPrice,
                 ProductStock = a.ProductStock,
-                Path = a.Path,
+                ProductPath = a.Path,
+                ProductBrand = a.ProductBrand,
+                ProductModel = a.ProductModel,
+                ProductDescription = a.ProductDescription,
+                ProductColor = a.ProductColor
 
             }).ToList();
 

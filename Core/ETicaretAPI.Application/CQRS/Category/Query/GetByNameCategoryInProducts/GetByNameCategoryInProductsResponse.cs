@@ -14,6 +14,6 @@ namespace ETicaretAPI.Application.CQRS.Category.Query.GetByNameCategoryInProduct
         public string ProductName { get; set; }
         public int ProductStock { get; set; }
         public float ProductPrice { get; set; }
-        public string Path { get; set; }
+        public string ProductPath { get; set; }
     }
 }

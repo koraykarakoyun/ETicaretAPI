@@ -9,6 +9,7 @@ using ETicaretAPI.Application.CQRS.Product.Command.UpdateById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAllImage;
 using ETicaretAPI.Application.CQRS.Product.Query.GetById;
+using ETicaretAPI.Application.CQRS.Product.Query.GetByIdProductAllImages;
 using ETicaretAPI.Application.CQRS.Product.Query.GetImage;
 using ETicaretAPI.Application.CQRS.Product.Query.SearchProducts;
 using ETicaretAPI.Application.CustomAttributes;
@@ -66,14 +67,14 @@ namespace ETicaretAPI.API.Controllers
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "SearchProducts")]
         public async Task<IActionResult> SearchProducts([FromRoute] SearchProductsQueryRequest searchProductsQueryRequest)
         {
-          List<SearchProductsQueryResponse> searchProductsQueryResponse = await _mediator.Send(searchProductsQueryRequest);
+            List<SearchProductsQueryResponse> searchProductsQueryResponse = await _mediator.Send(searchProductsQueryRequest);
             return Ok(searchProductsQueryResponse);
         }
 
 
 
         [HttpPost("add")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Writing, Definiton = "Add Product")]
         public async Task<IActionResult> Add(AddProductCommandRequest addProductCommandRequest)
         {
@@ -83,7 +84,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPut("update")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Updateing, Definiton = "Update Product")]
         public async Task<IActionResult> Update(UpdateProductCommandRequest updateProductCommandRequest)
         {
@@ -96,7 +97,7 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpDelete("deletebyid/{id}")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Deleting, Definiton = "Delete By Id Product")]
         public async Task<IActionResult> DeletebyId([FromRoute] DeleteProductCommandRequest deleteProductCommandRequest)
         {
@@ -107,7 +108,7 @@ namespace ETicaretAPI.API.Controllers
 
 
         [HttpPost("[action]")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Writing, Definiton = "Image Updload Product")]
         public async Task<IActionResult> Upload([FromForm] ImageUploadProductCommandRequest ımageUploadProductCommandRequest)
         {
@@ -145,8 +146,20 @@ namespace ETicaretAPI.API.Controllers
 
         }
 
+
+        [HttpGet("getbyidproductallimages/{Id}")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Get By Id Product All Images")]
+        public async Task<IActionResult> Getbyidproductallimages([FromRoute] GetByIdProductAllImagesQueryRequest getByIdProductAllImagesQueryRequest)
+        {
+
+            List<GetByIdProductAllImagesQueryResponse> getByIdProductAllImagesQueryResponses = await _mediator.Send(getByIdProductAllImagesQueryRequest);
+            return Ok(getByIdProductAllImagesQueryResponses);
+
+
+        }
+
         [HttpPut("vitrin")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Updateing, Definiton = "Change Show Case")]
         public async Task<IActionResult> Vitrin(ChangeShowCaseProductCommandRequest changeShowCaseProductCommandRequest)
         {

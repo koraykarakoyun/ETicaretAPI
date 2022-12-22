@@ -2,6 +2,8 @@
 using ETicaretAPI.Application.Abstraction.SignalR;
 using ETicaretAPI.Application.Abstraction.Storage;
 using ETicaretAPI.Application.Repositories;
+using ETicaretAPI.Application.Repositories.ProductDetail;
+using ETicaretAPI.Application.Repositories.ProductDetails;
 using ETicaretAPI.Application.Repositories.ProductImageFile;
 using ETicaretAPI.Domain.Entities.File;
 using MediatR;
@@ -26,8 +28,9 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.Add
         readonly IProductImageFileWriteRepository _productImageFileWriteRepository;
         IProductImageFileReadRepository _productImageFileReadRepository;
         ICategoryService _categoryService;
-
-        public AddProductCommandHandler(IProductWriteRepository productWriteRepository, ILogger<AddProductCommandHandler> logger, IProductHubService productHubService, IStorageService storageService, IProductReadRepository productReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IProductImageFileReadRepository productImageFileReadRepository, ICategoryService categoryService)
+        IProductDetailReadRepository _productDetailReadRepository;
+        IProductDetailWriteRepository _productDetailWriteRepository;
+        public AddProductCommandHandler(IProductWriteRepository productWriteRepository, ILogger<AddProductCommandHandler> logger, IProductHubService productHubService, IStorageService storageService, IProductReadRepository productReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IProductImageFileReadRepository productImageFileReadRepository, ICategoryService categoryService, IProductDetailReadRepository productDetailReadRepository, IProductDetailWriteRepository productDetailWriteRepository)
         {
             _productWriteRepository = productWriteRepository;
             _logger = logger;
@@ -37,6 +40,8 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.Add
             _productImageFileWriteRepository = productImageFileWriteRepository;
             _productImageFileReadRepository = productImageFileReadRepository;
             _categoryService = categoryService;
+            _productDetailReadRepository = productDetailReadRepository;
+            _productDetailWriteRepository = productDetailWriteRepository;
         }
 
         public async Task<AddProductCommandResponse> Handle(AddProductCommandRequest request, CancellationToken cancellationToken)
@@ -48,7 +53,14 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.Add
                 Name = request.Name,
                 Stock = request.Stock,
                 Price = request.Price,
-                Category=category
+                Category=category,
+                ProductDetail = new()
+                {
+                    Brand=request.Brand,
+                    Model=request.Model,
+                    Description=request.Description,
+                    Color=request.Color
+                }
             };
             await _productWriteRepository.AddAsync(product);
             await _productWriteRepository.SaveAsync();

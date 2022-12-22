@@ -24,10 +24,11 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAllImage
 
         public async Task<List<GetAllImageProductQueryResponse>> Handle(GetAllImageProductQueryRequest request, CancellationToken cancellationToken)
         {
-            var datas = await _productReadRepository.Table.Include(pif => pif.ProductImageFiles).SelectMany(pif => pif.ProductImageFiles, (p, pif) => new
+            var datas = await _productReadRepository.Table.Include(pif => pif.ProductImageFiles).Include(a=>a.ProductDetail).SelectMany(pif => pif.ProductImageFiles, (p, pif) => new
             {
                 p,
-                pif
+                pif,
+                p.ProductDetail
 
             }).ToListAsync();
 
@@ -39,7 +40,11 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAllImage
                 ProductStock = a.p.Stock,
                 ProductPrice = a.p.Price,
                 FileName = a.pif.FileName,
-                Path = a.pif.Path,
+                ProductPath = a.pif.Path,
+                ProductBrand = a.p.ProductDetail.Brand,
+                ProductModel = a.p.ProductDetail.Model,
+                ProductDescription =a.p.ProductDetail.Description,
+                ProductColor = a.p.ProductDetail.Color
             }).ToList();
 
         }
