@@ -22,13 +22,34 @@ namespace ETicaretAPI.Application.CQRS.Basket.Query.GetBasketItem
         {
 
             List<BasketItem> basketItems = await _basketService.GetBasketItems();
+            var itemCount= basketItems.Count();
+
+
+            if (itemCount == 0)
+            {
+                List<string> nullcount = new List<string>();
+                nullcount.Insert(index:0,"null");
+
+                return nullcount.Select(item => new GetBasketItemQueryResponse()
+                {
+                    Count = itemCount.ToString(),
+                }).ToList();
+            }
 
             return basketItems.Select(item => new GetBasketItemQueryResponse()
             {
                 BasketItemId = item.Id.ToString(),
                 ProductName = item.Product.Name,
                 ProductPrice = item.Product.Price.ToString(),
-                Quantity = item.Quantity.ToString()
+                ProductQuantity = item.Quantity.ToString(),
+                CategoryName = item.Product.Category.Name,
+                ProductPath = item.Product.ProductImageFiles.FirstOrDefault(a => a.ShowCase == true).Path,
+                ShowCase = item.Product.ProductImageFiles.FirstOrDefault(a => a.ShowCase == true).ShowCase,
+                ProductModel = item.Product.ProductDetail.Model,
+                ProductBrand = item.Product.ProductDetail.Brand,
+                ProductDescription = item.Product.ProductDetail.Description,
+                ProductColor = item.Product.ProductDetail.Color,
+                Count= itemCount.ToString(),
             }).ToList();
 
         }

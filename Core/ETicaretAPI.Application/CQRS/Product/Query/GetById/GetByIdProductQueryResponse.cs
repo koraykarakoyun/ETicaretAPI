@@ -17,5 +17,9 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetById
         public string? ProductModel { get; set; }
         public string? ProductDescription { get; set; }
         public string? ProductColor { get; set; }
+
+        public string? CategoryId { get; set; }
+        public string? CategoryName { get; set; }
+       
     }
 }

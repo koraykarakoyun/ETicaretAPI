@@ -12,7 +12,16 @@ namespace ETicaretAPI.Application.CQRS.Basket.Query.GetBasketItem
         public string BasketItemId { get; set; }
         public string ProductName { get; set; }
         public string ProductPrice { get; set; }
-        public string Quantity { get; set; }
-     
+        public string ProductQuantity { get; set; }
+        public string CategoryName { get; set; }
+        public string ProductBrand { get; set; }
+        public string ProductModel { get; set; }
+        public string ProductDescription { get; set; }
+        public string ProductColor { get; set; }
+
+        public string ProductPath { get; set; }
+        public bool ShowCase { get; set; }
+
+        public string Count { get; set; }
     }
 }

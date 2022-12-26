@@ -31,8 +31,8 @@ namespace ETicaretAPI.Persistence.Basket
         IBasketItemWriteRepository _basketItemWriteRepository;
         IBasketReadRepository _basketReadRepository;
         readonly IBasketWriteRepository _basketWriteRepository;
-   
-      
+
+
 
         public BasketService(IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager, IOrderReadRepository orderReadRepository, IOrderWriteRepository orderWriteRepository, IBasketItemReadRepository basketItemReadRepository, IBasketItemWriteRepository basketItemWriteRepository, IBasketReadRepository basketReadRepository, IBasketWriteRepository basketWriteRepository)
         {
@@ -44,7 +44,7 @@ namespace ETicaretAPI.Persistence.Basket
             _basketItemWriteRepository = basketItemWriteRepository;
             _basketReadRepository = basketReadRepository;
             _basketWriteRepository = basketWriteRepository;
-            
+
         }
 
 
@@ -58,7 +58,7 @@ namespace ETicaretAPI.Persistence.Basket
             if (!string.IsNullOrEmpty(username))
             {
                 AppUser? user = await _userManager.Users.Include(b => b.Basket).FirstOrDefaultAsync(u => u.UserName == username);
-          
+
                 var _basket = from basket in user.Basket
                               join order in _orderReadRepository.Table on basket.Id equals order.Id into BasketOrders
                               from orderempty in BasketOrders.DefaultIfEmpty()
@@ -79,7 +79,7 @@ namespace ETicaretAPI.Persistence.Basket
                 {
                     _targetbasket = new()
                     {
-                        UserId=user.Id
+                        UserId = user.Id
                     };
                     user.Basket.Add(_targetbasket);
                     await _basketWriteRepository.SaveAsync();
@@ -88,9 +88,9 @@ namespace ETicaretAPI.Persistence.Basket
                 return _targetbasket;
 
             }
-             
+
             throw new Exception();
-           
+
         }
 
         public async Task<bool> AddItemToBasketAsync(Create_BasketItem basketItem)
@@ -112,7 +112,7 @@ namespace ETicaretAPI.Persistence.Basket
                 {
                     await _basketItemWriteRepository.AddAsync(new BasketItem()
                     {
-                        
+
                         BasketId = basket.Id,
                         ProductId = Guid.Parse(basketItem.ProductId),
                         Quantity = basketItem.Quantity
@@ -131,7 +131,11 @@ namespace ETicaretAPI.Persistence.Basket
         {
 
             Domain.Entities.Basket _basket = await ContextUser();
-            Domain.Entities.Basket result = await _basketReadRepository.Table.Include(bi => bi.BasketItems).ThenInclude(p => p.Product).FirstOrDefaultAsync(b => b.Id == _basket.Id);
+            Domain.Entities.Basket? result = await _basketReadRepository.Table
+                .Include(bi => bi.BasketItems).ThenInclude(p => p.Product).ThenInclude(a => a.ProductDetail)
+                .Include(a => a.BasketItems).ThenInclude(a => a.Product).ThenInclude(a => a.ProductImageFiles)
+                .Include(a => a.BasketItems).ThenInclude(a => a.Product).ThenInclude(a => a.Category).
+                FirstOrDefaultAsync(b => b.Id == _basket.Id);
 
             return result.BasketItems.ToList();
 
@@ -166,7 +170,7 @@ namespace ETicaretAPI.Persistence.Basket
 
         public async Task<Domain.Entities.Basket?> GetUserActiveBasket()
         {
-           return await ContextUser();
+            return await ContextUser();
         }
     }
 }

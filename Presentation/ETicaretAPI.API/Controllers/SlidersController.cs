@@ -30,7 +30,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(AuthenticationSchemes = "Admin")]
+        //[Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(Menu = AttributeConst.Sliders, ActionType = ActionType.Writing, Definiton = "Add Slide Photo")]
         public async Task<IActionResult> AddSlidePhoto([FromForm] AddSlidePhotoCommandSliderRequest addSlidePhotoCommandSliderRequest)
         {

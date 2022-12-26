@@ -17,7 +17,8 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.UpdateById
         public string Model { get; set; }
         public string Description { get; set; }
         public string Color { get; set; }
+        public string CategoryId { get; set; }
 
-
+      
     }
 }

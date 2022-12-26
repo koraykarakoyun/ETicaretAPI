@@ -20,7 +20,7 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetById
 
         public async Task<GetByIdProductQueryResponse> Handle(GetByIdProductQueryRequest request, CancellationToken cancellationToken)
         {
-            var response = await _productReadRepository.Table.Include(a => a.ProductDetail).SingleOrDefaultAsync(a => a.Id == Guid.Parse(request.Id));
+            var response = await _productReadRepository.Table.Include(a => a.ProductDetail).Include(a => a.Category).SingleOrDefaultAsync(a => a.Id == Guid.Parse(request.Id));
 
 
 
@@ -31,10 +31,13 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetById
                 ProductName = response.Name,
                 ProductStock = response.Stock,
                 ProductPrice = response.Price,
-                ProductBrand=response.ProductDetail.Brand,
-                ProductModel=response.ProductDetail.Model,
-                ProductDescription=response.ProductDetail.Description,
-                ProductColor=response.ProductDetail.Color
+                ProductBrand = response.ProductDetail.Brand,
+                ProductModel = response.ProductDetail.Model,
+                ProductDescription = response.ProductDetail.Description,
+                ProductColor = response.ProductDetail.Color,
+                CategoryId = response.Category.Id.ToString(),
+                CategoryName = response.Category.Name
+
             };
         }
     }
