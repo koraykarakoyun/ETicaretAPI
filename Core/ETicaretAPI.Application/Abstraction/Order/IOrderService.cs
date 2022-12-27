@@ -1,4 +1,5 @@
-﻿using ETicaretAPI.Application.DTOs;
+﻿using ETicaretAPI.Application.CQRS.Order.Query.GetAllOrdersByUser;
+using ETicaretAPI.Application.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace ETicaretAPI.Application.Abstraction.Order
         Task<OrderDetailDto> GetOrderDetailById(string Id);
         
         Task<bool> CompleteOrderAsync(string Id);
+
+        Task<List<GetAllOrdersByUserDto>> GetAllOrdersByUser();
 
     }
 }

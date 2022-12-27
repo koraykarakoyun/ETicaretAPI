@@ -1,13 +1,18 @@
 ﻿using ETicaretAPI.Application.Abstraction.Basket;
 using ETicaretAPI.Application.Abstraction.Order;
+using ETicaretAPI.Application.CQRS.Order.Query.GetAllOrdersByUser;
 using ETicaretAPI.Application.DTOs;
+using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.Basket;
 using ETicaretAPI.Application.Repositories.BasketItem;
 using ETicaretAPI.Application.Repositories.CompletedOrder;
 using ETicaretAPI.Application.Repositories.Order;
 using ETicaretAPI.Domain.Entities;
+using ETicaretAPI.Domain.Entities.Identity;
 using ETicaretAPI.Persistence.Repositories.Basket;
 using ETicaretAPI.Persistence.Repositories.BasketItem;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,8 +31,13 @@ namespace ETicaretAPI.Persistence
         IBasketReadRepository _basketReadRepository;
         ICompletedOrderWriteRepository _completedOrderWriteRepository;
         ICompletedOrderReadRepository _completedOrderReadRepository;
+        IHttpContextAccessor _httpContextAccessor;
+        UserManager<AppUser> _userManager;
+        IBasketItemReadRepository _basketItemReadRepository;
 
-        public OrderService(IOrderWriteRepository orderWriteRepository, IBasketService basketService, IOrderReadRepository orderReadRepository, IBasketReadRepository basketReadRepository, ICompletedOrderWriteRepository completedOrderWriteRepository, ICompletedOrderReadRepository completedOrderReadRepository)
+
+
+        public OrderService(IOrderWriteRepository orderWriteRepository, IBasketService basketService, IOrderReadRepository orderReadRepository, IBasketReadRepository basketReadRepository, ICompletedOrderWriteRepository completedOrderWriteRepository, ICompletedOrderReadRepository completedOrderReadRepository, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager, IBasketItemReadRepository basketItemReadRepository)
         {
             _orderWriteRepository = orderWriteRepository;
             _basketService = basketService;
@@ -35,6 +45,9 @@ namespace ETicaretAPI.Persistence
             _basketReadRepository = basketReadRepository;
             _completedOrderWriteRepository = completedOrderWriteRepository;
             _completedOrderReadRepository = completedOrderReadRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
+            _basketItemReadRepository = basketItemReadRepository;
         }
 
         public async Task<bool> CompleteOrderAsync(string Id)
@@ -108,6 +121,40 @@ namespace ETicaretAPI.Persistence
 
         }
 
+        public async Task<List<GetAllOrdersByUserDto>> GetAllOrdersByUser()
+        {
+
+            string? username = _httpContextAccessor?.HttpContext?.User.Identity?.Name;
+
+            var result = await _basketReadRepository.Table.Include(a => a.BasketItems).ThenInclude(a => a.Product).ThenInclude(a => a.ProductImageFiles)
+                .Include(a => a.User).Include(a => a.Order).Where(a => a.User.UserName == username).ToListAsync();
+
+            List<GetAllOrdersByUserDto> list = new List<GetAllOrdersByUserDto>();
+           
+            foreach (var item in result)
+            {
+                GetAllOrdersByUserDto list1 = new GetAllOrdersByUserDto();
+                list1.OrderCode = item.Order.OrderCode;
+                list1.CreatedDate = item.CreatedDate;
+                list1.TotalPrice = item.BasketItems.Sum(a => a.Quantity * a.Product.Price);
+                foreach (var basketItem in item.BasketItems)
+                {
+                    foreach (var productImageFile in basketItem.Product.ProductImageFiles)
+                    {
+                        if (productImageFile.ShowCase == true)
+                        {
+                            list1.Paths.Add(productImageFile.Path);
+                        }
+                    }
+                }
+                list.Add(list1);
+             
+            }
+
+            return list;
+
+        }
+
         public async Task<OrderDetailDto> GetOrderDetailById(string Id)
         {
             var data = _orderReadRepository.Table.Include(o => o.Basket).ThenInclude(bi => bi.BasketItems).ThenInclude(p => p.Product).FirstOrDefaultAsync(id => id.Id == Guid.Parse(Id)).Result;
@@ -132,5 +179,9 @@ namespace ETicaretAPI.Persistence
 
 
         }
+
+
+
+
     }
 }
