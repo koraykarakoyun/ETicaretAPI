@@ -3,6 +3,7 @@ using ETicaretAPI.Application.CQRS.Order.Command.CompleteOrder;
 using ETicaretAPI.Application.CQRS.Order.Command.Create;
 using ETicaretAPI.Application.CQRS.Order.Query.GetAll;
 using ETicaretAPI.Application.CQRS.Order.Query.GetAllOrdersByUser;
+using ETicaretAPI.Application.CQRS.Order.Query.GetByIdUserOrderDetail;
 using ETicaretAPI.Application.CQRS.Order.Query.GetOrderDetailById;
 using ETicaretAPI.Application.CustomAttributes;
 using ETicaretAPI.Application.Enums;
@@ -66,6 +67,14 @@ namespace ETicaretAPI.API.Controllers
         {
             GetAllOrdersByUserQueryResponse getAllOrdersByUserQueryResponses= await _mediator.Send(getAllOrdersByUserQueryRequest);
             return Ok(getAllOrdersByUserQueryResponses);
+        }
+
+        [AuthorizeDefinition(Menu = AttributeConst.Orders, ActionType = ActionType.Reading, Definiton = "Get By Id User Order Detail")]
+        [HttpGet("GetByIdUserOrderDetail/{OrderCode}")]
+        public async Task<IActionResult> GetByIdUserOrderDetail([FromRoute] GetByIdUserOrderDetailQueryRequest getByIdUserOrderDetailQueryRequest)
+        {
+            GetByIdUserOrderDetailQueryResponse getByIdUserOrderDetailQueryResponse = await _mediator.Send(getByIdUserOrderDetailQueryRequest);
+            return Ok(getByIdUserOrderDetailQueryResponse);
         }
 
     }

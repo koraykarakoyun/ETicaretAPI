@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -129,29 +130,75 @@ namespace ETicaretAPI.Persistence
             var result = await _basketReadRepository.Table.Include(a => a.BasketItems).ThenInclude(a => a.Product).ThenInclude(a => a.ProductImageFiles)
                 .Include(a => a.User).Include(a => a.Order).Where(a => a.User.UserName == username).ToListAsync();
 
-            List<GetAllOrdersByUserDto> list = new List<GetAllOrdersByUserDto>();
-           
+            List<GetAllOrdersByUserDto> getAllOrdersByUserDtos = new List<GetAllOrdersByUserDto>();
+
             foreach (var item in result)
             {
-                GetAllOrdersByUserDto list1 = new GetAllOrdersByUserDto();
-                list1.OrderCode = item.Order.OrderCode;
-                list1.CreatedDate = item.CreatedDate;
-                list1.TotalPrice = item.BasketItems.Sum(a => a.Quantity * a.Product.Price);
+                GetAllOrdersByUserDto getAllOrdersByUserDto = new GetAllOrdersByUserDto();
+                getAllOrdersByUserDto.CreatedDate = item.CreatedDate;
+                getAllOrdersByUserDto.TotalPrice = item.BasketItems.Sum(a => a.Quantity * a.Product.Price);
+                getAllOrdersByUserDto.ProductQuantity = item.BasketItems.Sum(a => a.Quantity).ToString();
+                getAllOrdersByUserDto.OrderCode = item?.Order?.OrderCode?.ToString();
                 foreach (var basketItem in item.BasketItems)
                 {
                     foreach (var productImageFile in basketItem.Product.ProductImageFiles)
                     {
                         if (productImageFile.ShowCase == true)
                         {
-                            list1.Paths.Add(productImageFile.Path);
+                            getAllOrdersByUserDto.Paths.Add(productImageFile.Path);
                         }
                     }
                 }
-                list.Add(list1);
-             
+                getAllOrdersByUserDtos.Add(getAllOrdersByUserDto);
+
             }
 
-            return list;
+            return getAllOrdersByUserDtos;
+
+        }
+
+        public async Task<List<GetByIdUserOrderDetailDto>> GetByIdUserOrderDetail(string OrderCode)
+        {
+
+            var result = await _orderReadRepository.Table.Include(a => a.Basket).ThenInclude(a => a.BasketItems).ThenInclude(a => a.Product).ThenInclude(a => a.ProductDetail)
+                .Include(a => a.Basket).ThenInclude(a => a.BasketItems).ThenInclude(a => a.Product).ThenInclude(a => a.ProductImageFiles)
+                 .Include(a => a.Basket).ThenInclude(a => a.BasketItems).ThenInclude(a => a.Product).ThenInclude(a => a.Category).SingleOrDefaultAsync(a => a.OrderCode == OrderCode);
+
+            List<GetByIdUserOrderDetailDto> getByIdUserOrderDetailDtos = new List<GetByIdUserOrderDetailDto>();
+          
+
+            foreach (var basketitem in result.Basket.BasketItems)
+            {
+                GetByIdUserOrderDetailDto getByIdUserOrderDetailDto = new GetByIdUserOrderDetailDto();
+                getByIdUserOrderDetailDto.CategoryName = basketitem.Product.Category.Name;
+                getByIdUserOrderDetailDto.ProductName = basketitem.Product.Name;
+                getByIdUserOrderDetailDto.ProductPrice = basketitem.Product.Price;
+                getByIdUserOrderDetailDto.ProductQuantity = basketitem.Quantity;
+                getByIdUserOrderDetailDto.ProductBrand = basketitem.Product.ProductDetail.Brand;
+                getByIdUserOrderDetailDto.ProductModel = basketitem.Product.ProductDetail.Model;
+                getByIdUserOrderDetailDto.ProductDescription = basketitem.Product.ProductDetail.Description;
+                getByIdUserOrderDetailDto.ProductColor = basketitem.Product.ProductDetail.Color;
+                getByIdUserOrderDetailDto.OrderDescription = basketitem.Basket.Order.Description;
+                getByIdUserOrderDetailDto.OrderAddress = basketitem.Basket.Order.Address;
+                getByIdUserOrderDetailDto.OrderCode = basketitem.Basket.Order.OrderCode;
+                getByIdUserOrderDetailDto.OrderCreatedDate = basketitem.Basket.Order.CreatedDate;
+                getByIdUserOrderDetailDto.TotalPrice = (basketitem.Product.Price * basketitem.Quantity).ToString();
+
+                foreach (var productImageFile in basketitem.Product.ProductImageFiles)
+                {
+                    if (productImageFile.ShowCase == true)
+                    {
+                        getByIdUserOrderDetailDto.Paths.Add(productImageFile.Path);
+                    }
+                }
+
+                getByIdUserOrderDetailDtos.Add(getByIdUserOrderDetailDto);
+
+            }
+
+            return getByIdUserOrderDetailDtos;
+
+
 
         }
 

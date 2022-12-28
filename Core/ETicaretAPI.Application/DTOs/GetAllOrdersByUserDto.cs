@@ -19,9 +19,11 @@ namespace ETicaretAPI.Application.DTOs
             Paths = new List<string>();
            
         }
-        public string OrderCode { get; set; }
+        public string? OrderCode { get; set; }
 
         public float TotalPrice { get; set; }
+
+        public string ProductQuantity { get; set; }
 
         public DateTime CreatedDate { get; set; }
 

@@ -21,5 +21,7 @@ namespace ETicaretAPI.Application.Abstraction.Order
 
         Task<List<GetAllOrdersByUserDto>> GetAllOrdersByUser();
 
+        Task<List<GetByIdUserOrderDetailDto>> GetByIdUserOrderDetail(string OrderCode);
+
     }
 }
