@@ -1,4 +1,5 @@
-﻿using ETicaretAPI.Application.DTOs;
+﻿using ETicaretAPI.Application.CQRS.Category.Query.SortCategoryInProducts;
+using ETicaretAPI.Application.DTOs;
 using ETicaretAPI.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace ETicaretAPI.Application.Abstraction.Category
         Task<List<GetByIdCategoryInProductsDto>> GetByIdCategoryInProductsAsync(string CategoryId);
 
         Task<List<GetByNameCategoryInProductsDto>> GetByNameCategoryInProductsAsync(string CategoryName);
+
+        Task<List<SortCategoryInProductsDto>> SortCategoryInProductsAsync(string CategoryName,string type,string parameter);
 
     }
 }

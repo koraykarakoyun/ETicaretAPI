@@ -19,14 +19,14 @@ namespace ETicaretAPI.Persistence.Category
         ICategoryReadRepository _categoryReadRepository;
         ICategoryWriteRepository _categoryWriteRepository;
         IProductReadRepository _productReadRepository;
-       
+
 
         public CategoryService(ICategoryReadRepository categoryReadRepository, ICategoryWriteRepository categoryWriteRepository, IProductReadRepository productReadRepository)
         {
             _categoryReadRepository = categoryReadRepository;
             _categoryWriteRepository = categoryWriteRepository;
             _productReadRepository = productReadRepository;
-            
+
         }
 
         public async Task AddCategoryAsync(string Name)
@@ -89,17 +89,151 @@ namespace ETicaretAPI.Persistence.Category
             var products = _productReadRepository.Table.Include(a => a.Category).Include(a => a.ProductImageFiles).Where(a => a.Category.Name == CategoryName).ToList();
 
 
-            return products.SelectMany(i => i.ProductImageFiles, (p,i) => new GetByNameCategoryInProductsDto()
+            return products.SelectMany(i => i.ProductImageFiles, (p, i) => new GetByNameCategoryInProductsDto()
             {
-              CategoryId=p.CategoryId.ToString(),
-              CategoryName=p.Category.Name,
-              ProductId=p.Id.ToString(),
-              ProductName=p.Name,
-              ProductPrice=p.Price,
-              ProductStock=p.Stock,
-              Path=i.Path,
-              ShowCase=i.ShowCase          
+                CategoryId = p.CategoryId.ToString(),
+                CategoryName = p.Category.Name,
+                ProductId = p.Id.ToString(),
+                ProductName = p.Name,
+                ProductPrice = p.Price,
+                ProductStock = p.Stock,
+                Path = i.Path,
+                ShowCase = i.ShowCase
             }).ToList();
+
+        }
+
+        public async Task<List<SortCategoryInProductsDto>> SortCategoryInProductsAsync(string CategoryName, string type, string parameter)
+        {
+
+            var products = _productReadRepository.Table.Include(a => a.Category).Include(a => a.ProductImageFiles).Where(a => a.Category.Name == CategoryName).ToList();
+
+            if (parameter == "asc")
+            {
+                switch (type)
+                {
+                    case "name":
+                        return products.SelectMany(i => i.ProductImageFiles, (p, i) => new SortCategoryInProductsDto()
+                        {
+                            CategoryId = p.CategoryId.ToString(),
+                            CategoryName = p.Category.Name,
+                            ProductId = p.Id.ToString(),
+                            ProductName = p.Name,
+                            ProductPrice = p.Price,
+                            ProductStock = p.Stock,
+                            Path = i.Path,
+                            ShowCase = i.ShowCase
+                        }).OrderBy(a => a.ProductName).ToList();
+
+
+                    case "price":
+                        return products.SelectMany(i => i.ProductImageFiles, (p, i) => new SortCategoryInProductsDto()
+                        {
+                            CategoryId = p.CategoryId.ToString(),
+                            CategoryName = p.Category.Name,
+                            ProductId = p.Id.ToString(),
+                            ProductName = p.Name,
+                            ProductPrice = p.Price,
+                            ProductStock = p.Stock,
+                            Path = i.Path,
+                            ShowCase = i.ShowCase
+                        }).OrderBy(a => a.ProductPrice).ToList();
+                    case "code":
+                        return products.SelectMany(i => i.ProductImageFiles, (p, i) => new SortCategoryInProductsDto()
+                        {
+                            CategoryId = p.CategoryId.ToString(),
+                            CategoryName = p.Category.Name,
+                            ProductId = p.Id.ToString(),
+                            ProductName = p.Name,
+                            ProductPrice = p.Price,
+                            ProductStock = p.Stock,
+                            Path = i.Path,
+                            ShowCase = i.ShowCase,
+
+                        }).OrderBy(a => a.ProductId).ToList();
+
+                    default:
+                        return products.SelectMany(i => i.ProductImageFiles, (p, i) => new SortCategoryInProductsDto()
+                        {
+                            CategoryId = p.CategoryId.ToString(),
+                            CategoryName = p.Category.Name,
+                            ProductId = p.Id.ToString(),
+                            ProductName = p.Name,
+                            ProductPrice = p.Price,
+                            ProductStock = p.Stock,
+                            Path = i.Path,
+                            ShowCase = i.ShowCase
+                        }).ToList();
+                }
+
+
+
+            }
+            else if (parameter == "desc")
+            {
+                switch (type)
+                {
+                    case "name":
+                        return products.SelectMany(i => i.ProductImageFiles, (p, i) => new SortCategoryInProductsDto()
+                        {
+                            CategoryId = p.CategoryId.ToString(),
+                            CategoryName = p.Category.Name,
+                            ProductId = p.Id.ToString(),
+                            ProductName = p.Name,
+                            ProductPrice = p.Price,
+                            ProductStock = p.Stock,
+                            Path = i.Path,
+                            ShowCase = i.ShowCase
+                        }).OrderByDescending(a => a.ProductName).ToList();
+
+
+                    case "price":
+                        return products.SelectMany(i => i.ProductImageFiles, (p, i) => new SortCategoryInProductsDto()
+                        {
+                            CategoryId = p.CategoryId.ToString(),
+                            CategoryName = p.Category.Name,
+                            ProductId = p.Id.ToString(),
+                            ProductName = p.Name,
+                            ProductPrice = p.Price,
+                            ProductStock = p.Stock,
+                            Path = i.Path,
+                            ShowCase = i.ShowCase
+                        }).OrderByDescending(a => a.ProductPrice).ToList();
+                    case "code":
+                        return products.SelectMany(i => i.ProductImageFiles, (p, i) => new SortCategoryInProductsDto()
+                        {
+                            CategoryId = p.CategoryId.ToString(),
+                            CategoryName = p.Category.Name,
+                            ProductId = p.Id.ToString(),
+                            ProductName = p.Name,
+                            ProductPrice = p.Price,
+                            ProductStock = p.Stock,
+                            Path = i.Path,
+                            ShowCase = i.ShowCase,
+
+                        }).OrderByDescending(a => a.ProductId).ToList();
+
+                    default:
+                        return products.SelectMany(i => i.ProductImageFiles, (p, i) => new SortCategoryInProductsDto()
+                        {
+                            CategoryId = p.CategoryId.ToString(),
+                            CategoryName = p.Category.Name,
+                            ProductId = p.Id.ToString(),
+                            ProductName = p.Name,
+                            ProductPrice = p.Price,
+                            ProductStock = p.Stock,
+                            Path = i.Path,
+                            ShowCase = i.ShowCase
+                        }).ToList();
+                }
+            }
+
+            else
+            {
+                return null;
+            }
+
+
 
         }
     }

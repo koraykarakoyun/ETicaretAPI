@@ -9,6 +9,6 @@ namespace ETicaretAPI.Application.CQRS.Order.Query.GetByIdUserOrderDetail
 {
     public class GetByIdUserOrderDetailQueryResponse
     {
-        public List<GetByIdUserOrderDetailDto> Data { get; set; }
+        public GetByIdUserOrderDetailDto Data { get; set; }
     }
 }

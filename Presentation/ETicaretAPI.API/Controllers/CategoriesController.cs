@@ -5,6 +5,7 @@ using ETicaretAPI.Application.CQRS.Category.Command.UpdateCategory;
 using ETicaretAPI.Application.CQRS.Category.Query.GetAllCategories;
 using ETicaretAPI.Application.CQRS.Category.Query.GetByNameCategoryInProducts;
 using ETicaretAPI.Application.CQRS.Category.Query.GetCategoryInProducts;
+using ETicaretAPI.Application.CQRS.Category.Query.SortCategoryInProducts;
 using ETicaretAPI.Application.CQRS.Product.Command.Add;
 using ETicaretAPI.Application.CustomAttributes;
 using ETicaretAPI.Application.Enums;
@@ -17,7 +18,7 @@ namespace ETicaretAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   
+
     public class CategoriesController : ControllerBase
     {
 
@@ -85,6 +86,13 @@ namespace ETicaretAPI.API.Controllers
 
         }
 
+        [HttpPost("[action]")]
+        [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Reading, Definiton = "Sort Category In Products")]
+        public async Task<IActionResult> SortCategoryInProducts(SortCategoryInProductsQueryRequest sortCategoryInProductsQueryRequest)
+        {
+            List<SortCategoryInProductsQueryResponse> sortCategoryInProductsQueryResponses = await _mediator.Send(sortCategoryInProductsQueryRequest);
+            return Ok(sortCategoryInProductsQueryResponses);
+        }
 
 
     }

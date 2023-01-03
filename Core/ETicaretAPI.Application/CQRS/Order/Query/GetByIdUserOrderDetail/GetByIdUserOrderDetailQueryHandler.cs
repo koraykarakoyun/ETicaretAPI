@@ -21,7 +21,7 @@ namespace ETicaretAPI.Application.CQRS.Order.Query.GetByIdUserOrderDetail
 
         public async Task<GetByIdUserOrderDetailQueryResponse> Handle(GetByIdUserOrderDetailQueryRequest request, CancellationToken cancellationToken)
         {
-            List<GetByIdUserOrderDetailDto> result = await _orderService.GetByIdUserOrderDetail(request.OrderCode);
+            GetByIdUserOrderDetailDto result = await _orderService.GetByIdUserOrderDetail(request.OrderCode);
 
             return new GetByIdUserOrderDetailQueryResponse()
             {

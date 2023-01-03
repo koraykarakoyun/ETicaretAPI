@@ -10,20 +10,8 @@ namespace ETicaretAPI.Application.DTOs
     {
         public GetByIdUserOrderDetailDto()
         {
-            Paths = new List<string>();
+            ProductInfo = new List<GetByIdUserOrderDetailProductInfoDto>();
         }
-        public string CategoryName { get; set; }
-
-        public string ProductName { get; set; }
-
-        public float ProductPrice { get; set; }
-
-        public int ProductQuantity { get; set; }
-
-        public string ProductBrand { get; set; }
-        public string ProductModel { get; set; }
-        public string ProductDescription { get; set; }
-        public string ProductColor { get; set; }
 
         public string OrderDescription { get; set; }
 
@@ -33,10 +21,11 @@ namespace ETicaretAPI.Application.DTOs
 
         public DateTime OrderCreatedDate { get; set; }
 
-        public List<string> Paths { get; set; }
-
         public string TotalPrice { get; set; }
 
+        public string TotalProductCount { get; set; }
+
+        public List<GetByIdUserOrderDetailProductInfoDto> ProductInfo { get; set; }
 
     }
 }
