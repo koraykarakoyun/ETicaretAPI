@@ -26,6 +26,6 @@ namespace ETicaretAPI.Application.Abstraction.Category
         Task<List<GetByNameCategoryInProductsDto>> GetByNameCategoryInProductsAsync(string CategoryName);
 
         Task<List<SortCategoryInProductsDto>> SortCategoryInProductsAsync(string CategoryName,string type,string parameter);
-
+        Task<List<GetAllProductsDto>> SortAllProductsAsync(string type, string parameter);
     }
 }

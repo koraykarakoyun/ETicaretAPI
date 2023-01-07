@@ -12,6 +12,7 @@ using ETicaretAPI.Application.CQRS.Product.Query.GetById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetByIdProductAllImages;
 using ETicaretAPI.Application.CQRS.Product.Query.GetImage;
 using ETicaretAPI.Application.CQRS.Product.Query.SearchProducts;
+using ETicaretAPI.Application.CQRS.Product.Query.SortAllProducts;
 using ETicaretAPI.Application.CustomAttributes;
 using ETicaretAPI.Application.Enums;
 using ETicaretAPI.Application.Repositories;
@@ -167,7 +168,13 @@ namespace ETicaretAPI.API.Controllers
             return Ok(changeShowCaseProductCommandResponse);
         }
 
-
+        [HttpPost("[action]")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Sort All Products")]
+        public async Task<IActionResult> SortAllProducts(SortAllProductsQueryRequest sortAllProductsQueryRequest)
+        {
+            List<SortAllProductsQueryResponse> sortAllProductsQueryResponses = await _mediator.Send(sortAllProductsQueryRequest);
+            return Ok(sortAllProductsQueryResponses);
+        }
 
 
     }

@@ -26,6 +26,7 @@ namespace ETicaretAPI.Application.CQRS.User.Command.CreateUser
                 Name = request.Name,
                 Surname = request.Surname,
                 Username = request.Username,
+                PhoneNumber=request.PhoneNumber,
                 Email = request.Email,
                 Password = request.Password,
                 PasswordConfirm = request.PasswordConfirm

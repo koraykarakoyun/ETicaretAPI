@@ -38,7 +38,10 @@ namespace ETicaretAPI.Persistence.User
             if (appUser != null)
             {
                 var roles = await _userManager.GetRolesAsync(appUser);
-                await _userManager.RemoveFromRolesAsync(appUser, roles);
+                if (roles.Count!=0)
+                {
+                    await _userManager.RemoveFromRolesAsync(appUser, roles);
+                }
                 await _userManager.AddToRolesAsync(appUser, Roles);
             }
 
@@ -49,20 +52,32 @@ namespace ETicaretAPI.Persistence.User
         {
             Domain.Entities.UserAuthRole userAuthRole = await _userAuthRolesReadRepository.GetSingleAsync(a => a.RoleName == "Kullanıcı");
 
-            IdentityResult ıdentityResult = await _userManager.CreateAsync(new AppUser()
+            AppUser appUser = new AppUser()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = createUserDto.Name,
                 Surname = createUserDto.Surname,
                 UserName = createUserDto.Username,
                 Email = createUserDto.Email,
-                UserAuthRole = userAuthRole
-            }, createUserDto.Password);
+                UserAuthRole = userAuthRole,
+                PhoneNumber = createUserDto.PhoneNumber
+            };
+
+            IdentityResult ıdentityResult = await _userManager.CreateAsync(appUser, createUserDto.Password);
 
             CreateUserResponseDto response = new() { IsSuccess = ıdentityResult.Succeeded };
 
             if (response.IsSuccess)
             {
+                string[] defaultRoles = new string[]
+                {
+                    "Get By Id Product","Get Image Product","Create Order","Get All Slide Photo","Get All Product",
+                    "Get All Categories","Get By Name Category In Products","Get By Id Category In Products","Add Basket Item",
+                    "Get All Image Product","Get Basket Item","Delete Basket Item","Update Basket Item",
+                };
+
+                await AssignUserRoles(appUser.Id, defaultRoles);
+
                 response.Message = "Kullanıcı olusturuldu";
             }
             else

@@ -10,6 +10,6 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetAll
 {
     public class GetAllProductQueryRequest: IRequest<List<GetAllProductQueryResponse>>
     {
-
+    
     }
 }

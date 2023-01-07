@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI.Application.Abstraction.Category;
+using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
 using ETicaretAPI.Application.DTOs;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.Category;
@@ -234,6 +235,160 @@ namespace ETicaretAPI.Persistence.Category
             }
 
 
+
+        }
+
+        public async Task<List<GetAllProductsDto>> SortAllProductsAsync(string type, string parameter)
+        {
+            var productsdto = _productReadRepository.Table.Include(a => a.ProductImageFiles).Include(a => a.ProductDetail).Where(a => a.ProductImageFiles.Any(a => a.ShowCase == true)).SelectMany(p => p.ProductImageFiles, (i, p) =>
+            new GetAllProductsDto()
+            {
+
+                ProductId = i.Id.ToString(),
+                ProductName = i.Name,
+                ProductPrice = i.Price,
+                ProductStock = i.Stock,
+                Brand = i.ProductDetail.Brand,
+                Model = i.ProductDetail.Model,
+                Description = i.ProductDetail.Description,
+                Color = i.ProductDetail.Color,
+                Path = p.Path,
+                ShowCase = p.ShowCase,
+            }).ToList();
+
+
+
+
+            if (parameter == "asc")
+            {
+                switch (type)
+                {
+                    case "name":
+                        return productsdto.Where(a => a.ShowCase == true).Select(a => new GetAllProductsDto()
+                        {
+                            ProductId = a.ProductId,
+                            ProductName = a.ProductName,
+                            ProductPrice = a.ProductPrice,
+                            ProductStock = a.ProductStock,
+                            Brand = a.Brand,
+                            Model = a.Model,
+                            Description = a.Description,
+                            Color = a.Color,
+                            Path = a.Path,
+                        }).OrderBy(a => a.ProductName).ToList();
+
+
+                    case "price":
+                        return productsdto.Where(a => a.ShowCase == true).Select(a => new GetAllProductsDto()
+                        {
+                            ProductId = a.ProductId,
+                            ProductName = a.ProductName,
+                            ProductPrice = a.ProductPrice,
+                            ProductStock = a.ProductStock,
+                            Brand = a.Brand,
+                            Model = a.Model,
+                            Description = a.Description,
+                            Color = a.Color,
+                            Path = a.Path,
+                        }).OrderBy(a => a.ProductPrice).ToList();
+                    case "code":
+                        return productsdto.Where(a => a.ShowCase == true).Select(a => new GetAllProductsDto()
+                        {
+                            ProductId = a.ProductId,
+                            ProductName = a.ProductName,
+                            ProductPrice = a.ProductPrice,
+                            ProductStock = a.ProductStock,
+                            Brand = a.Brand,
+                            Model = a.Model,
+                            Description = a.Description,
+                            Color = a.Color,
+                            Path = a.Path,
+                        }).OrderBy(a => a.ProductId).ToList();
+
+                    default:
+                        return productsdto.Where(a => a.ShowCase == true).Select(a => new GetAllProductsDto()
+                        {
+                            ProductId = a.ProductId,
+                            ProductName = a.ProductName,
+                            ProductPrice = a.ProductPrice,
+                            ProductStock = a.ProductStock,
+                            Brand = a.Brand,
+                            Model = a.Model,
+                            Description = a.Description,
+                            Color = a.Color,
+                            Path = a.Path,
+                        }).ToList();
+                }
+
+
+
+            }
+            else if (parameter == "desc")
+            {
+                switch (type)
+                {
+                    case "name":
+                        return productsdto.Where(a => a.ShowCase == true).Select(a => new GetAllProductsDto()
+                        {
+                            ProductId = a.ProductId,
+                            ProductName = a.ProductName,
+                            ProductPrice = a.ProductPrice,
+                            ProductStock = a.ProductStock,
+                            Brand = a.Brand,
+                            Model = a.Model,
+                            Description = a.Description,
+                            Color = a.Color,
+                            Path = a.Path,
+                        }).OrderByDescending(a => a.ProductName).ToList();
+
+
+                    case "price":
+                        return productsdto.Where(a => a.ShowCase == true).Select(a => new GetAllProductsDto()
+                        {
+                            ProductId = a.ProductId,
+                            ProductName = a.ProductName,
+                            ProductPrice = a.ProductPrice,
+                            ProductStock = a.ProductStock,
+                            Brand = a.Brand,
+                            Model = a.Model,
+                            Description = a.Description,
+                            Color = a.Color,
+                            Path = a.Path,
+                        }).OrderByDescending(a => a.ProductPrice).ToList();
+                    case "code":
+                        return productsdto.Where(a => a.ShowCase == true).Select(a => new GetAllProductsDto()
+                        {
+                            ProductId = a.ProductId,
+                            ProductName = a.ProductName,
+                            ProductPrice = a.ProductPrice,
+                            ProductStock = a.ProductStock,
+                            Brand = a.Brand,
+                            Model = a.Model,
+                            Description = a.Description,
+                            Color = a.Color,
+                            Path = a.Path,
+                        }).OrderByDescending(a => a.ProductId).ToList();
+
+                    default:
+                        return productsdto.Where(a => a.ShowCase == true).Select(a => new GetAllProductsDto()
+                        {
+                            ProductId = a.ProductId,
+                            ProductName = a.ProductName,
+                            ProductPrice = a.ProductPrice,
+                            ProductStock = a.ProductStock,
+                            Brand = a.Brand,
+                            Model = a.Model,
+                            Description = a.Description,
+                            Color = a.Color,
+                            Path = a.Path,
+                        }).OrderBy(a => a.ProductName).ToList();
+                }
+            }
+
+            else
+            {
+                return null;
+            }
 
         }
     }

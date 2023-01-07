@@ -89,7 +89,7 @@ namespace ETicaretAPI.API.Controllers
         [HttpPost("[action]")]
         [AuthorizeDefinition(Menu = AttributeConst.Categories, ActionType = ActionType.Reading, Definiton = "Sort Category In Products")]
         public async Task<IActionResult> SortCategoryInProducts(SortCategoryInProductsQueryRequest sortCategoryInProductsQueryRequest)
-        {
+       {
             List<SortCategoryInProductsQueryResponse> sortCategoryInProductsQueryResponses = await _mediator.Send(sortCategoryInProductsQueryRequest);
             return Ok(sortCategoryInProductsQueryResponses);
         }

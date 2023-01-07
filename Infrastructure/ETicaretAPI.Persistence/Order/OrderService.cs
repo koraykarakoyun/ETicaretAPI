@@ -202,7 +202,8 @@ namespace ETicaretAPI.Persistence
                 getByIdUserOrderDetailDto.ProductInfo.Add(dto);
 
             }
-            getByIdUserOrderDetailDto.TotalProductCount = getByIdUserOrderDetailDto.ProductInfo.Count().ToString();
+
+            getByIdUserOrderDetailDto.TotalProductCount = getByIdUserOrderDetailDto.ProductInfo.Sum(a => a.ProductQuantity).ToString();
             return getByIdUserOrderDetailDto;
 
         }
