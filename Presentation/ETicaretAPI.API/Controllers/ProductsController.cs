@@ -176,6 +176,8 @@ namespace ETicaretAPI.API.Controllers
             return Ok(sortAllProductsQueryResponses);
         }
 
+       
+
 
     }
 }

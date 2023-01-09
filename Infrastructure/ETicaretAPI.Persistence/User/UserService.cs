@@ -38,7 +38,7 @@ namespace ETicaretAPI.Persistence.User
             if (appUser != null)
             {
                 var roles = await _userManager.GetRolesAsync(appUser);
-                if (roles.Count!=0)
+                if (roles.Count != 0)
                 {
                     await _userManager.RemoveFromRolesAsync(appUser, roles);
                 }
@@ -194,6 +194,20 @@ namespace ETicaretAPI.Persistence.User
 
         }
 
-     
+
+        public async Task<GetUserInfoDto> GetUserInfoAsync(string UserName)
+        {
+            AppUser? appUser = await _userManager.FindByNameAsync(UserName);
+            if (appUser != null)
+            {
+                return new GetUserInfoDto()
+                {
+                    Name = appUser.Name,
+                    Surname = appUser.Surname,
+                    PhoneNumber = appUser.PhoneNumber
+                };
+            }
+            throw new Exception("Kullanıcı Bulunamadı");
+        }
     }
 }

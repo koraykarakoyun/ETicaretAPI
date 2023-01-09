@@ -27,9 +27,7 @@ namespace ETicaretAPI.Application.Abstraction.User
 
         Task<bool> IsAdminAsync(string userName);
 
-      
-
-        
+        Task<GetUserInfoDto> GetUserInfoAsync(string UserName);
 
 
     }

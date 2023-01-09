@@ -5,6 +5,7 @@ using ETicaretAPI.Application.CQRS.User.Command.FacebookLogin;
 using ETicaretAPI.Application.CQRS.User.Command.GoogleLogin;
 using ETicaretAPI.Application.CQRS.User.Command.Login;
 using ETicaretAPI.Application.CQRS.User.Query.GetAllUsers;
+using ETicaretAPI.Application.CQRS.User.Query.GetUserPhoneNumber;
 using ETicaretAPI.Application.CQRS.User.Query.GetUserRoles;
 using ETicaretAPI.Application.CustomAttributes;
 using ETicaretAPI.Application.Enums;
@@ -68,8 +69,16 @@ namespace ETicaretAPI.API.Controllers
 
         }
 
+        [HttpGet("GetUserInfo")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AttributeConst.Users, ActionType = ActionType.Reading, Definiton = "Get User Info")]
+        public async Task<IActionResult> GetUserInfo([FromRoute] GetUserInfoQueryRequest getUserInfoQueryRequest)
+        {
+           GetUserInfoQueryResponse getUserInfoQueryResponse = await _mediator.Send(getUserInfoQueryRequest);
+            return Ok(getUserInfoQueryResponse);
 
-       
+        }
+
 
 
     }
