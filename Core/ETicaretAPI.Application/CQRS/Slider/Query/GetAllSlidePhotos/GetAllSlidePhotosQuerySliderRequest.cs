@@ -9,5 +9,6 @@ namespace ETicaretAPI.Application.CQRS.Slider.Query.GetAllSlidePhotos
 {
     public class GetAllSlidePhotosQuerySliderRequest:IRequest<List<GetAllSlidePhotosQuerySliderResponse>>
     {
+        public bool Slider { get; set; }
     }
 }

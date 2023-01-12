@@ -3,6 +3,7 @@ using ETicaretAPI.Application.CQRS.Category.Command.AddCategory;
 using ETicaretAPI.Application.CQRS.Category.Command.DeleteCategory;
 using ETicaretAPI.Application.CQRS.Category.Command.UpdateCategory;
 using ETicaretAPI.Application.CQRS.Category.Query.GetAllCategories;
+using ETicaretAPI.Application.CQRS.Slider.Command.ActivateByIdShowCase;
 using ETicaretAPI.Application.CQRS.Slider.Command.AddSlidePhoto;
 using ETicaretAPI.Application.CQRS.Slider.Command.DeletByIdShowCase;
 using ETicaretAPI.Application.CQRS.Slider.Command.UpdateByIdSlidePhoto;
@@ -49,7 +50,7 @@ namespace ETicaretAPI.API.Controllers
         }
 
 
-        [HttpGet("[action]")]
+        [HttpGet("[action]/{Slider}")]
         [AuthorizeDefinition(Menu = AttributeConst.Sliders, ActionType = ActionType.Reading, Definiton = "Get All Slide Photo")]
         public async Task<IActionResult> GetAllSlidePhoto([FromRoute] GetAllSlidePhotosQuerySliderRequest getAllSlidePhotosQuerySliderRequest)
         {
@@ -63,10 +64,21 @@ namespace ETicaretAPI.API.Controllers
         [AuthorizeDefinition(Menu = AttributeConst.Sliders, ActionType = ActionType.Deleting, Definiton = "Delete ShowCase Slide Photo")]
         public async Task<IActionResult> DeleteByIdShowCase([FromRoute] DeleteByIdShowCaseCommandSliderRequest deleteByIdShowCaseCommandSliderRequest)
         {
-           DeleteByIdShowCaseCommandSliderResponse deleteByIdShowCaseCommandSliderResponse = await _mediator.Send(deleteByIdShowCaseCommandSliderRequest);
+            DeleteByIdShowCaseCommandSliderResponse deleteByIdShowCaseCommandSliderResponse = await _mediator.Send(deleteByIdShowCaseCommandSliderRequest);
             return Ok(deleteByIdShowCaseCommandSliderResponse);
 
         }
+
+        [HttpPost("[action]/{Id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AttributeConst.Sliders, ActionType = ActionType.Writing, Definiton = "Activate By Id Show Case")]
+        public async Task<IActionResult> ActivateByIdShowCase([FromRoute] ActivateByIdShowCaseCommandRequest activateByIdShowCaseCommandRequest)
+        {
+            ActivateByIdShowCaseCommandResponse activateByIdShowCaseCommandResponse = await _mediator.Send(activateByIdShowCaseCommandRequest);
+            return Ok(activateByIdShowCaseCommandResponse);
+
+        }
+
 
     }
 }

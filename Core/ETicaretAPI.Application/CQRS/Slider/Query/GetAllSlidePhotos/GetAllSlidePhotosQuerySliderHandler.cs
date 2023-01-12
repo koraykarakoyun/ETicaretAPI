@@ -20,13 +20,29 @@ namespace ETicaretAPI.Application.CQRS.Slider.Query.GetAllSlidePhotos
 
         public async Task<List<GetAllSlidePhotosQuerySliderResponse>> Handle(GetAllSlidePhotosQuerySliderRequest request, CancellationToken cancellationToken)
         {
-            return await _sliderReadRepository.GetAll().Select(a => new GetAllSlidePhotosQuerySliderResponse()
+
+
+            if (request.Slider)
             {
-                FileId=a.Id.ToString(),
-                FileName = a.FileName,
-                FilePath = a.Path,
-                ShowCase = a.ShowCase
-            }).ToListAsync();
+                return await _sliderReadRepository.GetAll().Where(a => a.ShowCase == true).Select(a => new GetAllSlidePhotosQuerySliderResponse()
+                {
+                    FileId = a.Id.ToString(),
+                    FileName = a.FileName,
+                    FilePath = a.Path,
+                    ShowCase = a.ShowCase
+                }).ToListAsync();
+            }
+            else
+            {
+                return await _sliderReadRepository.GetAll().Select(a => new GetAllSlidePhotosQuerySliderResponse()
+                {
+                    FileId = a.Id.ToString(),
+                    FileName = a.FileName,
+                    FilePath = a.Path,
+                    ShowCase = a.ShowCase
+                }).ToListAsync();
+            }
+          
         }
     }
 }
