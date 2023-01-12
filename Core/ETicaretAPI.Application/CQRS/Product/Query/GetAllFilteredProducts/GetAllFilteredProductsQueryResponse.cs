@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Application.DTOs
+namespace ETicaretAPI.Application.CQRS.Product.Query.GetAllFilteredProducts
 {
-    public class GetAllProductsDto
+    public class GetAllFilteredProductsQueryResponse
     {
-        public string CategoryName { get; set; }
         public string ProductId { get; set; }
         public string ProductName { get; set; }
         public int ProductStock { get; set; }

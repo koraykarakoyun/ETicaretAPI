@@ -82,6 +82,23 @@ namespace ETicaretAPI.Persistence
 
         }
 
+        public async Task<bool> DeleteOrderByOrderCodeAsync(string OrderCode)
+        {
+            Order order = await _orderReadRepository.GetAll().SingleOrDefaultAsync(a => a.OrderCode == OrderCode);
+
+            bool result = _orderWriteRepository.Remove(order);
+
+            if (result)
+            {
+                await _orderWriteRepository.SaveAsync();
+                return true;
+            }
+          
+            throw new Exception("Sipariş Bulunamadı");
+
+
+        }
+
         public async Task<List<GetAllOrderDto>> GetAllOrder()
         {
 

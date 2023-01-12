@@ -23,5 +23,6 @@ namespace ETicaretAPI.Application.Abstraction.Order
 
         Task<GetByIdUserOrderDetailDto> GetByIdUserOrderDetail(string OrderCode);
 
+        Task<bool> DeleteOrderByOrderCodeAsync(string OrderCode);
     }
 }

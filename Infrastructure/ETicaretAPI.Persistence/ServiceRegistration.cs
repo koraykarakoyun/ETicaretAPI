@@ -4,6 +4,7 @@ using ETicaretAPI.Application.Abstraction.AuthorizationEndpoint;
 using ETicaretAPI.Application.Abstraction.Basket;
 using ETicaretAPI.Application.Abstraction.Category;
 using ETicaretAPI.Application.Abstraction.Order;
+using ETicaretAPI.Application.Abstraction.Product;
 using ETicaretAPI.Application.Abstraction.Role;
 using ETicaretAPI.Application.Abstraction.User;
 using ETicaretAPI.Application.Abstraction.UserAuthRole;
@@ -128,6 +129,7 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
             services.AddScoped<IUserAuthRoleService, UserAuthRoleService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
         }
     }
 }

@@ -23,10 +23,26 @@ namespace ETicaretAPI.Application.CQRS.Product.Query.GetByIdProductAllImages
         public async Task<List<GetByIdProductAllImagesQueryResponse>> Handle(GetByIdProductAllImagesQueryRequest request, CancellationToken cancellationToken)
         {
             Domain.Entities.Product? product = await _productReadRepository.Table.Include(a => a.ProductImageFiles).SingleOrDefaultAsync(a => a.Id == Guid.Parse(request.Id));
-            return product.ProductImageFiles.Select(a => new GetByIdProductAllImagesQueryResponse()
+
+
+            if (product.ProductImageFiles.Where(a => a.FileName != "defaultimage.png").Count() != 0)
             {
-                FilePath = a.Path
-            }).ToList();
+                return product.ProductImageFiles.Where(a => a.FileName != "defaultimage.png").Select(a => new GetByIdProductAllImagesQueryResponse()
+                {
+                    FilePath = a.Path
+                }).ToList();
+            }
+            else
+            {
+                return product.ProductImageFiles.Where(a => a.FileName == "defaultimage.png").Select(a => new GetByIdProductAllImagesQueryResponse()
+                {
+                    FilePath = a.Path
+                }).ToList();
+
+            }
+
+            throw new Exception("Fotograf Bulunamadı");
+
         }
     }
 }

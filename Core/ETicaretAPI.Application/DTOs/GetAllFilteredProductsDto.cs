@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Application.DTOs
 {
-    public class GetAllProductsDto
+    public class GetAllFilteredProductsDto
     {
         public string CategoryName { get; set; }
         public string ProductId { get; set; }

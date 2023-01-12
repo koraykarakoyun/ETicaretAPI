@@ -1,6 +1,7 @@
 ﻿using ETicaretAPI.Application.Const;
 using ETicaretAPI.Application.CQRS.Order.Command.CompleteOrder;
 using ETicaretAPI.Application.CQRS.Order.Command.Create;
+using ETicaretAPI.Application.CQRS.Order.Command.DeleteOrderByOrderCode;
 using ETicaretAPI.Application.CQRS.Order.Query.GetAll;
 using ETicaretAPI.Application.CQRS.Order.Query.GetAllOrdersByUser;
 using ETicaretAPI.Application.CQRS.Order.Query.GetByIdUserOrderDetail;
@@ -27,7 +28,7 @@ namespace ETicaretAPI.API.Controllers
             _mediator = mediator;
         }
 
-        [AuthorizeDefinition(Menu = AttributeConst.Orders, ActionType =ActionType.Reading, Definiton = "Get All Orders")]
+        [AuthorizeDefinition(Menu = AttributeConst.Orders, ActionType = ActionType.Reading, Definiton = "Get All Orders")]
         [HttpGet("GetAllOrders")]
         public async Task<IActionResult> GetAllOrder([FromRoute] GetAllOrderQueryRequest getAllOrderQueryRequest)
         {
@@ -55,7 +56,7 @@ namespace ETicaretAPI.API.Controllers
 
         [AuthorizeDefinition(Menu = AttributeConst.Orders, ActionType = ActionType.Writing, Definiton = "Complete Order")]
         [HttpPost("CompleteOrder/{CompleteOrderId}")]
-        public async Task<IActionResult> CompleteOrder([FromRoute]CompletedOrderCommandRequest completedOrderCommandRequest)
+        public async Task<IActionResult> CompleteOrder([FromRoute] CompletedOrderCommandRequest completedOrderCommandRequest)
         {
             CompletedOrderCommandResponse completedOrderCommandResponse = await _mediator.Send(completedOrderCommandRequest);
             return Ok(completedOrderCommandResponse);
@@ -65,7 +66,7 @@ namespace ETicaretAPI.API.Controllers
         [HttpGet("GetAllOrdersByUser")]
         public async Task<IActionResult> GetAllOrdersByUser([FromRoute] GetAllOrdersByUserQueryRequest getAllOrdersByUserQueryRequest)
         {
-            GetAllOrdersByUserQueryResponse getAllOrdersByUserQueryResponses= await _mediator.Send(getAllOrdersByUserQueryRequest);
+            GetAllOrdersByUserQueryResponse getAllOrdersByUserQueryResponses = await _mediator.Send(getAllOrdersByUserQueryRequest);
             return Ok(getAllOrdersByUserQueryResponses);
         }
 
@@ -76,6 +77,15 @@ namespace ETicaretAPI.API.Controllers
             GetByIdUserOrderDetailQueryResponse getByIdUserOrderDetailQueryResponse = await _mediator.Send(getByIdUserOrderDetailQueryRequest);
             return Ok(getByIdUserOrderDetailQueryResponse);
         }
+
+        [AuthorizeDefinition(Menu = AttributeConst.Orders, ActionType = ActionType.Deleting, Definiton = "Delete Order By Order Code")]
+        [HttpDelete("DeleteOrderByOrderCode/{OrderCode}")]
+        public async Task<IActionResult> DeleteOrderByOrderCode([FromRoute] DeleteOrderByOrderCodeCommandRequest deleteOrderByOrderCodeCommandRequest)
+        {
+            DeleteOrderByOrderCodeCommandResponse deleteOrderByOrderCodeCommandResponse = await _mediator.Send(deleteOrderByOrderCodeCommandRequest);
+            return Ok(deleteOrderByOrderCodeCommandResponse);
+        }
+
 
     }
 }

@@ -7,9 +7,12 @@ using ETicaretAPI.Application.CQRS.Product.Command.ImageUpload;
 using ETicaretAPI.Application.CQRS.Product.Command.InvoiceUpload;
 using ETicaretAPI.Application.CQRS.Product.Command.UpdateById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAll;
+using ETicaretAPI.Application.CQRS.Product.Query.GetAllFilter;
+using ETicaretAPI.Application.CQRS.Product.Query.GetAllFilteredProducts;
 using ETicaretAPI.Application.CQRS.Product.Query.GetAllImage;
 using ETicaretAPI.Application.CQRS.Product.Query.GetById;
 using ETicaretAPI.Application.CQRS.Product.Query.GetByIdProductAllImages;
+using ETicaretAPI.Application.CQRS.Product.Query.GetFilteredCategoryProducts;
 using ETicaretAPI.Application.CQRS.Product.Query.GetImage;
 using ETicaretAPI.Application.CQRS.Product.Query.SearchProducts;
 using ETicaretAPI.Application.CQRS.Product.Query.SortAllProducts;
@@ -176,7 +179,30 @@ namespace ETicaretAPI.API.Controllers
             return Ok(sortAllProductsQueryResponses);
         }
 
-       
+
+        [HttpGet("[action]")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Get All Filter")]
+        public async Task<IActionResult> GetAllFilters([FromRoute]GetAllFilterQueryRequest getAllFilterQueryRequest)
+        {
+            GetAllFilterQueryResponse getAllFilterQueryResponses = await _mediator.Send(getAllFilterQueryRequest);
+            return Ok(getAllFilterQueryResponses);
+        }
+
+        [HttpPost("[action]")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Sort All Products")]
+        public async Task<IActionResult> GetAllFilteredProducts(GetAllFilteredProductsQueryRequest getAllFilteredProductsQueryRequest)
+        {
+            List<GetAllFilteredProductsQueryResponse> getAllFilteredProductsQueryResponses = await _mediator.Send(getAllFilteredProductsQueryRequest);
+            return Ok(getAllFilteredProductsQueryResponses);
+        }
+
+        [HttpPost("[action]")]
+        [AuthorizeDefinition(Menu = AttributeConst.Products, ActionType = ActionType.Reading, Definiton = "Sort All Products")]
+        public async Task<IActionResult> GetCategoryFilters(GetCategoryFiltersRequest getCategoryFiltersRequest)
+        {
+            GetCategoryFiltersResponse getCategoryFiltersResponse = await _mediator.Send(getCategoryFiltersRequest);
+            return Ok(getCategoryFiltersResponse);
+        }
 
 
     }
