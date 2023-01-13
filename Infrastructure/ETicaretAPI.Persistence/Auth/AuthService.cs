@@ -1,5 +1,6 @@
 ﻿using ETicaretAPI.Application.Abstraction.Auth;
 using ETicaretAPI.Application.Abstraction.User;
+using ETicaretAPI.Application.Const;
 using ETicaretAPI.Application.CQRS.User.Command.FacebookLogin;
 using ETicaretAPI.Application.CQRS.User.Command.GoogleLogin;
 using ETicaretAPI.Application.CQRS.User.Command.Login;
@@ -8,6 +9,7 @@ using ETicaretAPI.Application.Repositories.UserAuthRoles;
 using ETicaretAPI.Application.Token;
 using ETicaretAPI.Domain.Entities;
 using ETicaretAPI.Domain.Entities.Identity;
+using ETicaretAPI.Persistence.User;
 using Google.Apis.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -44,7 +46,7 @@ namespace ETicaretAPI.Persistence.Auth
             _userAuthRolesReadRepository = userAuthRolesReadRepository;
         }
 
-        private async Task<LoginDto> CreateUserExternalAsync(AppUser? appUser, string email, string name, UserLoginInfo info, int TokenLifeTime_Seconds)
+        private async Task<LoginDto> CreateUserExternalAsync(AppUser? appUser, string email, string name, string givenName, string familyName ,UserLoginInfo info, int TokenLifeTime_Seconds)
         {
             bool result = appUser != null;
 
@@ -63,14 +65,20 @@ namespace ETicaretAPI.Persistence.Auth
                     appUser = new AppUser()
                     {
                         Id = Guid.NewGuid().ToString(),
-                        Name = name,
-                        Surname = name,
+                        Name = givenName,
+                        Surname = familyName,
                         UserName = name,
                         Email = email,
-                        UserAuthRole = userAuthRole
+                        UserAuthRole = userAuthRole,
+                        PhoneNumber="12345678910"
                     };
                     //kullanıcı yoksa user tablosuna kaydeder.
                     var identityResult = await _userManager.CreateAsync(appUser);
+                    if (identityResult.Succeeded)
+                    {
+                        await _userService.AssignUserRoles(appUser.Id, DefaultRolesConst.DefaultRoles);
+                    }
+
                     if (!identityResult.Succeeded)
                     {
 
@@ -91,24 +99,22 @@ namespace ETicaretAPI.Persistence.Auth
                 }
                 result = true;
 
+
             }
 
             if (result)
             {
-
                 appUser = await _userManager.Users.Include(a => a.UserAuthRole).SingleOrDefaultAsync(a => a.Email == appUser.Email && a.PasswordHash == appUser.PasswordHash);
-
                 await _userManager.AddLoginAsync(appUser, info);
                 Token token = _tokenHandler.CreateAccessToken(TokenLifeTime_Seconds, appUser);
                 await _userService.UpdateRefreshToken(appUser, token.RefreshToken, token.Expiration, 5);
 
-
                 return new LoginDto()
                 {
                     IsSuccess = true,
-                    Message = "Basarili giris",
+                    Message = "Giris Işlemi Başarılı",
                     Token = token,
-                    UserAuthRoleName =appUser.UserAuthRole.RoleName
+                    UserAuthRoleName = appUser.UserAuthRole.RoleName
 
                 };
 
@@ -116,7 +122,7 @@ namespace ETicaretAPI.Persistence.Auth
             return new LoginDto()
             {
                 IsSuccess = false,
-                Message = "Hatali Giris"
+                Message = "Lütfen Bilgilerinizi Kontrol Ediniz"
             };
 
         }
@@ -136,14 +142,14 @@ namespace ETicaretAPI.Persistence.Auth
                 var info = new UserLoginInfo("FACEBOOK", facebookUserInfoValidation.Data.UserId, "FACEBOOK");
                 //login tablosunda google girişi yapan kisinin bilgileri aranır
                 AppUser appUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-                return await CreateUserExternalAsync(appUser, userInfoResponse.Email, userInfoResponse.Name, info, TokenLifeTime_Seconds);
+                return await CreateUserExternalAsync(appUser, userInfoResponse.Email, userInfoResponse.Name, userInfoResponse.Name, userInfoResponse.Name, info, TokenLifeTime_Seconds);
 
             }
 
             return new LoginDto()
             {
                 IsSuccess = false,
-                Message = "Hatali Giris"
+                Message = "Lütfen Bilgilerinizi Kontrol Ediniz"
             };
         }
 
@@ -162,7 +168,7 @@ namespace ETicaretAPI.Persistence.Auth
             //login tablosunda google girişi yapan kisinin bilgileri aranır
             AppUser appUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
-            return await CreateUserExternalAsync(appUser, payload.Email, payload.Name, info, TokenLifeTime_Seconds);
+            return await CreateUserExternalAsync(appUser, payload.Email, payload.Name, payload.GivenName, payload.FamilyName ,info, TokenLifeTime_Seconds);
 
 
         }
@@ -177,7 +183,7 @@ namespace ETicaretAPI.Persistence.Auth
                 return new LoginDto()
                 {
                     IsSuccess = false,
-                    Message = "Email Veya Sifre Yanlis"
+                    Message = "Lütfen Bilgilerinizi Kontrol Ediniz"
                 };
             }
 
@@ -191,7 +197,7 @@ namespace ETicaretAPI.Persistence.Auth
                 return new LoginDto()
                 {
                     IsSuccess = true,
-                    Message = "Giris yapildi.",
+                    Message = "Giris Işlemi Başarılı",
                     Token = token,
                     UserAuthRoleName = user.UserAuthRole.RoleName
                 };
@@ -201,7 +207,7 @@ namespace ETicaretAPI.Persistence.Auth
             return new LoginDto()
             {
                 IsSuccess = false,
-                Message = "Email Veya Sifre Yanlis"
+                Message = "Lütfen Bilgilerinizi Kontrol Ediniz"
             };
 
         }

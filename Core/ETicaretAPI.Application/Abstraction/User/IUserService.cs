@@ -29,6 +29,5 @@ namespace ETicaretAPI.Application.Abstraction.User
 
         Task<GetUserInfoDto> GetUserInfoAsync(string UserName);
 
-
     }
 }

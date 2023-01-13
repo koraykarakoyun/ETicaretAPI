@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI.Application.Abstraction.User;
+using ETicaretAPI.Application.Const;
 using ETicaretAPI.Application.CQRS.User.Command.CreateUser;
 using ETicaretAPI.Application.DTOs;
 using ETicaretAPI.Application.DTOs.CreateUser;
@@ -32,21 +33,7 @@ namespace ETicaretAPI.Persistence.User
             _userAuthRolesReadRepository = userAuthRolesReadRepository;
         }
 
-        public async Task AssignUserRoles(string Id, string[] Roles)
-        {
-            AppUser appUser = await _userManager.FindByIdAsync(Id);
-            if (appUser != null)
-            {
-                var roles = await _userManager.GetRolesAsync(appUser);
-                if (roles.Count != 0)
-                {
-                    await _userManager.RemoveFromRolesAsync(appUser, roles);
-                }
-                await _userManager.AddToRolesAsync(appUser, Roles);
-            }
 
-
-        }
 
         public async Task<CreateUserResponseDto> CreateUser(CreateUserRequestDto createUserDto)
         {
@@ -69,14 +56,8 @@ namespace ETicaretAPI.Persistence.User
 
             if (response.IsSuccess)
             {
-                string[] defaultRoles = new string[]
-                {
-                    "Get By Id Product","Get Image Product","Create Order","Get All Slide Photo","Get All Product",
-                    "Get All Categories","Get By Name Category In Products","Get By Id Category In Products","Add Basket Item",
-                    "Get All Image Product","Get Basket Item","Delete Basket Item","Update Basket Item",
-                };
 
-                await AssignUserRoles(appUser.Id, defaultRoles);
+                await AssignUserRoles(appUser.Id, DefaultRolesConst.DefaultRoles);
 
                 response.Message = "Kullanıcı olusturuldu";
             }
@@ -208,6 +189,20 @@ namespace ETicaretAPI.Persistence.User
                 };
             }
             throw new Exception("Kullanıcı Bulunamadı");
+        }
+
+        public async Task AssignUserRoles(string Id, string[] Roles)
+        {
+            AppUser appUser = await _userManager.FindByIdAsync(Id);
+            if (appUser != null)
+            {
+                var roles = await _userManager.GetRolesAsync(appUser);
+                if (roles.Count != 0)
+                {
+                    await _userManager.RemoveFromRolesAsync(appUser, roles);
+                }
+                await _userManager.AddToRolesAsync(appUser, Roles);
+            }
         }
     }
 }

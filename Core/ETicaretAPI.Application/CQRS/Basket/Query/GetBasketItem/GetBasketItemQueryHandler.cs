@@ -36,6 +36,12 @@ namespace ETicaretAPI.Application.CQRS.Basket.Query.GetBasketItem
                 }).ToList();
             }
 
+            var totalquantity = 0;
+            foreach (var item in basketItems)
+            {
+                totalquantity = totalquantity + item.Quantity;
+            }
+
             return basketItems.Select(item => new GetBasketItemQueryResponse()
             {
                 BasketItemId = item.Id.ToString(),
@@ -49,7 +55,7 @@ namespace ETicaretAPI.Application.CQRS.Basket.Query.GetBasketItem
                 ProductBrand = item.Product.ProductDetail.Brand,
                 ProductDescription = item.Product.ProductDetail.Description,
                 ProductColor = item.Product.ProductDetail.Color,
-                Count= itemCount.ToString(),
+                Count= totalquantity.ToString()
             }).ToList();
 
         }

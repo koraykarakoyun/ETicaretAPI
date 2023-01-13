@@ -39,11 +39,11 @@ builder.Services.AddStoreage<LocalStorage>();
 
 builder.Services.AddControllers(
 
-//    options =>
-//{
+    options =>
+{
 
-//    options.Filters.Add<RolePermissionFilter>();
-//}
+    options.Filters.Add<RolePermissionFilter>();
+}
 
 )
  .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<AddProductCommandRequest>());
@@ -79,7 +79,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-//app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
+
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
+
 app.UseSerilogRequestLogging();
 app.UseStaticFiles();
 app.UseCors();
