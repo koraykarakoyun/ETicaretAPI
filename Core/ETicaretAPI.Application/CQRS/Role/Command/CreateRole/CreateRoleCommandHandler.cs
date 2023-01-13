@@ -23,7 +23,7 @@ namespace ETicaretAPI.Application.CQRS.Role.Command.CreateRole
 
             return new CreateRoleCommandResponse()
             {
-                Success = result,
+                IsSuccess = result,
                 Message = "Rol Oluşturuldu"
             };
         }

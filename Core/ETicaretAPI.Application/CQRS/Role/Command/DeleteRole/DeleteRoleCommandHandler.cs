@@ -22,8 +22,8 @@ namespace ETicaretAPI.Application.CQRS.Role.Command.DeleteRole
 
             return new DeleteRoleCommandResponse()
             {
-                Success = result,
-                Message = "Role Silindi"
+                IsSuccess = result,
+                Message = "Rol Silinmiştir"
             };
         }
     }

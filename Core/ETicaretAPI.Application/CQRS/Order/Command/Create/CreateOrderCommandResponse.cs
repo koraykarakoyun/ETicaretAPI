@@ -10,6 +10,6 @@ namespace ETicaretAPI.Application.CQRS.Order.Command.Create
     {
         public bool IsSuccess { get; set; }
 
-        public string Messages { get; set; }
+        public string Message { get; set; }
     }
 }

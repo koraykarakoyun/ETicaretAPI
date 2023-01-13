@@ -8,6 +8,7 @@ namespace ETicaretAPI.Application.CQRS.Slider.Command.ActivateByIdShowCase
 {
     public class ActivateByIdShowCaseCommandResponse
     {
+        public bool IsSuccess { get; set; }
         public string Message { get; set; }
     }
 }

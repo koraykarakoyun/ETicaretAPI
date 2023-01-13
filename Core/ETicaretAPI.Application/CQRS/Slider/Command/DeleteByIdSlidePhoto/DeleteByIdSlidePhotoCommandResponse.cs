@@ -9,6 +9,6 @@ namespace ETicaretAPI.Application.CQRS.Slider.Command.UpdateByIdSlidePhoto
     public class DeleteByIdSlidePhotoCommandResponse
     {
         public string Message { get; set; }
-        public bool issucess { get; set; }
+        public bool IsSuccess { get; set; }
     }
 }

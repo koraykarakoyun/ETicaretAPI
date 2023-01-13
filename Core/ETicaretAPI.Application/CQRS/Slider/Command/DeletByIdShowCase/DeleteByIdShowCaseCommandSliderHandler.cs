@@ -27,7 +27,7 @@ namespace ETicaretAPI.Application.CQRS.Slider.Command.DeletByIdShowCase
             await _sliderWriteRepository.SaveAsync();
             return new()
             {
-                issucess = true,
+                IsSuccess = true,
                 Message = "Resim Vitrinden Kaldırıldı"
             };
         }

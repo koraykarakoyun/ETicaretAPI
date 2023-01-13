@@ -8,6 +8,7 @@ namespace ETicaretAPI.Application.CQRS.UserAuthRole.Command.SetUserAuthRole
 {
     public class SetUserAuthRoleResponse
     {
+        public bool IsSuccess { get; set; }
         public string Message { get; set; }
     }
 }

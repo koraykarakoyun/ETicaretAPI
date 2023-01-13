@@ -8,7 +8,7 @@ namespace ETicaretAPI.Application.CQRS.Role.Command.UpdateRole
 {
     public class UpdateRoleCommandResponse
     {
-        public bool Success { get; set; }
+        public bool IsSuccess { get; set; }
         public string Message { get; set; }
     }
 }

@@ -23,7 +23,11 @@ namespace ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command
         {
 
             await _authorizationEndpointService.AssignRoleEndpointAsync(request.code, request.roles, request.Type, request.menu);
-            return new AssignRoleEndpointCommandResponse();
+            return new AssignRoleEndpointCommandResponse()
+            {
+                IsSuccess = true,
+                Message = "Endpoint'e Rol Atanmıştır"
+            };
         }
     }
 }

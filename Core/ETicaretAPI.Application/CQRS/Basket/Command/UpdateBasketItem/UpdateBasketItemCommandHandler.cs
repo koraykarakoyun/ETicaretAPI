@@ -31,7 +31,7 @@ namespace ETicaretAPI.Application.CQRS.Basket.Command.UpdateBasketItem
                 return new()
                 {
                     IsSuccess = true,
-                    Message = "Sepetteki Urun Guncellenmistir"
+                    Message = "Sepet Güncellenmiştir"
                 };
             }
 

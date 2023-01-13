@@ -30,7 +30,7 @@ namespace ETicaretAPI.Application.CQRS.Order.Command.Create
             return new CreateOrderCommandResponse()
             {
                 IsSuccess = true,
-                Messages = "Sepetiniz Basariyla Tamamlanmistir"
+                Message = "Sepetiniz Basariyla Tamamlanmistir"
             };
         }
     }

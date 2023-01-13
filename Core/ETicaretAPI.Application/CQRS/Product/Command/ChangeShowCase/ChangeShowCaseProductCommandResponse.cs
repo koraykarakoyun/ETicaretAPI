@@ -9,7 +9,7 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.ChangeShowCase
     public class ChangeShowCaseProductCommandResponse
     {
 
-
-
+        public string Message { get; set; }
+        public bool IsSuccess { get; set; }
     }
 }

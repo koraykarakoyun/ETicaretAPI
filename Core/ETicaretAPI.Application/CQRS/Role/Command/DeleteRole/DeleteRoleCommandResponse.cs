@@ -8,7 +8,7 @@ namespace ETicaretAPI.Application.CQRS.Role.Command.DeleteRole
 {
     public class DeleteRoleCommandResponse
     {
-        public bool Success { get; set; }
+        public bool IsSuccess { get; set; }
 
         public string Message { get; set; }
     }

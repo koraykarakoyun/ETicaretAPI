@@ -34,12 +34,16 @@ namespace ETicaretAPI.Application.CQRS.Slider.Command.AddSlidePhoto
 
             if (!result)
             {
-                throw new Exception();
+                return new AddSlidePhotoCommandSliderResponse()
+                {
+                    IsSuccess = false,
+                    Message = "Resmi Eklenirken Hata Oluştu"
+                };
             }
 
             return new AddSlidePhotoCommandSliderResponse()
             {
-                issucess = true,
+                IsSuccess = true,
                 Message = "Resmi eklendi"
             };
         }

@@ -28,12 +28,16 @@ namespace ETicaretAPI.Application.CQRS.Slider.Command.UpdateByIdSlidePhoto
 
             if (!result)
             {
-                throw new Exception();
+                return new DeleteByIdSlidePhotoCommandResponse()
+                {
+                    IsSuccess = true,
+                    Message = "Resim Silinirken Hata Oluştu"
+                };
             }
 
             return new DeleteByIdSlidePhotoCommandResponse()
             {
-                issucess = true,
+                IsSuccess = true,
                 Message = "Resim silindi"
             };
 

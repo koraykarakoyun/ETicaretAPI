@@ -20,7 +20,11 @@ namespace ETicaretAPI.Application.CQRS.User.Command.AssignUserRoles
         public async Task<AssignUserRolesResponse> Handle(AssignUserRolesRequest request, CancellationToken cancellationToken)
         {
             await _userService.AssignUserRoles(request.Id, request.Roles);
-            return new AssignUserRolesResponse();
+            return new AssignUserRolesResponse()
+            {
+                IsSuccess=true,
+                Message="Kullanıcıya Rol Atandı"
+            };
         }
     }
 }

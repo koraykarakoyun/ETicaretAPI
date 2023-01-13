@@ -46,7 +46,7 @@ namespace ETicaretAPI.Persistence.Auth
             _userAuthRolesReadRepository = userAuthRolesReadRepository;
         }
 
-        private async Task<LoginDto> CreateUserExternalAsync(AppUser? appUser, string email, string name, string givenName, string familyName ,UserLoginInfo info, int TokenLifeTime_Seconds)
+        private async Task<LoginDto> CreateUserExternalAsync(AppUser? appUser, string email, string name, string givenName, string familyName, UserLoginInfo info, int TokenLifeTime_Seconds)
         {
             bool result = appUser != null;
 
@@ -62,16 +62,17 @@ namespace ETicaretAPI.Persistence.Auth
                 //kullanıcı user tablosunda yoksa
                 if (appUser == null)
                 {
-                    appUser = new AppUser()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Name = givenName,
-                        Surname = familyName,
-                        UserName = name,
-                        Email = email,
-                        UserAuthRole = userAuthRole,
-                        PhoneNumber="12345678910"
-                    };
+                        appUser = new AppUser()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Name = givenName,
+                            Surname = familyName,
+                            UserName = name+"_"+info.LoginProvider.ToLower(),
+                            Email = email,
+                            UserAuthRole = userAuthRole,
+                            PhoneNumber = "12345678910"
+                        };
+     
                     //kullanıcı yoksa user tablosuna kaydeder.
                     var identityResult = await _userManager.CreateAsync(appUser);
                     if (identityResult.Succeeded)
@@ -137,12 +138,12 @@ namespace ETicaretAPI.Persistence.Auth
 
             if (facebookUserInfoValidation.Data.IsValid)
             {
-                string userinforesponse = await _httpClient.GetStringAsync($"https://graph.facebook.com/me?fields=email,name&access_token={AccessToken}");
+                string userinforesponse = await _httpClient.GetStringAsync($"https://graph.facebook.com/me?fields=email,name,first_name,last_name&access_token={AccessToken}");
                 UserInfoResponse userInfoResponse = JsonSerializer.Deserialize<UserInfoResponse>(userinforesponse);
                 var info = new UserLoginInfo("FACEBOOK", facebookUserInfoValidation.Data.UserId, "FACEBOOK");
                 //login tablosunda google girişi yapan kisinin bilgileri aranır
                 AppUser appUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-                return await CreateUserExternalAsync(appUser, userInfoResponse.Email, userInfoResponse.Name, userInfoResponse.Name, userInfoResponse.Name, info, TokenLifeTime_Seconds);
+                return await CreateUserExternalAsync(appUser, userInfoResponse.Email, userInfoResponse.Name, userInfoResponse.FirstName, userInfoResponse.LastName, info, TokenLifeTime_Seconds);
 
             }
 
@@ -168,7 +169,7 @@ namespace ETicaretAPI.Persistence.Auth
             //login tablosunda google girişi yapan kisinin bilgileri aranır
             AppUser appUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
-            return await CreateUserExternalAsync(appUser, payload.Email, payload.Name, payload.GivenName, payload.FamilyName ,info, TokenLifeTime_Seconds);
+            return await CreateUserExternalAsync(appUser, payload.Email, payload.Name, payload.GivenName, payload.FamilyName, info, TokenLifeTime_Seconds);
 
 
         }

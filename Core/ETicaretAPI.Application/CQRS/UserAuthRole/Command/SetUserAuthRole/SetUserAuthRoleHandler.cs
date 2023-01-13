@@ -28,6 +28,7 @@ namespace ETicaretAPI.Application.CQRS.UserAuthRole.Command.SetUserAuthRole
             }
             return new()
             {
+                IsSuccess = true,
                 Message = "Kullanıcıya Yetki Verilmiştir"
             };
 

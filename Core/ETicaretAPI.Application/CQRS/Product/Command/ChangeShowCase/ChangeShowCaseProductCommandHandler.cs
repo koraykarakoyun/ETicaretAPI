@@ -34,14 +34,28 @@ namespace ETicaretAPI.Application.CQRS.Product.Command.ChangeShowCase
             {
                 item.ShowCase = false;
             }
-      
-            ProductImageFile productImageFile = product.ProductImageFiles.FirstOrDefault(a => a.Id == Guid.Parse(request.ImageId));
-            productImageFile.ShowCase = true;
-            await _productWriteRepository.SaveAsync();
 
-            return new();
-            
-            
+            ProductImageFile productImageFile = product.ProductImageFiles.FirstOrDefault(a => a.Id == Guid.Parse(request.ImageId));
+            if (productImageFile != null)
+            {
+                productImageFile.ShowCase = true;
+                await _productWriteRepository.SaveAsync();
+
+                return new()
+                {
+                    IsSuccess = true,
+                    Message = "Vitrin Resmi Değiştirildi"
+                };
+            }
+
+            return new()
+            {
+                IsSuccess = false,
+                Message = "Vitrin Resmi Değiştirilirken Hata Oluştu"
+            };
+
+
+
 
 
         }

@@ -8,5 +8,8 @@ namespace ETicaretAPI.Application.CQRS.AuthorizationEndpoint.Command.AssingRoleE
 {
     public class AssignRoleEndpointCommandResponse
     {
+        public bool IsSuccess { get; set; }
+
+        public string Message { get; set; }
     }
 }

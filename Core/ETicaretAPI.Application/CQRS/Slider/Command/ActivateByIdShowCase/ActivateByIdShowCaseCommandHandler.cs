@@ -26,8 +26,9 @@ namespace ETicaretAPI.Application.CQRS.Slider.Command.ActivateByIdShowCase
             slider.ShowCase = true;
             await _sliderWriteRepository.SaveAsync();
 
-            return new()
+            return new ActivateByIdShowCaseCommandResponse()
             {
+                IsSuccess=true,
                 Message = "Resim Vitrine Eklendi"
             };
 

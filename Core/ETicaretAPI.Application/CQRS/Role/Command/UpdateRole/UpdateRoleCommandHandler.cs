@@ -21,8 +21,8 @@ namespace ETicaretAPI.Application.CQRS.Role.Command.UpdateRole
             bool result = await _roleService.UpdateRoleAsync(request.Id,request.Name);
             return new UpdateRoleCommandResponse()
             {
-                Success = result,
-                Message = "Role Güncellendi"
+                IsSuccess = result,
+                Message = "Rol Güncellenmiştir"
             };
         }
     }
